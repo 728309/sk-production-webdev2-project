@@ -1,12 +1,13 @@
 <template>
-  <div class="flex flex-wrap items-center gap-2 text-sm text-gray-600">
-    <Text as="span" size="sm" color="muted">
+  <div class="space-y-1 text-sm text-gray-600">
+    <Text as="p" size="sm" color="muted">
       <span class="font-semibold text-gray-700">Submitted by</span>
+      {{ ' ' }}
       {{ submittedBy }}
     </Text>
-    <span class="text-gray-400">|</span>
-    <Text as="span" size="sm" color="muted">
-      <span class="font-semibold text-gray-700">Submitted date</span>
+    <Text as="p" size="sm" color="muted">
+      <span class="font-semibold text-gray-700">Submitted on</span>
+      {{ ' ' }}
       <DateDisplay :date="submittedDate" format="short" />
     </Text>
   </div>
