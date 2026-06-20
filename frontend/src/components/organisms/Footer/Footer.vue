@@ -5,16 +5,16 @@
         <!-- Brand section -->
         <div class="col-span-1 md:col-span-2">
           <Heading :level="3" size="lg" class="mb-4">
-            Article Archive
+            SK Production Hub
           </Heading>
           <Text as="p" size="sm" color="muted" class="mb-4">
-            Your source for quality articles on technology, science, health, and more.
+            A simple hub for submitted mixes across genres and platforms.
           </Text>
           <div class="flex space-x-4">
-            <a 
-              v-for="social in socialLinks" 
+            <a
+              v-for="social in socialLinks"
               :key="social.name"
-              :href="social.href" 
+              :href="social.href"
               class="text-gray-600 hover:text-blue-600 transition-colors"
               :aria-label="social.name"
             >
@@ -22,7 +22,7 @@
             </a>
           </div>
         </div>
-        
+
         <!-- Quick Links -->
         <div>
           <Heading :level="4" size="md" class="mb-4">
@@ -30,8 +30,8 @@
           </Heading>
           <ul class="space-y-2">
             <li v-for="link in quickLinks" :key="link.name">
-              <a 
-                :href="link.href" 
+              <a
+                :href="link.href"
                 class="text-gray-600 hover:text-blue-600 transition-colors text-sm"
               >
                 {{ link.name }}
@@ -39,7 +39,7 @@
             </li>
           </ul>
         </div>
-        
+
         <!-- Legal -->
         <div>
           <Heading :level="4" size="md" class="mb-4">
@@ -47,8 +47,8 @@
           </Heading>
           <ul class="space-y-2">
             <li v-for="link in legalLinks" :key="link.name">
-              <a 
-                :href="link.href" 
+              <a
+                :href="link.href"
                 class="text-gray-600 hover:text-blue-600 transition-colors text-sm"
               >
                 {{ link.name }}
@@ -57,10 +57,10 @@
           </ul>
         </div>
       </div>
-      
+
       <div class="mt-8 pt-8 border-t border-gray-200">
         <Text as="p" size="sm" color="muted" class="text-center">
-          © {{ currentYear }} Article Archive. All rights reserved.
+          (c) {{ currentYear }} SK Production Hub. All rights reserved.
         </Text>
       </div>
     </div>
@@ -77,8 +77,8 @@ defineProps({
     type: Array,
     default: () => [
       { name: 'Home', href: '/' },
-      { name: 'Articles', href: '/articles' },
-      { name: 'Categories', href: '/categories' },
+      { name: 'Mixes', href: '/mixes' },
+      { name: 'Genres', href: '/genres' },
       { name: 'About', href: '/about' },
     ],
   },

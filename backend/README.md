@@ -1,6 +1,6 @@
-# Articles API
+# Mixes API
 
-A RESTful API for managing articles built with PHP, following MVC architecture patterns.
+A RESTful API for managing mixes built with PHP, following MVC architecture patterns.
 
 ## Project Structure
 
@@ -10,79 +10,91 @@ backend/
 │   ├── public/
 │   │   └── index.php          # Entry point and route dispatcher
 │   └── src/
-│       ├── Controllers/        # Request handlers
-│       ├── Services/           # Business logic layer
-│       ├── Repositories/       # Data access layer
-│       ├── Models/             # Data models
-│       ├── Framework/          # Base controller class and other general framework code
-│       ├── Utils/              # Utility classes (JsonStore)
-│       └── data/               # JSON data storage
-├── docker-compose.yml          # Docker services configuration
-├── nginx.conf                  # Nginx configuration
-├── PHP.Dockerfile              # PHP Docker image configuration
-└── Articles_API.postman_collection.json  # Postman collection for API testing
+│       ├── Controllers/       # Request handlers
+│       ├── Services/          # Business logic layer
+│       ├── Repositories/      # Data access layer
+│       ├── Models/            # Data models
+│       ├── Framework/         # Base controller class
+│       ├── Utils/             # Utility classes (JsonStore)
+│       └── data/              # JSON data storage
+├── docker-compose.yml         # Docker services configuration
+├── nginx.conf                 # Nginx configuration
+└── PHP.Dockerfile             # PHP Docker image configuration
 ```
 
 ## API Endpoints
 
-### Get All Articles
+### Get All Mixes
 
 ```
-GET /articles
+GET /mixes
 ```
 
-Returns a list of all articles.
+Returns a list of all mixes.
 
-### Get Article by ID
-
-```
-GET /articles/{id}
-```
-
-Returns a specific article by its ID.
-
-### Create Article
+### Get Mix by ID
 
 ```
-POST /articles
+GET /mixes/{id}
+```
+
+Returns a specific mix by its ID.
+
+### Create Mix
+
+```
+POST /mixes
 Content-Type: application/json
 
 {
-    "title": "Article Title",
-    "author": "Author Name",
-    "category": "Category",
-    "published": "2025-01-15",
-    "content": "Article content here"
+    "title": "Rooftop House Session",
+    "artist": "Lena Cole",
+    "genre": "House",
+    "platform": "SoundCloud",
+    "mixUrl": "https://soundcloud.com/skproductionhub/rooftop-house-session",
+    "coverImageUrl": "https://images.unsplash.com/photo-1501386761578-eac5c94b800a",
+    "duration": "46:09",
+    "submittedBy": "Maya Brooks",
+    "submittedDate": "2026-05-12",
+    "description": "Uplifting house selections with soulful vocals.",
+    "status": "published",
+    "featured": true
 }
 ```
 
-Creates a new article and returns it with the assigned ID.
+Creates a new mix and returns it with the assigned ID.
 
-### Update Article
+### Update Mix
 
 ```
-PUT /articles/{id}
+PUT /mixes/{id}
 Content-Type: application/json
 
 {
-    "id": 123,
-    "title": "Updated Title",
-    "author": "Author Name",
-    "category": "Category",
-    "published": "2025-01-16",
-    "content": "Updated content"
+    "title": "Updated Mix Title",
+    "artist": "Lena Cole",
+    "genre": "House",
+    "platform": "SoundCloud",
+    "mixUrl": "https://soundcloud.com/skproductionhub/updated-mix",
+    "coverImageUrl": "https://images.unsplash.com/photo-1501386761578-eac5c94b800a",
+    "duration": "48:10",
+    "submittedBy": "Maya Brooks",
+    "submittedDate": "2026-05-16",
+    "description": "Updated mix description.",
+    "status": "published",
+    "featured": false
 }
 ```
 
-Updates an existing article by ID.
+Updates an existing mix by ID.
 
-### Delete Article
+### Delete Mix
 
 ```
-DELETE /articles/{id}
+DELETE /mixes/{id}
 ```
 
-Deletes an article by ID.
+Deletes a mix by ID.
 
 ## Getting Started
 
@@ -92,7 +104,7 @@ Deletes an article by ID.
 
 ### Installation
 
-1. Clone the repository:
+1. Go to the backend folder:
 
 ```bash
 cd backend
@@ -104,7 +116,7 @@ cd backend
 docker-compose up
 ```
 
-3. Run composer commands:
+3. Run composer commands when needed:
 
 ```bash
 docker-compose exec php composer [...]
@@ -116,10 +128,6 @@ The application will be available at:
 
 - **API**: http://localhost
 - **phpMyAdmin**: http://localhost:8080
-
-### Testing the API
-
-Import the `Articles_API.postman_collection.json` file into Postman to test all endpoints.
 
 ## Docker Services
 
@@ -133,4 +141,4 @@ Import the `Articles_API.postman_collection.json` file into Postman to test all 
 
 ## Data Storage
 
-Currently, the application uses JSON file-based storage (`app/src/data/articles.json`) for demonstration purposes. In production, this should be replaced with a proper database implementation.
+Currently, the application uses JSON file-based storage (`app/src/data/mixes.json`) for demonstration purposes. In production, this should be replaced with a proper database implementation.

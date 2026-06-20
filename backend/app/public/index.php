@@ -36,12 +36,12 @@ use function FastRoute\simpleDispatcher;
  * Define the routes for the application.
  */
 $dispatcher = simpleDispatcher(function (RouteCollector $r) {
-    // Article routes
-    $r->addRoute('GET', '/articles', ['App\Controllers\ArticleController', 'getAll']);
-    $r->addRoute('GET', '/articles/{id}', ['App\Controllers\ArticleController', 'get']);
-    $r->addRoute('POST', '/articles', ['App\Controllers\ArticleController', 'create']);
-    $r->addRoute('PUT', '/articles/{id}', ['App\Controllers\ArticleController', 'update']);
-    $r->addRoute('DELETE', '/articles/{id}', ['App\Controllers\ArticleController', 'delete']);
+    // Mix routes
+    $r->addRoute('GET', '/mixes', ['App\Controllers\MixController', 'getAll']);
+    $r->addRoute('GET', '/mixes/{id}', ['App\Controllers\MixController', 'get']);
+    $r->addRoute('POST', '/mixes', ['App\Controllers\MixController', 'create']);
+    $r->addRoute('PUT', '/mixes/{id}', ['App\Controllers\MixController', 'update']);
+    $r->addRoute('DELETE', '/mixes/{id}', ['App\Controllers\MixController', 'delete']);
 });
 
 

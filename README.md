@@ -1,18 +1,18 @@
-# Web Development 2 Boilerplate
+# SK Production Hub
 
-A full-stack web application, featuring a PHP REST API backend and a Vue 3 frontend.
+A full-stack web application for a music production hub, featuring a PHP REST API backend and a Vue 3 frontend.
 
-## 🏗️ Architecture
+## Architecture
 
 This project consists of two main components:
 
 - **Backend**: PHP REST API following MVC architecture patterns
 - **Frontend**: Vue 3 application with Vite, Tailwind CSS, and Storybook
 
-## 📁 Project Structure
+## Project Structure
 
 ```
-web_development_2_boilerplate/
+sk-production-webdev2-project/
 ├── backend/          # PHP REST API
 │   ├── app/          # Application code
 │   ├── docker-compose.yml
@@ -22,12 +22,12 @@ web_development_2_boilerplate/
     └── README.md     # Frontend documentation
 ```
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 
-- **Docker and Docker Compose** (for backend)
-- **Node.js** ^20.19.0 or >=22.12.0 (for frontend)
+- **Docker and Docker Compose** for the backend
+- **Node.js** ^20.19.0 or >=22.12.0 for the frontend
 - **npm** or **yarn**
 
 ### Backend Setup
@@ -44,15 +44,9 @@ cd backend
 docker-compose up
 ```
 
-3. Install PHP dependencies:
+The API will be available at **http://localhost**.
 
-```bash
-docker-compose exec php composer install
-```
-
-The API will be available at **http://localhost**
-
-For detailed backend documentation, see [backend/README.md](./backend/README.md)
+For detailed backend documentation, see [backend/README.md](./backend/README.md).
 
 ### Frontend Setup
 
@@ -74,6 +68,6 @@ npm install
 npm run dev
 ```
 
-The frontend will be available at **http://localhost:5173** (or the port shown in terminal)
+The frontend will be available at **http://localhost:5173**.
 
-For detailed frontend documentation, see [frontend/README.md](./frontend/README.md)
+For detailed frontend documentation, see [frontend/README.md](./frontend/README.md).

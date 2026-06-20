@@ -8,21 +8,21 @@ export default {
 
 export const Default = {
   args: {
-    author: 'Jane Smith',
-    published: '2025-01-12',
+    submittedBy: 'Sofia Martins',
+    submittedDate: '2026-05-04',
   },
 };
 
 export const Recent = {
   args: {
-    author: 'Mark Thompson',
-    published: new Date().toISOString().split('T')[0],
+    submittedBy: 'Noah Vermeer',
+    submittedDate: new Date().toISOString().split('T')[0],
   },
 };
 
-export const LongAuthorName = {
+export const LongSubmitterName = {
   args: {
-    author: 'Dr. Emily Chen',
-    published: '2025-03-18',
+    submittedBy: 'Alexandra van den Berg',
+    submittedDate: '2026-05-18',
   },
 };

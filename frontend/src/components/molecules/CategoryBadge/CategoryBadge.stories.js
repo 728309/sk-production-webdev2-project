@@ -6,38 +6,37 @@ export default {
   tags: ['autodocs'],
 };
 
-export const Technology = {
+export const Afrobeat = {
   args: {
-    category: 'Technology',
+    genre: 'Afrobeat',
   },
 };
 
-export const Environment = {
+export const Techno = {
   args: {
-    category: 'Environment',
+    genre: 'Techno',
   },
 };
 
-export const Health = {
+export const House = {
   args: {
-    category: 'Health',
+    genre: 'House',
   },
 };
 
-export const AllCategories = {
+export const AllGenres = {
   render: () => ({
     components: { CategoryBadge },
     template: `
       <div class="flex gap-2 flex-wrap">
-        <CategoryBadge category="Technology" />
-        <CategoryBadge category="Environment" />
-        <CategoryBadge category="Health" />
-        <CategoryBadge category="Finance" />
-        <CategoryBadge category="History" />
-        <CategoryBadge category="Gaming" />
-        <CategoryBadge category="Automotive" />
-        <CategoryBadge category="Travel" />
-        <CategoryBadge category="Science" />
+        <CategoryBadge genre="Afrobeat" />
+        <CategoryBadge genre="Techno" />
+        <CategoryBadge genre="House" />
+        <CategoryBadge genre="Hip-Hop" />
+        <CategoryBadge genre="Amapiano" />
+        <CategoryBadge :genre="'R&B'" />
+        <CategoryBadge genre="Dancehall" />
+        <CategoryBadge genre="Drum and Bass" />
       </div>
     `,
   }),

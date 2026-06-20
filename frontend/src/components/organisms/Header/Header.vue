@@ -5,7 +5,7 @@
         <div class="flex items-center">
           <Heading :level="1" size="xl" class="text-blue-600">
             <a href="/" class="hover:text-blue-700 transition-colors">
-              Article Archive
+              SK Production Hub
             </a>
           </Heading>
         </div>
@@ -78,7 +78,7 @@ defineProps({
     type: Array,
     default: () => [
       { name: "Home", href: "/" },
-      { name: "Articles", href: "/articles" },
+      { name: "Mixes", href: "/mixes" },
       { name: "About", href: "/about" },
       { name: "Contact", href: "/contact" },
     ],

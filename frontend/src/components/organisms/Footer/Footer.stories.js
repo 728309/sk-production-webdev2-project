@@ -10,8 +10,8 @@ export const Default = {
   args: {
     quickLinks: [
       { name: 'Home', href: '/' },
-      { name: 'Articles', href: '/articles' },
-      { name: 'Categories', href: '/categories' },
+      { name: 'Mixes', href: '/mixes' },
+      { name: 'Genres', href: '/genres' },
       { name: 'About', href: '/about' },
     ],
     legalLinks: [
@@ -26,7 +26,7 @@ export const Minimal = {
   args: {
     quickLinks: [
       { name: 'Home', href: '/' },
-      { name: 'Articles', href: '/articles' },
+      { name: 'Mixes', href: '/mixes' },
     ],
     legalLinks: [
       { name: 'Privacy Policy', href: '/privacy' },

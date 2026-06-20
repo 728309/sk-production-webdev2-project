@@ -2,28 +2,32 @@
   <article class="max-w-4xl mx-auto">
     <header class="mb-6">
       <div class="mb-4">
-        <CategoryBadge :category="article.category" />
+        <CategoryBadge :genre="article.genre" />
       </div>
-      
+
       <Heading :level="1" size="3xl" class="mb-4">
         {{ article.title }}
       </Heading>
-      
-      <ArticleMeta 
-        :author="article.author" 
-        :published="article.published" 
+
+      <Text as="p" size="lg" color="default" weight="semibold" class="mb-4">
+        {{ article.artist }}
+      </Text>
+
+      <ArticleMeta
+        :submitted-by="article.submittedBy"
+        :submitted-date="article.submittedDate"
         class="mb-6"
       />
     </header>
-    
+
     <div class="prose prose-lg max-w-none">
-      <Text 
-        as="div" 
-        size="base" 
+      <Text
+        as="div"
+        size="base"
         color="default"
         class="whitespace-pre-line leading-relaxed"
       >
-        {{ article.content }}
+        {{ article.description }}
       </Text>
     </div>
   </article>
@@ -40,7 +44,7 @@ defineProps({
     type: Object,
     required: true,
     validator: (value) => {
-      return value.id && value.title && value.author && value.category && value.published && value.content;
+      return value.id && value.title && value.artist && value.genre && value.submittedBy && value.submittedDate;
     },
   },
 });

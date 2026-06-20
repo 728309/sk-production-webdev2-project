@@ -2,25 +2,25 @@
 
 namespace App\Controllers;
 
-use App\Models\Article;
-use App\Services\IArticleService;
-use App\Services\ArticleService;
+use App\Models\Mix;
+use App\Services\IMixService;
+use App\Services\MixService;
 use App\Framework\Controller;
 
-class ArticleController extends Controller
+class MixController extends Controller
 {
-    private IArticleService $articleService;
+    private IMixService $mixService;
 
     public function __construct()
     {
-        $this->articleService = new ArticleService();
+        $this->mixService = new MixService();
     }
 
     public function getAll()
     {
         try {
-            $articles = $this->articleService->getAll();
-            return $this->sendSuccessResponse($articles);
+            $mixes = $this->mixService->getAll();
+            return $this->sendSuccessResponse($mixes);
         } catch (\Exception $e) {
             return $this->sendErrorResponse('Internal server error', 500);
         }
@@ -30,12 +30,12 @@ class ArticleController extends Controller
     {
         try {
             $id = (int)($vars['id'] ?? 0);
-            $article = $this->articleService->getById($id);
+            $mix = $this->mixService->getById($id);
             
-            if (!$article) {
-                return $this->sendErrorResponse('Article not found', 404);
+            if (!$mix) {
+                return $this->sendErrorResponse('Mix not found', 404);
             }
-            return $this->sendSuccessResponse($article);
+            return $this->sendSuccessResponse($mix);
         } catch (\Exception $e) {
             return $this->sendErrorResponse('Internal server error', 500);
         }
@@ -44,11 +44,10 @@ class ArticleController extends Controller
     public function create()
     {
         try {
-            $article = $this->mapPostDataToClass(Article::class);
-            $article = $this->articleService->create($article);
-            return $this->sendSuccessResponse($article, 201);
+            $mix = $this->mapPostDataToClass(Mix::class);
+            $mix = $this->mixService->create($mix);
+            return $this->sendSuccessResponse($mix, 201);
         } catch (\Exception $e) {
-            var_dump($e->getMessage());
             return $this->sendErrorResponse('Internal server error', 500);
         }
     }
@@ -56,11 +55,11 @@ class ArticleController extends Controller
     public function update($vars = [])
     {
         try {
-            $article = $this->mapPostDataToClass(Article::class);
+            $mix = $this->mapPostDataToClass(Mix::class);
             $id = (int)($vars['id'] ?? 0);
-            $article->id = $id;
-            $this->articleService->update($article);
-            return $this->sendSuccessResponse($article);
+            $mix->id = $id;
+            $this->mixService->update($mix);
+            return $this->sendSuccessResponse($mix);
         } catch (\Exception $e) {
             return $this->sendErrorResponse('Internal server error', 500);
         }
@@ -70,7 +69,7 @@ class ArticleController extends Controller
     {
         try {
             $id = (int)($vars['id'] ?? 0);
-            $this->articleService->delete($id);
+            $this->mixService->delete($id);
             return $this->sendSuccessResponse();
         } catch (\Exception $e) {
             return $this->sendErrorResponse('Internal server error', 500);

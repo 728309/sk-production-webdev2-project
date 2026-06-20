@@ -2,31 +2,46 @@
   <article class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 overflow-hidden">
     <div class="p-6">
       <div class="flex items-start justify-between mb-3">
-        <CategoryBadge :category="article.category" />
+        <CategoryBadge :genre="article.genre" />
       </div>
-      
+
       <Heading :level="3" size="xl" class="mb-3">
-        <a 
-          :href="`#/articles/${article.id}`" 
+        <a
+          :href="`#/mixes/${article.id}`"
           class="hover:text-blue-600 transition-colors"
           @click.prevent="$emit('click', article.id)"
         >
           {{ article.title }}
         </a>
       </Heading>
-      
-      <Text 
-        as="p" 
-        size="sm" 
-        color="muted" 
+
+      <Text as="p" size="sm" color="default" weight="semibold" class="mb-2">
+        {{ article.artist }}
+      </Text>
+
+      <Text
+        as="p"
+        size="sm"
+        color="muted"
         class="mb-4 line-clamp-3"
       >
-        {{ truncatedContent }}
+        {{ truncatedDescription }}
       </Text>
-      
-      <ArticleMeta 
-        :author="article.author" 
-        :published="article.published" 
+
+      <div class="grid grid-cols-2 gap-3 mb-4 text-sm text-gray-600">
+        <div>
+          <span class="block text-xs font-semibold uppercase text-gray-500">Duration</span>
+          <span>{{ article.duration }}</span>
+        </div>
+        <div>
+          <span class="block text-xs font-semibold uppercase text-gray-500">Platform</span>
+          <span>{{ article.platform }}</span>
+        </div>
+      </div>
+
+      <ArticleMeta
+        :submitted-by="article.submittedBy"
+        :submitted-date="article.submittedDate"
       />
     </div>
   </article>
@@ -44,19 +59,21 @@ const props = defineProps({
     type: Object,
     required: true,
     validator: (value) => {
-      return value.id && value.title && value.author && value.category && value.published && value.content;
+      return value.id && value.title && value.artist && value.genre && value.submittedBy && value.submittedDate;
     },
   },
 });
 
 defineEmits(['click']);
 
-const truncatedContent = computed(() => {
+const truncatedDescription = computed(() => {
   const maxLength = 150;
-  if (props.article.content.length <= maxLength) {
-    return props.article.content;
+  const description = props.article.description || '';
+
+  if (description.length <= maxLength) {
+    return description;
   }
-  return props.article.content.substring(0, maxLength) + '...';
+  return description.substring(0, maxLength) + '...';
 });
 </script>
 

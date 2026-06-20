@@ -1,0 +1,105 @@
+{
+	"info": {
+		"_postman_id": "mixes-api-collection",
+		"name": "Mixes API",
+		"description": "API collection for Mix CRUD operations",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get All Mixes",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/mixes",
+					"host": ["{{base_url}}"],
+					"path": ["mixes"]
+				},
+				"description": "Retrieve all mixes"
+			}
+		},
+		{
+			"name": "Get Mix by ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/mixes/{{mix_id}}",
+					"host": ["{{base_url}}"],
+					"path": ["mixes", "{{mix_id}}"]
+				},
+				"description": "Retrieve a specific mix by ID"
+			}
+		},
+		{
+			"name": "Create Mix",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"title\": \"New Mix Title\",\n    \"artist\": \"DJ Example\",\n    \"genre\": \"House\",\n    \"platform\": \"SoundCloud\",\n    \"mixUrl\": \"https://soundcloud.com/skproductionhub/new-mix\",\n    \"coverImageUrl\": \"https://images.unsplash.com/photo-1501386761578-eac5c94b800a\",\n    \"duration\": \"45:00\",\n    \"submittedBy\": \"Student Name\",\n    \"submittedDate\": \"2026-06-01\",\n    \"description\": \"This is a new submitted mix.\",\n    \"status\": \"published\",\n    \"featured\": false\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/mixes",
+					"host": ["{{base_url}}"],
+					"path": ["mixes"]
+				},
+				"description": "Create a new mix"
+			}
+		},
+		{
+			"name": "Update Mix",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"title\": \"Updated Mix Title\",\n    \"artist\": \"DJ Example\",\n    \"genre\": \"Techno\",\n    \"platform\": \"Mixcloud\",\n    \"mixUrl\": \"https://www.mixcloud.com/skproductionhub/updated-mix\",\n    \"coverImageUrl\": \"https://images.unsplash.com/photo-1571266028243-d220c9c3b04d\",\n    \"duration\": \"50:00\",\n    \"submittedBy\": \"Student Name\",\n    \"submittedDate\": \"2026-06-02\",\n    \"description\": \"This is the updated mix description.\",\n    \"status\": \"published\",\n    \"featured\": true\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/mixes/{{mix_id}}",
+					"host": ["{{base_url}}"],
+					"path": ["mixes", "{{mix_id}}"]
+				},
+				"description": "Update an existing mix by ID"
+			}
+		},
+		{
+			"name": "Delete Mix",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/mixes/{{mix_id}}",
+					"host": ["{{base_url}}"],
+					"path": ["mixes", "{{mix_id}}"]
+				},
+				"description": "Delete a mix by ID"
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost",
+			"type": "string"
+		},
+		{
+			"key": "mix_id",
+			"value": "1",
+			"type": "string"
+		}
+	]
+}

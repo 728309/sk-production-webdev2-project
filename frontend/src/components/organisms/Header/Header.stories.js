@@ -10,7 +10,7 @@ export const Default = {
   args: {
     navigationLinks: [
       { name: 'Home', href: '/' },
-      { name: 'Articles', href: '/articles' },
+      { name: 'Mixes', href: '/mixes' },
       { name: 'About', href: '/about' },
       { name: 'Contact', href: '/contact' },
     ],
@@ -20,9 +20,9 @@ export const Default = {
 export const CustomNavigation = {
   args: {
     navigationLinks: [
-      { name: 'Blog', href: '/blog' },
-      { name: 'News', href: '/news' },
-      { name: 'Resources', href: '/resources' },
+      { name: 'Mixes', href: '/mixes' },
+      { name: 'Genres', href: '/genres' },
+      { name: 'Platforms', href: '/platforms' },
     ],
   },
 };

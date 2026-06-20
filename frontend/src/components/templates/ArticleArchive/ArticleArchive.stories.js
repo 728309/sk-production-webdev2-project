@@ -1,53 +1,65 @@
 import ArticleArchive from './ArticleArchive.vue';
 
-const sampleArticles = [
+const sampleMixes = [
   {
     id: 1,
-    title: "How Climate Change Is Affecting Global Weather Patterns",
-    author: "Jane Smith",
-    category: "Environment",
-    published: "2025-01-12",
-    content: "Climate change has become one of the most significant environmental challenges of the 21st century. Rising global temperatures are causing major shifts in weather systems that scientists have been monitoring for decades. These changes are not limited to a specific region—they are happening worldwide and growing more noticeable each year.",
+    title: 'Lagos Sunset Groove',
+    artist: 'DJ Kemi',
+    genre: 'Afrobeat',
+    platform: 'SoundCloud',
+    mixUrl: 'https://soundcloud.com/skproductionhub/lagos-sunset-groove',
+    coverImageUrl: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819',
+    duration: '42:18',
+    submittedBy: 'Sofia Martins',
+    submittedDate: '2026-05-04',
+    description: 'A warm Afrobeat session with bright percussion, smooth horn lines, and late-evening party energy.',
+    status: 'published',
+    featured: true,
   },
   {
     id: 2,
-    title: "The Rise of AI Assistants in Everyday Life",
-    author: "Mark Thompson",
-    category: "Technology",
-    published: "2025-02-03",
-    content: "Artificial intelligence assistants have transformed from simple voice-activated tools to powerful digital companions. Today, AI is integrated into smartphones, computers, cars, smart home devices, and even workplaces. These systems help users manage tasks, answer complex questions, and automate repetitive activities.",
+    title: 'Warehouse Pulse 132',
+    artist: 'Milo Voss',
+    genre: 'Techno',
+    platform: 'Mixcloud',
+    mixUrl: 'https://www.mixcloud.com/skproductionhub/warehouse-pulse-132',
+    coverImageUrl: 'https://images.unsplash.com/photo-1571266028243-d220c9c3b04d',
+    duration: '58:44',
+    submittedBy: 'Noah Vermeer',
+    submittedDate: '2026-05-07',
+    description: 'A driving techno mix built around hypnotic drums, dark synth stabs, and steady peak-time momentum.',
+    status: 'published',
+    featured: false,
   },
   {
     id: 3,
-    title: "Healthy Eating: 10 Tips for a Balanced Diet",
-    author: "Dr. Emily Chen",
-    category: "Health",
-    published: "2025-03-18",
-    content: "Maintaining a balanced diet is essential for long-term wellness. Healthy eating doesn't require extreme restrictions or difficult routines—it's about making mindful choices that support the body's natural processes. A good diet should provide energy, strengthen the immune system, and help maintain a stable mood.",
+    title: 'Rooftop House Session',
+    artist: 'Lena Cole',
+    genre: 'House',
+    platform: 'SoundCloud',
+    mixUrl: 'https://soundcloud.com/skproductionhub/rooftop-house-session',
+    coverImageUrl: 'https://images.unsplash.com/photo-1501386761578-eac5c94b800a',
+    duration: '46:09',
+    submittedBy: 'Maya Brooks',
+    submittedDate: '2026-05-12',
+    description: 'Uplifting house selections with soulful vocals, crisp claps, and a relaxed rooftop feel.',
+    status: 'published',
+    featured: true,
   },
   {
     id: 4,
-    title: "A Beginner's Guide to Investing in 2025",
-    author: "Robert Hale",
-    category: "Finance",
-    published: "2025-04-09",
-    content: "Investing in 2025 presents both exciting opportunities and new challenges for beginners. With digital platforms becoming more user-friendly, more people are entering the investment world than ever before. Before diving in, it's crucial to understand fundamental concepts like risk tolerance, asset allocation, and market volatility.",
-  },
-  {
-    id: 5,
-    title: "Exploring Ancient Civilizations: What We've Recently Learned",
-    author: "Alicia Gomez",
-    category: "History",
-    published: "2025-05-22",
-    content: "Recent archaeological discoveries have reshaped our understanding of ancient civilizations. Advanced technology such as LiDAR scanning and DNA analysis has allowed researchers to uncover hidden cities, trace migration patterns, and gain new insight into ancient cultures.",
-  },
-  {
-    id: 6,
-    title: "Top 10 Video Games of the Year",
-    author: "Kevin Brooks",
-    category: "Gaming",
-    published: "2025-06-14",
-    content: "The gaming world continues to evolve rapidly, delivering breathtaking experiences through improved graphics, storytelling, and gameplay mechanics. This year's top titles span a wide range of genres, ensuring something for every type of player.",
+    title: 'Late Night Cypher Tape',
+    artist: 'Northside Kai',
+    genre: 'Hip-Hop',
+    platform: 'YouTube',
+    mixUrl: 'https://www.youtube.com/watch?v=skproductionhub-cypher',
+    coverImageUrl: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f',
+    duration: '35:27',
+    submittedBy: 'Jordan Price',
+    submittedDate: '2026-05-15',
+    description: 'Boom bap drums, mellow keys, and sharp underground verses stitched into a late-night hip-hop blend.',
+    status: 'published',
+    featured: false,
   },
 ];
 
@@ -56,7 +68,7 @@ export default {
   component: ArticleArchive,
   tags: ['autodocs'],
   argTypes: {
-    articles: {
+    mixes: {
       control: 'object',
     },
   },
@@ -64,49 +76,47 @@ export default {
 
 export const Default = {
   args: {
-    articles: sampleArticles,
+    mixes: sampleMixes,
   },
 };
 
 export const Empty = {
   args: {
-    articles: [],
+    mixes: [],
   },
 };
 
-export const SingleArticle = {
+export const SingleMix = {
   args: {
-    articles: [sampleArticles[0]],
+    mixes: [sampleMixes[0]],
   },
 };
 
-export const ManyArticles = {
+export const ManyMixes = {
   args: {
-    articles: [
-      ...sampleArticles,
+    mixes: [
+      ...sampleMixes,
       {
-        id: 7,
-        title: "The Future of Electric Cars",
-        author: "Samantha Lee",
-        category: "Automotive",
-        published: "2025-07-07",
-        content: "Electric vehicles (EVs) are rapidly changing the automotive industry. With major improvements in battery efficiency, charging speed, and range, more consumers are making the switch from traditional gasoline-powered cars.",
+        id: 5,
+        title: 'Pretoria Balcony Keys',
+        artist: 'Thabo Nine',
+        genre: 'Amapiano',
+        platform: 'Mixcloud',
+        duration: '51:33',
+        submittedBy: 'Aisha Khan',
+        submittedDate: '2026-05-19',
+        description: 'Amapiano grooves with rolling log drums, airy pads, and smooth weekend balcony energy.',
       },
       {
-        id: 8,
-        title: "Travel Guide: Best Budget Destinations for 2025",
-        author: "David Nguyen",
-        category: "Travel",
-        published: "2025-08-29",
-        content: "Traveling doesn't have to be expensive. In 2025, several destinations offer incredible experiences at budget-friendly prices—from scenic coastlines to historic cities and vibrant cultural hubs.",
-      },
-      {
-        id: 9,
-        title: "Understanding Quantum Computing",
-        author: "Dr. Lena Patel",
-        category: "Science",
-        published: "2025-09-11",
-        content: "Quantum computing represents a groundbreaking shift in how we process information. Unlike classical computers, which use bits that represent 0 or 1, quantum computers use qubits—units that can exist in multiple states simultaneously.",
+        id: 6,
+        title: 'Velvet Room Slow Jams',
+        artist: 'Nia Vale',
+        genre: 'R&B',
+        platform: 'SoundCloud',
+        duration: '39:52',
+        submittedBy: 'Elena Rossi',
+        submittedDate: '2026-05-22',
+        description: 'A smooth R&B set with glossy vocals, soft basslines, and slow grooves for after-hours listening.',
       },
     ],
   },
