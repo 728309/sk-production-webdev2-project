@@ -93,7 +93,7 @@
                   <th class="px-4 py-3 text-left text-xs font-semibold uppercase text-gray-500">Genre</th>
                   <th class="px-4 py-3 text-left text-xs font-semibold uppercase text-gray-500">Status</th>
                   <th class="px-4 py-3 text-left text-xs font-semibold uppercase text-gray-500">Featured</th>
-                  <th class="px-4 py-3 text-left text-xs font-semibold uppercase text-gray-500">Actions</th>
+                  <th class="min-w-64 px-4 py-3 text-left text-xs font-semibold uppercase text-gray-500">Actions</th>
                 </tr>
               </thead>
               <tbody class="divide-y divide-gray-200 bg-white">
@@ -109,25 +109,25 @@
                   <td class="px-4 py-3 text-sm text-gray-700">
                     {{ mix.featured ? 'Yes' : 'No' }}
                   </td>
-                  <td class="px-4 py-3">
-                    <div class="flex flex-wrap gap-2">
+                  <td class="min-w-64 px-4 py-3 align-top">
+                    <div class="flex min-w-56 flex-wrap items-center gap-2">
                       <button
                         type="button"
-                        class="rounded-md border border-gray-300 px-3 py-1 text-xs font-semibold text-gray-700 hover:bg-gray-100"
+                        class="action-button border-gray-300 text-gray-700 hover:bg-gray-100"
                         @click="startEdit(mix)"
                       >
                         Edit
                       </button>
                       <button
                         type="button"
-                        class="rounded-md border border-blue-300 px-3 py-1 text-xs font-semibold text-blue-700 hover:bg-blue-50"
+                        class="action-button min-w-24 border-blue-300 text-blue-700 hover:bg-blue-50"
                         @click="toggleFeatured(mix)"
                       >
                         {{ mix.featured ? 'Unfeature' : 'Feature' }}
                       </button>
                       <button
                         type="button"
-                        class="rounded-md border border-red-300 px-3 py-1 text-xs font-semibold text-red-700 hover:bg-red-50"
+                        class="action-button border-red-300 text-red-700 hover:bg-red-50"
                         @click="deleteMix(mix)"
                       >
                         Delete
@@ -458,5 +458,20 @@ onMounted(fetchMixes)
   border-color: rgb(59 130 246);
   outline: none;
   box-shadow: 0 0 0 2px rgb(191 219 254);
+}
+
+.action-button {
+  display: inline-flex;
+  min-height: 2rem;
+  align-items: center;
+  justify-content: center;
+  border-width: 1px;
+  border-radius: 0.375rem;
+  padding: 0.375rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1;
+  transition: background-color 150ms ease, color 150ms ease;
+  white-space: nowrap;
 }
 </style>
