@@ -1,6 +1,6 @@
 # Mixes API
 
-A RESTful API for managing mixes built with PHP, following MVC architecture patterns.
+A RESTful API for managing mixes built with PHP, PDO, and MariaDB, following MVC architecture patterns.
 
 ## Project Structure
 
@@ -15,8 +15,10 @@ backend/
 │       ├── Repositories/      # Data access layer
 │       ├── Models/            # Data models
 │       ├── Framework/         # Base controller class
-│       ├── Utils/             # Utility classes (JsonStore)
-│       └── data/              # JSON data storage
+│       ├── Utils/             # Utility classes
+│       └── data/              # Backup JSON data
+├── database/
+│   └── init.sql               # MariaDB seed file
 ├── docker-compose.yml         # Docker services configuration
 ├── nginx.conf                 # Nginx configuration
 └── PHP.Dockerfile             # PHP Docker image configuration
@@ -141,4 +143,4 @@ The application will be available at:
 
 ## Data Storage
 
-Currently, the application uses JSON file-based storage (`app/src/data/mixes.json`) for demonstration purposes. In production, this should be replaced with a proper database implementation.
+Mixes are stored in the MariaDB `mixes` table. The table and starter data are created from `database/init.sql` when the database container is created for the first time. The old `app/src/data/mixes.json` file is still kept as a backup.

@@ -31,7 +31,7 @@ class Mix
         $this->submittedBy = $data['submittedBy'] ?? '';
         $this->submittedDate = $data['submittedDate'] ?? '';
         $this->description = $data['description'] ?? '';
-        $this->status = $data['status'] ?? '';
+        $this->status = $data['status'] ?? 'published';
         $this->featured = $data['featured'] ?? false;
     }
 }

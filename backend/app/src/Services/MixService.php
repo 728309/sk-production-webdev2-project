@@ -33,9 +33,9 @@ class MixService implements IMixService
         return $this->repository->create($mix);
     }
 
-    public function update(Mix $mix): bool
+    public function update(int $id, Mix $mix): bool
     {
-        return $this->repository->update($mix);
+        return $this->repository->update($id, $mix);
     }
 
     public function delete(int $id): bool

@@ -58,7 +58,7 @@ class MixController extends Controller
             $mix = $this->mapPostDataToClass(Mix::class);
             $id = (int)($vars['id'] ?? 0);
             $mix->id = $id;
-            $this->mixService->update($mix);
+            $this->mixService->update($id, $mix);
             return $this->sendSuccessResponse($mix);
         } catch (\Exception $e) {
             return $this->sendErrorResponse('Internal server error', 500);
