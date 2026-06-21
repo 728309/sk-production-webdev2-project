@@ -36,7 +36,7 @@ class MixController extends Controller
             $totalPages = (int)ceil($total / $limit);
 
             return $this->sendSuccessResponse([
-                'data' => $mixes,
+                'data' => array_map([$this, 'toPublicMixResponse'], $mixes),
                 'pagination' => [
                     'page' => $page,
                     'limit' => $limit,
@@ -59,7 +59,7 @@ class MixController extends Controller
                 return $this->sendErrorResponse('Mix not found', 404);
             }
 
-            return $this->sendSuccessResponse($mix);
+            return $this->sendSuccessResponse($this->toPublicMixResponse($mix));
         } catch (\Throwable $e) {
             return $this->sendMixError($e);
         }
@@ -68,7 +68,9 @@ class MixController extends Controller
     public function getFeatured()
     {
         try {
-            return $this->sendSuccessResponse($this->mixService->getFeatured(3));
+            $mixes = $this->mixService->getFeatured(3);
+
+            return $this->sendSuccessResponse(array_map([$this, 'toPublicMixResponse'], $mixes));
         } catch (\Throwable $e) {
             return $this->sendMixError($e);
         }
@@ -92,6 +94,7 @@ class MixController extends Controller
                 'submittedBy' => $user->name,
                 'submittedByUserId' => $user->id,
                 'submittedDate' => date('Y-m-d'),
+                'publishedAt' => null,
                 'description' => trim($data['description'] ?? ''),
                 'status' => 'pending',
                 'featured' => false,
@@ -186,6 +189,17 @@ class MixController extends Controller
             $data = $this->getJsonInput();
             $this->validateAdminUpdate($data);
 
+            $status = trim($data['status']);
+            $publishedAt = $existingMix->publishedAt;
+
+            if ($status === 'published' && !$publishedAt) {
+                $publishedAt = date('Y-m-d H:i:s');
+            }
+
+            if ($status !== 'published') {
+                $publishedAt = null;
+            }
+
             $mix = new Mix([
                 'id' => $id,
                 'title' => trim($data['title']),
@@ -198,8 +212,9 @@ class MixController extends Controller
                 'submittedBy' => $existingMix->submittedBy,
                 'submittedByUserId' => $existingMix->submittedByUserId,
                 'submittedDate' => $existingMix->submittedDate,
+                'publishedAt' => $publishedAt,
                 'description' => trim($data['description'] ?? ''),
-                'status' => trim($data['status']),
+                'status' => $status,
                 'featured' => (bool)($data['featured'] ?? false),
                 'reviewNote' => $existingMix->reviewNote,
             ]);
@@ -347,5 +362,23 @@ class MixController extends Controller
     private function sendMixError(\Throwable $e)
     {
         return $this->sendApiError($e, [400, 401, 403, 404]);
+    }
+
+    private function toPublicMixResponse(Mix $mix): array
+    {
+        return [
+            'id' => $mix->id,
+            'title' => $mix->title,
+            'artist' => $mix->artist,
+            'genre' => $mix->genre,
+            'platform' => $mix->platform,
+            'mixUrl' => $mix->mixUrl,
+            'coverImageUrl' => $mix->coverImageUrl,
+            'duration' => $mix->duration,
+            'description' => $mix->description,
+            'status' => $mix->status,
+            'featured' => $mix->featured,
+            'postedDate' => $mix->publishedAt ?: $mix->submittedDate,
+        ];
     }
 }

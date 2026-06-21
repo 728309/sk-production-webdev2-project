@@ -41,10 +41,11 @@
         </div>
 
         <div class="mt-auto border-t border-[var(--color-border)] pt-4">
-          <MixMeta
-            :submitted-by="mix.submittedBy"
-            :submitted-date="mix.submittedDate"
-          />
+          <div v-if="displayPostedDate" class="text-[0.92rem] leading-6 text-[var(--color-text-muted)]">
+            <span class="font-semibold uppercase text-[var(--color-text-soft)]">Posted on</span>
+            {{ ' ' }}
+            <DateDisplay :date="displayPostedDate" format="short" />
+          </div>
         </div>
       </div>
     </article>
@@ -56,7 +57,7 @@ import { computed } from 'vue';
 import { RouterLink } from 'vue-router';
 import Heading from '../../atoms/Heading/Heading.vue';
 import Text from '../../atoms/Text/Text.vue';
-import MixMeta from '../../molecules/MixMeta/MixMeta.vue';
+import DateDisplay from '../../atoms/DateDisplay/DateDisplay.vue';
 import GenreBadge from '../../molecules/GenreBadge/GenreBadge.vue';
 
 const props = defineProps({
@@ -64,7 +65,7 @@ const props = defineProps({
     type: Object,
     required: true,
     validator: (value) => {
-      return value.id && value.title && value.artist && value.genre && value.submittedBy && value.submittedDate;
+      return value.id && value.title && value.artist && value.genre;
     },
   },
 });
@@ -80,6 +81,8 @@ const truncatedDescription = computed(() => {
   }
   return description.substring(0, maxLength) + '...';
 });
+
+const displayPostedDate = computed(() => props.mix.postedDate || props.mix.submittedDate || '');
 </script>
 
 <style scoped>

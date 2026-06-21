@@ -58,13 +58,9 @@
                 <p class="text-xs font-semibold uppercase text-[var(--color-text-muted)]">Duration</p>
                 <p class="text-sm text-[var(--color-text)]">{{ mix.duration || 'Not listed' }}</p>
               </div>
-              <div>
-                <p class="text-xs font-semibold uppercase text-[var(--color-text-muted)]">Submitted by</p>
-                <p class="text-sm text-[var(--color-text)]">{{ mix.submittedBy }}</p>
-              </div>
-              <div>
-                <p class="text-xs font-semibold uppercase text-[var(--color-text-muted)]">Submitted date</p>
-                <p class="text-sm text-[var(--color-text)]">{{ formatDate(mix.submittedDate) }}</p>
+              <div v-if="displayPostedDate">
+                <p class="text-xs font-semibold uppercase text-[var(--color-text-muted)]">Posted on</p>
+                <p class="text-sm text-[var(--color-text)]">{{ formatDate(displayPostedDate) }}</p>
               </div>
             </div>
 
@@ -206,6 +202,7 @@ const commentError = ref('')
 
 const mixId = computed(() => route.params.id)
 const embedUrl = computed(() => getEmbedUrl(mix.value?.mixUrl || ''))
+const displayPostedDate = computed(() => mix.value?.postedDate || mix.value?.submittedDate || '')
 
 const fetchMix = async () => {
   loading.value = true
@@ -305,7 +302,12 @@ const formatDate = (value) => {
     return 'Not listed'
   }
 
-  return new Date(`${value}T00:00:00`).toLocaleDateString(undefined, {
+  const normalizedValue = value.includes(' ') ? value.replace(' ', 'T') : value
+  const date = normalizedValue.includes('T')
+    ? new Date(normalizedValue)
+    : new Date(`${normalizedValue}T00:00:00`)
+
+  return date.toLocaleDateString(undefined, {
     year: 'numeric',
     month: 'long',
     day: 'numeric',

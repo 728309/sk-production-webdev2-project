@@ -14,6 +14,7 @@ class MixRepository implements IMixRepository
     public function __construct()
     {
         $this->connection = Database::connect();
+        $this->ensurePublishedAtColumn();
     }
 
     /**
@@ -156,6 +157,7 @@ class MixRepository implements IMixRepository
                 submitted_by,
                 submitted_by_user_id,
                 submitted_date,
+                published_at,
                 description,
                 status,
                 featured,
@@ -171,6 +173,7 @@ class MixRepository implements IMixRepository
                 :submitted_by,
                 :submitted_by_user_id,
                 :submitted_date,
+                :published_at,
                 :description,
                 :status,
                 :featured,
@@ -200,6 +203,7 @@ class MixRepository implements IMixRepository
                 submitted_by = :submitted_by,
                 submitted_by_user_id = :submitted_by_user_id,
                 submitted_date = :submitted_date,
+                published_at = :published_at,
                 description = :description,
                 status = :status,
                 featured = :featured,
@@ -233,7 +237,9 @@ class MixRepository implements IMixRepository
         }
 
         $statement = $this->connection->prepare(
-            'UPDATE mixes SET status = :status, review_note = NULL WHERE id = :id'
+            'UPDATE mixes
+             SET status = :status, published_at = CURRENT_TIMESTAMP, review_note = NULL
+             WHERE id = :id'
         );
         $statement->execute([
             'status' => 'published',
@@ -250,7 +256,9 @@ class MixRepository implements IMixRepository
         }
 
         $statement = $this->connection->prepare(
-            'UPDATE mixes SET status = :status, review_note = :review_note WHERE id = :id'
+            'UPDATE mixes
+             SET status = :status, published_at = NULL, review_note = :review_note
+             WHERE id = :id'
         );
         $statement->execute([
             'status' => 'rejected',
@@ -319,6 +327,7 @@ class MixRepository implements IMixRepository
             'submittedBy' => $row['submitted_by'],
             'submittedByUserId' => $row['submitted_by_user_id'] !== null ? (int)$row['submitted_by_user_id'] : null,
             'submittedDate' => $row['submitted_date'],
+            'publishedAt' => $row['published_at'] ?? null,
             'description' => $row['description'] ?? '',
             'status' => $row['status'],
             'featured' => (bool) $row['featured'],
@@ -339,6 +348,7 @@ class MixRepository implements IMixRepository
             'submitted_by' => $mix->submittedBy,
             'submitted_by_user_id' => $mix->submittedByUserId,
             'submitted_date' => $mix->submittedDate,
+            'published_at' => $mix->publishedAt,
             'description' => $mix->description,
             'status' => $mix->status ?: 'published',
             'featured' => $mix->featured ? 1 : 0,
@@ -392,5 +402,18 @@ class MixRepository implements IMixRepository
         foreach ($params as $name => $value) {
             $statement->bindValue(':' . $name, $value);
         }
+    }
+
+    private function ensurePublishedAtColumn(): void
+    {
+        $statement = $this->connection->query("SHOW COLUMNS FROM mixes LIKE 'published_at'");
+        $column = $statement->fetch();
+
+        if ($column) {
+            return;
+        }
+
+        $this->connection->exec('ALTER TABLE mixes ADD published_at DATETIME NULL AFTER submitted_date');
+        $this->connection->exec('UPDATE mixes SET published_at = submitted_date WHERE status = "published"');
     }
 }

@@ -15,6 +15,7 @@ class Mix
     public string $submittedBy;
     public ?int $submittedByUserId;
     public string $submittedDate;
+    public ?string $publishedAt;
     public string $description;
     public string $status;
     public bool $featured;
@@ -33,6 +34,7 @@ class Mix
         $this->submittedBy = $data['submittedBy'] ?? '';
         $this->submittedByUserId = $data['submittedByUserId'] ?? null;
         $this->submittedDate = $data['submittedDate'] ?? '';
+        $this->publishedAt = $data['publishedAt'] ?? null;
         $this->description = $data['description'] ?? '';
         $this->status = $data['status'] ?? 'published';
         $this->featured = $data['featured'] ?? false;

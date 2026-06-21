@@ -56,6 +56,8 @@ Login body:
 | GET | `/mixes/featured` | Public | Returns featured published mixes for the home page. |
 | GET | `/mixes/{id}` | Public | Returns one published mix. Pending or rejected mixes return `404`. |
 
+Public mix responses include `postedDate` for display. They do not expose `submittedBy` or `submittedByUserId`; submitter details remain available through authenticated user/admin routes where needed.
+
 Supported query parameters for `GET /mixes`:
 
 - `page`

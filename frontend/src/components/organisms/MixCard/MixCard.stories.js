@@ -11,6 +11,7 @@ const sampleMix = {
   duration: '42:18',
   submittedBy: 'Sofia Martins',
   submittedDate: '2026-05-04',
+  postedDate: '2026-05-04 00:00:00',
   description: 'A warm Afrobeat session with bright percussion, smooth horn lines, and late-evening party energy.',
   status: 'published',
   featured: true,
@@ -45,6 +46,7 @@ export const Techno = {
       duration: '58:44',
       submittedBy: 'Noah Vermeer',
       submittedDate: '2026-05-07',
+      postedDate: '2026-05-07 00:00:00',
       description: 'A driving techno mix built around hypnotic drums, dark synth stabs, and steady peak-time momentum.',
       featured: false,
     },
@@ -63,6 +65,7 @@ export const LongDescription = {
       duration: '46:09',
       submittedBy: 'Maya Brooks',
       submittedDate: '2026-05-12',
+      postedDate: '2026-05-12 00:00:00',
       description: 'Uplifting house selections with soulful vocals, crisp claps, and a relaxed rooftop feel that moves from sunny warm-up grooves into deeper late-night club records.',
     },
   },
@@ -83,6 +86,7 @@ export const Grid = {
           duration: '58:44',
           submittedBy: 'Noah Vermeer',
           submittedDate: '2026-05-07',
+          postedDate: '2026-05-07 00:00:00',
         },
         {
           ...sampleMix,
@@ -93,6 +97,7 @@ export const Grid = {
           duration: '51:33',
           submittedBy: 'Aisha Khan',
           submittedDate: '2026-05-19',
+          postedDate: '2026-05-19 00:00:00',
         },
       ];
       return { mixes };
