@@ -17,7 +17,7 @@ const sampleMix = {
 };
 
 export default {
-  title: 'Organisms/ArticleDetail',
+  title: 'Organisms/MixDetail',
   component: ArticleDetail,
   tags: ['autodocs'],
   argTypes: {

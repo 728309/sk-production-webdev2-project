@@ -56,7 +56,7 @@ class MixController extends Controller
             $id = (int)($vars['id'] ?? 0);
             $mix = $this->mixService->getById($id);
 
-            if (!$mix) {
+            if (!$mix || $mix->status !== 'published') {
                 return $this->sendErrorResponse('Mix not found', 404);
             }
 

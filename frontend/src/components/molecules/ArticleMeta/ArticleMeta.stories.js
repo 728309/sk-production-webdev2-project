@@ -1,7 +1,7 @@
 import ArticleMeta from './ArticleMeta.vue';
 
 export default {
-  title: 'Molecules/ArticleMeta',
+  title: 'Molecules/MixMeta',
   component: ArticleMeta,
   tags: ['autodocs'],
 };

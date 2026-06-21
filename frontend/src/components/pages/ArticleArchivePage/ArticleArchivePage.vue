@@ -40,7 +40,6 @@
       :pagination="pagination"
       :loading="loading"
       :error="error"
-      @mix-click="handleMixClick"
       @search-change="handleSearchChange"
       @genre-change="handleGenreChange"
       @page-change="handlePageChange"
@@ -119,7 +118,6 @@ const fetchMixes = async () => {
       totalPages: 1,
     };
   } catch (err) {
-    console.error("Error fetching mixes:", err);
     error.value = err.message || "Failed to load mixes. Please try again later.";
     mixes.value = [];
   } finally {
@@ -146,17 +144,6 @@ const handlePageChange = (newPage) => {
 
   page.value = newPage;
   fetchMixes();
-};
-
-/**
- * Handle mix click event
- * @param {number} mixId - The ID of the clicked mix
- */
-const handleMixClick = (mixId) => {
-  // Navigate to mix detail page
-  // This can be implemented with Vue Router or your preferred routing solution
-  console.log("Mix clicked:", mixId);
-  // Example: router.push(`/mixes/${mixId}`);
 };
 
 // Fetch mixes when component is mounted

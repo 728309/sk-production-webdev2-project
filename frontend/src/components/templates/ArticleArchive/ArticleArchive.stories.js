@@ -64,7 +64,7 @@ const sampleMixes = [
 ];
 
 export default {
-  title: 'Templates/ArticleArchive',
+  title: 'Templates/MixArchive',
   component: ArticleArchive,
   tags: ['autodocs'],
   argTypes: {

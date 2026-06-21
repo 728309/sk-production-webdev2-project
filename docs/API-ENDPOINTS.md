@@ -26,7 +26,7 @@ Authorization: Bearer TOKEN
 | --- | --- | --- | --- |
 | GET | `/mixes` | Public | Return published mixes with pagination, search, and genre filtering. |
 | GET | `/mixes/featured` | Public | Return featured published mixes for the home page. |
-| GET | `/mixes/{id}` | Public | Return one mix by ID. |
+| GET | `/mixes/{id}` | Public | Return one published mix by ID. Pending and rejected mixes return 404 on this public endpoint. |
 | POST | `/mixes` | User token required | Submit a new mix. Submitted mixes start as pending. |
 | GET | `/my/mixes` | User token required | Return mixes submitted by the logged-in user. |
 

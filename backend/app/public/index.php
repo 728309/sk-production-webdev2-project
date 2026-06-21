@@ -78,13 +78,15 @@ $routeInfo = $dispatcher->dispatch($httpMethod, $uri);
 switch ($routeInfo[0]) {
     // Handle not found routes
     case FastRoute\Dispatcher::NOT_FOUND:
+        header('Content-Type: application/json; charset=utf-8');
         http_response_code(404);
-        echo 'Not Found';
+        echo json_encode(['error' => 'Route not found'], JSON_PRETTY_PRINT);
         break;
     // Handle routes that were invoked with the wrong HTTP method
     case FastRoute\Dispatcher::METHOD_NOT_ALLOWED:
+        header('Content-Type: application/json; charset=utf-8');
         http_response_code(405);
-        echo 'Method Not Allowed';
+        echo json_encode(['error' => 'Method not allowed'], JSON_PRETTY_PRINT);
         break;
     // Handle found routes
     case FastRoute\Dispatcher::FOUND:
