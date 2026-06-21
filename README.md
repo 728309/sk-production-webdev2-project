@@ -1,73 +1,124 @@
 # SK Production Hub
 
-A full-stack web application for a music production hub, featuring a PHP REST API backend and a Vue 3 frontend.
+SK Production Hub is a curated music mix platform where visitors can discover approved mixes, users can submit mixes, comment, vote, and admins can approve, reject, edit, feature, and manage mixes.
 
-## Architecture
+This project is an improvement and refactor of a Web Development 1 project concept into a Web Development 2 architecture with a Vue frontend and a PHP REST API backend.
 
-This project consists of two main components:
+## Technologies Used
 
-- **Backend**: PHP REST API following MVC architecture patterns
-- **Frontend**: Vue 3 application with Vite, Tailwind CSS, and Storybook
+### Frontend
+
+- Vue 3
+- JavaScript
+- Vue Router
+- Pinia
+- CSS / Tailwind CSS
+- Fetch-based API helper in `frontend/src/utils/api.js`
+
+Note: Axios is not installed in the current project. The API helper fills the same role by wrapping browser `fetch` calls and adding the JWT token when available.
+
+### Backend
+
+- PHP
+- Composer
+- FastRoute
+- PDO
+- firebase/php-jwt
+- REST API
+
+### Database / Environment
+
+- MariaDB/MySQL
+- Docker
+- phpMyAdmin
+- nginx
+
+## Main Features
+
+### Public Visitor
+
+- Browse published mixes
+- Search, filter, and paginate mixes
+- View featured mixes
+- View mix details
+- Read comments and vote counts
+
+### Logged-in User
+
+- Register and login
+- Submit a mix
+- View own submissions
+- Comment on mixes
+- Like or dislike mixes
+
+### Admin
+
+- View pending submissions
+- Approve or reject mixes
+- Manage all mixes
+- Edit and delete mixes
+- Feature or unfeature mixes
+- Delete comments
 
 ## Project Structure
 
-```
+```text
 sk-production-webdev2-project/
-├── backend/          # PHP REST API
-│   ├── app/          # Application code
-│   ├── docker-compose.yml
-│   └── README.md     # Backend documentation
-└── frontend/         # Vue 3 application
-    ├── src/          # Source code
-    └── README.md     # Frontend documentation
+  backend/
+    app/
+      public/
+      src/
+    database/
+    docker-compose.yml
+  frontend/
+    src/
+      components/
+      router/
+      stores/
+      utils/
 ```
 
-## Quick Start
+- `backend/` contains the PHP REST API, Docker setup, SQL seed file, models, repositories, services, and controllers.
+- `frontend/` contains the Vue 3 application, Vue Router routes, Pinia auth store, components, pages, and API helper.
 
-### Prerequisites
+## Setup Quick Start
 
-- **Docker and Docker Compose** for the backend
-- **Node.js** ^20.19.0 or >=22.12.0 for the frontend
-- **npm** or **yarn**
-
-### Backend Setup
-
-1. Navigate to the backend directory:
+### Backend
 
 ```bash
 cd backend
+docker compose up -d --build
 ```
 
-2. Start Docker containers:
-
-```bash
-docker-compose up
-```
-
-The API will be available at **http://localhost**.
-
-For detailed backend documentation, see [backend/README.md](./backend/README.md).
-
-### Frontend Setup
-
-1. Navigate to the frontend directory:
+### Frontend
 
 ```bash
 cd frontend
-```
-
-2. Install dependencies:
-
-```bash
 npm install
-```
-
-3. Start the development server:
-
-```bash
 npm run dev
 ```
 
-The frontend will be available at **http://localhost:5173**.
+## Local URLs
 
-For detailed frontend documentation, see [frontend/README.md](./frontend/README.md).
+- Frontend: http://localhost:5173
+- Backend API: http://localhost
+- phpMyAdmin: http://localhost:8080
+
+## Test Accounts
+
+### Admin
+
+- Email: `admin@skproduction.test`
+- Password: `password123`
+
+### User
+
+- Email: `user@skproduction.test`
+- Password: `password123`
+
+## Documentation
+
+- [Setup Guide](docs/SETUP.md)
+- [API Endpoints](docs/API-ENDPOINTS.md)
+- [Test Accounts](docs/TEST-ACCOUNTS.md)
+- [AI Disclosure](AI-DISCLOSURE.md)
