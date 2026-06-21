@@ -1,6 +1,16 @@
 USE developmentdb;
 
+DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS mixes;
+
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password_hash VARCHAR(255) NOT NULL,
+    role VARCHAR(50) NOT NULL DEFAULT 'user',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 
 CREATE TABLE mixes (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -157,3 +167,27 @@ INSERT INTO mixes (
 );
 
 ALTER TABLE mixes AUTO_INCREMENT = 9;
+
+INSERT INTO users (
+    id,
+    name,
+    email,
+    password_hash,
+    role
+) VALUES
+(
+    1,
+    'Admin User',
+    'admin@skproduction.test',
+    '$2y$12$3bMlg1H6tmTqY8lLXAoST.zOFAoCksLj7DVc61sk3wJV1vI6BPUIi',
+    'admin'
+),
+(
+    2,
+    'Test User',
+    'user@skproduction.test',
+    '$2y$12$WM7ekzGhdGT9ll3VpxYy8.7KQxYOEYjfh3nF6uABZH8xX2UrK8Ja6',
+    'user'
+);
+
+ALTER TABLE users AUTO_INCREMENT = 3;

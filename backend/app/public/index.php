@@ -36,6 +36,11 @@ use function FastRoute\simpleDispatcher;
  * Define the routes for the application.
  */
 $dispatcher = simpleDispatcher(function (RouteCollector $r) {
+    // Auth routes
+    $r->addRoute('POST', '/auth/register', ['App\Controllers\AuthController', 'register']);
+    $r->addRoute('POST', '/auth/login', ['App\Controllers\AuthController', 'login']);
+    $r->addRoute('GET', '/auth/me', ['App\Controllers\AuthController', 'me']);
+
     // Mix routes
     $r->addRoute('GET', '/mixes', ['App\Controllers\MixController', 'getAll']);
     $r->addRoute('GET', '/mixes/{id}', ['App\Controllers\MixController', 'get']);

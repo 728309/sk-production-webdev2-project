@@ -26,6 +26,44 @@ backend/
 
 ## API Endpoints
 
+### Register User
+
+```
+POST /auth/register
+Content-Type: application/json
+
+{
+    "name": "New User",
+    "email": "new.user@example.com",
+    "password": "password123"
+}
+```
+
+Creates a user account with the default `user` role.
+
+### Login User
+
+```
+POST /auth/login
+Content-Type: application/json
+
+{
+    "email": "admin@skproduction.test",
+    "password": "password123"
+}
+```
+
+Returns a JWT token and user details.
+
+### Get Current User
+
+```
+GET /auth/me
+Authorization: Bearer TOKEN
+```
+
+Returns the user attached to the provided JWT token.
+
 ### Get All Mixes
 
 ```
