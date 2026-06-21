@@ -90,12 +90,30 @@ cd backend
 docker compose up -d --build
 ```
 
+One-line version:
+
+```bash
+cd backend && docker compose up -d --build
+```
+
 ### Frontend
 
 ```bash
 cd frontend
 npm install
 npm run dev
+```
+
+One-line version:
+
+```bash
+cd frontend && npm install && npm run dev
+```
+
+### Database Reset
+
+```bash
+cd backend && docker compose down -v && docker compose up -d --build
 ```
 
 ## Local URLs

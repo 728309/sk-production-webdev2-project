@@ -1,5 +1,5 @@
 {
-  "name": "docker-template/app",
+  "name": "sk-production-hub/backend",
   "type": "project",
   "require": {
     "nikic/fast-route": "^1.3",

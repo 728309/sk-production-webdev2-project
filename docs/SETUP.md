@@ -18,6 +18,12 @@ cd backend
 docker compose up -d --build
 ```
 
+One-line version:
+
+```bash
+cd backend && docker compose up -d --build
+```
+
 This starts:
 
 - nginx on http://localhost
@@ -41,6 +47,12 @@ npm install
 npm run dev
 ```
 
+One-line version:
+
+```bash
+cd frontend && npm install && npm run dev
+```
+
 The frontend runs at:
 
 ```text
@@ -54,6 +66,12 @@ If you need to reset the database back to the seed data, run this from the `back
 ```bash
 docker compose down -v
 docker compose up -d --build
+```
+
+One-line version from the project root:
+
+```bash
+cd backend && docker compose down -v && docker compose up -d --build
 ```
 
 The `-v` flag removes the database volume, so MariaDB will recreate the database and import `backend/database/init.sql` again.

@@ -29,13 +29,19 @@ src/
   main.js        App entry point
 ```
 
-Some component filenames still use the original boilerplate names, such as `ArticleCard` and `ArticleArchive`. They now display mix data in the SK Production Hub interface.
+Some component filenames are inherited from the original boilerplate. They now display mix data in the SK Production Hub interface.
 
 ## Setup
 
 ```bash
 npm install
 npm run dev
+```
+
+One-line version from the project root:
+
+```bash
+cd frontend && npm install && npm run dev
 ```
 
 The frontend runs at:

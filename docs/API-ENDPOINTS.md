@@ -41,16 +41,16 @@ Supported query parameters for `GET /mixes`:
 
 | Method | Path | Auth | Description |
 | --- | --- | --- | --- |
-| GET | `/mixes/{id}/comments` | Public | Return comments for a mix. |
-| POST | `/mixes/{id}/comments` | User token required | Add a comment to a mix. |
+| GET | `/mixes/{id}/comments` | Public | Return comments for a published mix. Pending and rejected mixes return 404. |
+| POST | `/mixes/{id}/comments` | User token required | Add a comment to a published mix. Pending and rejected mixes return 404. |
 | DELETE | `/comments/{id}` | User token required | Delete a comment. Admins can delete any comment. Users can delete their own comments. |
 
 ## Votes
 
 | Method | Path | Auth | Description |
 | --- | --- | --- | --- |
-| GET | `/mixes/{id}/votes` | Public | Return like and dislike counts for a mix. If a valid token is included, also returns the user's vote. |
-| POST | `/mixes/{id}/votes` | User token required | Like or dislike a mix. Sending a different vote updates the existing vote. |
+| GET | `/mixes/{id}/votes` | Public | Return like and dislike counts for a published mix. If a valid token is included, also returns the user's vote. Pending and rejected mixes return 404. |
+| POST | `/mixes/{id}/votes` | User token required | Like or dislike a published mix. Sending a different vote updates the existing vote. Pending and rejected mixes return 404. |
 
 ## Admin
 

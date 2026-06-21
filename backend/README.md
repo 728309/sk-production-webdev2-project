@@ -1,184 +1,129 @@
-# Mixes API
+# SK Production Hub Backend
 
-A RESTful API for managing mixes built with PHP, PDO, and MariaDB, following MVC architecture patterns.
+This folder contains the PHP REST API for SK Production Hub. It uses Docker, nginx, PHP, Composer, FastRoute, PDO, MariaDB/MySQL, and JWT authentication.
+
+The API supports public mix browsing, user accounts, mix submissions, comments, votes, and admin mix management.
+
+## Local URLs
+
+- Backend API: http://localhost
+- phpMyAdmin: http://localhost:8080
 
 ## Project Structure
 
-```
+```text
 backend/
-├── app/
-│   ├── public/
-│   │   └── index.php          # Entry point and route dispatcher
-│   └── src/
-│       ├── Controllers/       # Request handlers
-│       ├── Services/          # Business logic layer
-│       ├── Repositories/      # Data access layer
-│       ├── Models/            # Data models
-│       ├── Framework/         # Base controller class
-│       ├── Utils/             # Utility classes
-│       └── data/              # Backup JSON data
-├── database/
-│   └── init.sql               # MariaDB seed file
-├── docker-compose.yml         # Docker services configuration
-├── nginx.conf                 # Nginx configuration
-└── PHP.Dockerfile             # PHP Docker image configuration
+  app/
+    public/          API entry point and route dispatcher
+    src/
+      Controllers/   Request handlers
+      Framework/     Base controller helper
+      Models/        Simple data models
+      Repositories/  Database queries
+      Services/      Application logic
+      Utils/         Database and JWT helpers
+      data/          Backup JSON data
+    composer.json
+    composer.lock
+  database/
+    init.sql         Database schema and seed data
+  docker-compose.yml
+  nginx.conf
+  PHP.Dockerfile
 ```
 
-## API Endpoints
-
-### Register User
-
-```
-POST /auth/register
-Content-Type: application/json
-
-{
-    "name": "New User",
-    "email": "new.user@example.com",
-    "password": "password123"
-}
-```
-
-Creates a user account with the default `user` role.
-
-### Login User
-
-```
-POST /auth/login
-Content-Type: application/json
-
-{
-    "email": "admin@skproduction.test",
-    "password": "password123"
-}
-```
-
-Returns a JWT token and user details.
-
-### Get Current User
-
-```
-GET /auth/me
-Authorization: Bearer TOKEN
-```
-
-Returns the user attached to the provided JWT token.
-
-### Get All Mixes
-
-```
-GET /mixes
-```
-
-Returns a list of all mixes.
-
-### Get Mix by ID
-
-```
-GET /mixes/{id}
-```
-
-Returns a specific mix by its ID.
-
-### Create Mix
-
-```
-POST /mixes
-Content-Type: application/json
-
-{
-    "title": "Rooftop House Session",
-    "artist": "Lena Cole",
-    "genre": "House",
-    "platform": "SoundCloud",
-    "mixUrl": "https://soundcloud.com/skproductionhub/rooftop-house-session",
-    "coverImageUrl": "https://images.unsplash.com/photo-1501386761578-eac5c94b800a",
-    "duration": "46:09",
-    "submittedBy": "Maya Brooks",
-    "submittedDate": "2026-05-12",
-    "description": "Uplifting house selections with soulful vocals.",
-    "status": "published",
-    "featured": true
-}
-```
-
-Creates a new mix and returns it with the assigned ID.
-
-### Update Mix
-
-```
-PUT /mixes/{id}
-Content-Type: application/json
-
-{
-    "title": "Updated Mix Title",
-    "artist": "Lena Cole",
-    "genre": "House",
-    "platform": "SoundCloud",
-    "mixUrl": "https://soundcloud.com/skproductionhub/updated-mix",
-    "coverImageUrl": "https://images.unsplash.com/photo-1501386761578-eac5c94b800a",
-    "duration": "48:10",
-    "submittedBy": "Maya Brooks",
-    "submittedDate": "2026-05-16",
-    "description": "Updated mix description.",
-    "status": "published",
-    "featured": false
-}
-```
-
-Updates an existing mix by ID.
-
-### Delete Mix
-
-```
-DELETE /mixes/{id}
-```
-
-Deletes a mix by ID.
-
-## Getting Started
-
-### Prerequisites
-
-- Docker and Docker Compose
-
-### Installation
-
-1. Go to the backend folder:
+## Start Backend
 
 ```bash
 cd backend
+docker compose up -d --build
 ```
 
-2. Start the Docker containers:
+One-line version:
 
 ```bash
-docker-compose up
+cd backend && docker compose up -d --build
 ```
 
-3. Run composer commands when needed:
+## Reset Database
+
+This removes the database volume and recreates the tables and seed data from `database/init.sql`.
 
 ```bash
-docker-compose exec php composer [...]
+cd backend
+docker compose down -v
+docker compose up -d --build
 ```
 
-### Running the Application
+One-line version:
 
-The application will be available at:
+```bash
+cd backend && docker compose down -v && docker compose up -d --build
+```
 
-- **API**: http://localhost
-- **phpMyAdmin**: http://localhost:8080
+## Test Accounts
 
-## Docker Services
+Admin:
 
-- **nginx**: Web server (port 80)
-- **php**: PHP-FPM service
-- **mysql**: MariaDB database (port 3306)
-  - Username: `developer`
-  - Password: `secret123`
-  - Database: `developmentdb`
-- **phpmyadmin**: Database management interface (port 8080)
+```text
+email: admin@skproduction.test
+password: password123
+```
 
-## Data Storage
+User:
 
-Mixes are stored in the MariaDB `mixes` table. The table and starter data are created from `database/init.sql` when the database container is created for the first time. The old `app/src/data/mixes.json` file is still kept as a backup.
+```text
+email: user@skproduction.test
+password: password123
+```
+
+## API Overview
+
+### Auth
+
+| Method | Path | Auth | Description |
+| --- | --- | --- | --- |
+| POST | `/auth/register` | Public | Register a new user account. |
+| POST | `/auth/login` | Public | Log in and receive a JWT token. |
+| GET | `/auth/me` | User token required | Return the current user. |
+
+### Public Mixes
+
+| Method | Path | Auth | Description |
+| --- | --- | --- | --- |
+| GET | `/mixes` | Public | Return published mixes with search, genre filtering, and pagination. |
+| GET | `/mixes/featured` | Public | Return featured published mixes. |
+| GET | `/mixes/{id}` | Public | Return one published mix by ID. Pending and rejected mixes return 404. |
+| GET | `/mixes/{id}/comments` | Public | Return comments for a published mix. |
+| GET | `/mixes/{id}/votes` | Public | Return vote counts for a published mix. |
+
+### Logged-In User
+
+| Method | Path | Auth | Description |
+| --- | --- | --- | --- |
+| POST | `/mixes` | User token required | Submit a new mix for review. |
+| GET | `/my/mixes` | User token required | Return mixes submitted by the logged-in user. |
+| POST | `/mixes/{id}/comments` | User token required | Add a comment to a published mix. |
+| DELETE | `/comments/{id}` | User token required | Delete your own comment. Admins can delete any comment. |
+| POST | `/mixes/{id}/votes` | User token required | Like or dislike a published mix. |
+
+### Admin
+
+All admin endpoints require a valid JWT token from an admin user.
+
+| Method | Path | Description |
+| --- | --- | --- |
+| GET | `/admin/mixes` | Return all mixes, including pending, published, and rejected. |
+| GET | `/admin/mixes/pending` | Return pending mix submissions. |
+| PUT | `/admin/mixes/{id}` | Edit a mix. |
+| DELETE | `/admin/mixes/{id}` | Delete a mix and related comments/votes. |
+| PUT | `/admin/mixes/{id}/approve` | Approve and publish a mix. |
+| PUT | `/admin/mixes/{id}/reject` | Reject a mix with a review note. |
+| PUT | `/admin/mixes/{id}/feature` | Mark a mix as featured. |
+| PUT | `/admin/mixes/{id}/unfeature` | Remove a mix from featured mixes. |
+
+## Database
+
+The database name is `developmentdb`. The development user is `developer` with password `secret123`.
+
+Tables and starter data are created from `database/init.sql` when the database container is created. The old `app/src/data/mixes.json` file is kept only as backup data and is not used by the API.

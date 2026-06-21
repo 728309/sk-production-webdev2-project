@@ -29,7 +29,9 @@ class CommentController extends Controller
         try {
             $mixId = (int)($vars['id'] ?? 0);
 
-            if (!$this->mixService->getById($mixId)) {
+            $mix = $this->mixService->getById($mixId);
+
+            if (!$mix || $mix->status !== 'published') {
                 return $this->sendErrorResponse('Mix not found', 404);
             }
 
@@ -45,7 +47,9 @@ class CommentController extends Controller
             $user = $this->requireUser();
             $mixId = (int)($vars['id'] ?? 0);
 
-            if (!$this->mixService->getById($mixId)) {
+            $mix = $this->mixService->getById($mixId);
+
+            if (!$mix || $mix->status !== 'published') {
                 return $this->sendErrorResponse('Mix not found', 404);
             }
 
