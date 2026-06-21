@@ -14,7 +14,7 @@
       </Text>
 
       <MixMeta
-        :submitted-by="mix.submittedBy"
+        :posted-date="mix.postedDate"
         :submitted-date="mix.submittedDate"
         class="mb-6"
       />
@@ -44,7 +44,7 @@ defineProps({
     type: Object,
     required: true,
     validator: (value) => {
-      return value.id && value.title && value.artist && value.genre && value.submittedBy && value.submittedDate;
+      return value.id && value.title && value.artist && value.genre;
     },
   },
 });

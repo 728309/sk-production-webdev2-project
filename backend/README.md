@@ -89,7 +89,7 @@ The `-v` flag removes the database volume. MariaDB then imports `database/init.s
 
 - `POST /auth/register`, `POST /auth/login`, `GET /auth/me`
 - `GET /mixes`, `GET /mixes/featured`, `GET /mixes/{id}`
-- `POST /mixes`, `GET /my/mixes`
+- `POST /mixes`, `GET /my/mixes`, `GET /my/mixes/summary`
 - `GET/POST /mixes/{id}/comments`, `DELETE /comments/{id}`
 - `GET/POST /mixes/{id}/votes`
 - `GET/PUT/DELETE /admin/mixes...`

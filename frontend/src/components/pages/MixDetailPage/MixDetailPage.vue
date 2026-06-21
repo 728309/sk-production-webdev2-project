@@ -28,16 +28,12 @@
       <div v-else-if="mix" class="space-y-6">
         <section class="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_340px]">
           <article class="panel panel-padding">
-            <div v-if="embedUrl" class="mb-6 overflow-hidden rounded-lg border border-[var(--color-border-strong)] bg-black shadow-[0_0_24px_rgba(124,255,65,0.12)]">
-              <iframe
-                :src="embedUrl"
-                :title="`${mix.title} player`"
-                class="h-80 w-full"
-                loading="lazy"
-                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                allowfullscreen
-              ></iframe>
-            </div>
+            <MixPlayer
+              class="mb-6"
+              :mix-url="mix.mixUrl"
+              :platform="mix.platform"
+              :title="mix.title"
+            />
 
             <GenreBadge :genre="mix.genre" />
 
@@ -67,15 +63,6 @@
             <Text as="p" size="base" color="default" class="mt-6 leading-7">
               {{ mix.description }}
             </Text>
-
-            <a
-              :href="mix.mixUrl"
-              target="_blank"
-              rel="noreferrer"
-              class="button-primary mt-6"
-            >
-              Open mix
-            </a>
           </article>
 
           <aside class="space-y-6">
@@ -187,6 +174,7 @@ import Footer from '../../organisms/Footer/Footer.vue'
 import Heading from '../../atoms/Heading/Heading.vue'
 import Text from '../../atoms/Text/Text.vue'
 import GenreBadge from '../../molecules/GenreBadge/GenreBadge.vue'
+import MixPlayer from '../../molecules/MixPlayer/MixPlayer.vue'
 import VoteButtons from '../../molecules/VoteButtons/VoteButtons.vue'
 
 const route = useRoute()
@@ -201,7 +189,6 @@ const error = ref('')
 const commentError = ref('')
 
 const mixId = computed(() => route.params.id)
-const embedUrl = computed(() => getEmbedUrl(mix.value?.mixUrl || ''))
 const displayPostedDate = computed(() => mix.value?.postedDate || mix.value?.submittedDate || '')
 
 const fetchMix = async () => {
@@ -263,38 +250,6 @@ const deleteComment = async (commentId) => {
 
 const canDeleteComment = (comment) => {
   return authStore.isAdmin || Number(comment.userId) === Number(authStore.user?.id)
-}
-
-const getEmbedUrl = (value) => {
-  try {
-    const url = new URL(value)
-    const hostname = url.hostname.replace(/^www\./, '').toLowerCase()
-
-    if (url.protocol !== 'https:' && url.protocol !== 'http:') {
-      return ''
-    }
-
-    if (hostname === 'soundcloud.com') {
-      return `https://w.soundcloud.com/player/?url=${encodeURIComponent(url.toString())}`
-    }
-
-    if (hostname === 'mixcloud.com') {
-      const feedPath = url.pathname.endsWith('/') ? url.pathname : `${url.pathname}/`
-      return `https://www.mixcloud.com/widget/iframe/?feed=${encodeURIComponent(feedPath)}`
-    }
-
-    if (hostname === 'youtube.com' || hostname === 'youtu.be') {
-      const videoId = hostname === 'youtu.be'
-        ? url.pathname.replace('/', '')
-        : url.searchParams.get('v')
-
-      return videoId ? `https://www.youtube.com/embed/${encodeURIComponent(videoId)}` : ''
-    }
-  } catch (error) {
-    return ''
-  }
-
-  return ''
 }
 
 const formatDate = (value) => {
