@@ -70,6 +70,26 @@ class MixRepository implements IMixRepository
     /**
      * @return Mix[]
      */
+    public function getFeatured(int $limit = 3): array
+    {
+        $statement = $this->connection->prepare(
+            'SELECT * FROM mixes
+             WHERE status = :status AND featured = 1
+             ORDER BY submitted_date DESC, id DESC
+             LIMIT :limit'
+        );
+        $statement->bindValue(':status', 'published');
+        $statement->bindValue(':limit', $limit, PDO::PARAM_INT);
+        $statement->execute();
+
+        $rows = $statement->fetchAll();
+
+        return array_map([$this, 'mapRowToMix'], $rows);
+    }
+
+    /**
+     * @return Mix[]
+     */
     public function getByUserId(int $userId): array
     {
         $statement = $this->connection->prepare(
@@ -170,6 +190,17 @@ class MixRepository implements IMixRepository
         return $statement->rowCount() > 0;
     }
 
+    public function updateAndReturn(int $id, Mix $mix): ?Mix
+    {
+        if (!$this->getById($id)) {
+            return null;
+        }
+
+        $this->update($id, $mix);
+
+        return $this->getById($id);
+    }
+
     public function approve(int $id): ?Mix
     {
         if (!$this->getById($id)) {
@@ -205,10 +236,46 @@ class MixRepository implements IMixRepository
         return $this->getById($id);
     }
 
+    public function setFeatured(int $id, bool $featured): ?Mix
+    {
+        if (!$this->getById($id)) {
+            return null;
+        }
+
+        $statement = $this->connection->prepare(
+            'UPDATE mixes SET featured = :featured WHERE id = :id'
+        );
+        $statement->execute([
+            'featured' => $featured ? 1 : 0,
+            'id' => $id,
+        ]);
+
+        return $this->getById($id);
+    }
+
     public function delete(int $id): bool
     {
-        $statement = $this->connection->prepare('DELETE FROM mixes WHERE id = :id');
-        $statement->execute(['id' => $id]);
+        if (!$this->getById($id)) {
+            return false;
+        }
+
+        $this->connection->beginTransaction();
+
+        try {
+            $deleteVotes = $this->connection->prepare('DELETE FROM votes WHERE mix_id = :id');
+            $deleteVotes->execute(['id' => $id]);
+
+            $deleteComments = $this->connection->prepare('DELETE FROM comments WHERE mix_id = :id');
+            $deleteComments->execute(['id' => $id]);
+
+            $statement = $this->connection->prepare('DELETE FROM mixes WHERE id = :id');
+            $statement->execute(['id' => $id]);
+
+            $this->connection->commit();
+        } catch (\Throwable $e) {
+            $this->connection->rollBack();
+            throw $e;
+        }
 
         return $statement->rowCount() > 0;
     }

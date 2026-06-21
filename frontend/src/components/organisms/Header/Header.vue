@@ -50,6 +50,13 @@
             </RouterLink>
             <RouterLink
               v-if="authStore.isAdmin"
+              to="/admin/mixes"
+              class="text-gray-700 hover:text-blue-600 transition-colors font-medium"
+            >
+              Admin Mixes
+            </RouterLink>
+            <RouterLink
+              v-if="authStore.isAdmin"
               to="/admin/pending"
               class="text-gray-700 hover:text-blue-600 transition-colors font-medium"
             >
@@ -149,6 +156,14 @@
               @click="mobileMenuOpen = false"
             >
               My Submissions
+            </RouterLink>
+            <RouterLink
+              v-if="authStore.isAdmin"
+              to="/admin/mixes"
+              class="text-gray-700 hover:text-blue-600 transition-colors px-2 py-1"
+              @click="mobileMenuOpen = false"
+            >
+              Admin Mixes
             </RouterLink>
             <RouterLink
               v-if="authStore.isAdmin"

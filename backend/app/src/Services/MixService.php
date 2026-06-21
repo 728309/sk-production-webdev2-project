@@ -33,6 +33,11 @@ class MixService implements IMixService
         return $this->repository->getById($id);
     }
 
+    public function getFeatured(int $limit = 3): array
+    {
+        return $this->repository->getFeatured($limit);
+    }
+
     public function getByUserId(int $userId): array
     {
         return $this->repository->getByUserId($userId);
@@ -53,6 +58,11 @@ class MixService implements IMixService
         return $this->repository->update($id, $mix);
     }
 
+    public function updateAndReturn(int $id, Mix $mix): ?Mix
+    {
+        return $this->repository->updateAndReturn($id, $mix);
+    }
+
     public function approve(int $id): ?Mix
     {
         return $this->repository->approve($id);
@@ -61,6 +71,11 @@ class MixService implements IMixService
     public function reject(int $id, string $reviewNote): ?Mix
     {
         return $this->repository->reject($id, $reviewNote);
+    }
+
+    public function setFeatured(int $id, bool $featured): ?Mix
+    {
+        return $this->repository->setFeatured($id, $featured);
     }
 
     public function delete(int $id): bool

@@ -43,6 +43,7 @@ $dispatcher = simpleDispatcher(function (RouteCollector $r) {
 
     // Mix routes
     $r->addRoute('GET', '/mixes', ['App\Controllers\MixController', 'getAll']);
+    $r->addRoute('GET', '/mixes/featured', ['App\Controllers\MixController', 'getFeatured']);
     $r->addRoute('GET', '/mixes/{id}/comments', ['App\Controllers\CommentController', 'getForMix']);
     $r->addRoute('POST', '/mixes/{id}/comments', ['App\Controllers\CommentController', 'create']);
     $r->addRoute('GET', '/mixes/{id}/votes', ['App\Controllers\VoteController', 'getForMix']);
@@ -53,9 +54,14 @@ $dispatcher = simpleDispatcher(function (RouteCollector $r) {
     $r->addRoute('DELETE', '/comments/{id}', ['App\Controllers\CommentController', 'delete']);
 
     // Admin mix review routes
+    $r->addRoute('GET', '/admin/mixes', ['App\Controllers\MixController', 'getAdminAll']);
     $r->addRoute('GET', '/admin/mixes/pending', ['App\Controllers\MixController', 'getPending']);
     $r->addRoute('PUT', '/admin/mixes/{id}/approve', ['App\Controllers\MixController', 'approve']);
     $r->addRoute('PUT', '/admin/mixes/{id}/reject', ['App\Controllers\MixController', 'reject']);
+    $r->addRoute('PUT', '/admin/mixes/{id}/feature', ['App\Controllers\MixController', 'feature']);
+    $r->addRoute('PUT', '/admin/mixes/{id}/unfeature', ['App\Controllers\MixController', 'unfeature']);
+    $r->addRoute('PUT', '/admin/mixes/{id}', ['App\Controllers\MixController', 'adminUpdate']);
+    $r->addRoute('DELETE', '/admin/mixes/{id}', ['App\Controllers\MixController', 'adminDelete']);
 });
 
 

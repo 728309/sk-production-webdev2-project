@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import HomePage from '../components/pages/HomePage/HomePage.vue'
 import ArticleArchivePage from '../components/pages/ArticleArchivePage/ArticleArchivePage.vue'
 import MixDetailPage from '../components/pages/MixDetailPage/MixDetailPage.vue'
 import LoginPage from '../components/pages/LoginPage/LoginPage.vue'
@@ -8,13 +9,14 @@ import ContactPage from '../components/pages/ContactPage/ContactPage.vue'
 import SubmitMixPage from '../components/pages/SubmitMixPage/SubmitMixPage.vue'
 import MySubmissionsPage from '../components/pages/MySubmissionsPage/MySubmissionsPage.vue'
 import AdminPendingPage from '../components/pages/AdminPendingPage/AdminPendingPage.vue'
+import AdminMixesPage from '../components/pages/AdminMixesPage/AdminMixesPage.vue'
 import { useAuthStore } from '../stores/authStore.js'
 
 const routes = [
   {
     path: '/',
     name: 'home',
-    component: ArticleArchivePage,
+    component: HomePage,
   },
   {
     path: '/mixes',
@@ -62,6 +64,12 @@ const routes = [
     path: '/admin/pending',
     name: 'admin-pending',
     component: AdminPendingPage,
+    meta: { requiresAuth: true, requiresAdmin: true },
+  },
+  {
+    path: '/admin/mixes',
+    name: 'admin-mixes',
+    component: AdminMixesPage,
     meta: { requiresAuth: true, requiresAdmin: true },
   },
 ]

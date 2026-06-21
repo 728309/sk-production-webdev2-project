@@ -66,6 +66,15 @@ class MixController extends Controller
         }
     }
 
+    public function getFeatured()
+    {
+        try {
+            return $this->sendSuccessResponse($this->mixService->getFeatured(3));
+        } catch (\Throwable $e) {
+            return $this->sendMixError($e);
+        }
+    }
+
     public function create()
     {
         try {
@@ -120,6 +129,93 @@ class MixController extends Controller
         }
     }
 
+    public function getAdminAll()
+    {
+        try {
+            $this->requireAdmin();
+
+            $page = max(1, (int)($_GET['page'] ?? 1));
+            $limit = max(1, (int)($_GET['limit'] ?? 6));
+            $genre = trim($_GET['genre'] ?? '');
+            $search = trim($_GET['search'] ?? '');
+            $status = trim($_GET['status'] ?? '');
+
+            $genreFilter = $genre !== '' ? $genre : null;
+            $searchFilter = $search !== '' ? $search : null;
+            $statusFilter = $status !== '' ? $status : null;
+
+            $mixes = $this->mixService->getAll($page, $limit, $genreFilter, $searchFilter, $statusFilter);
+            $total = $this->mixService->count($genreFilter, $searchFilter, $statusFilter);
+            $totalPages = (int)ceil($total / $limit);
+
+            return $this->sendSuccessResponse([
+                'data' => $mixes,
+                'pagination' => [
+                    'page' => $page,
+                    'limit' => $limit,
+                    'total' => $total,
+                    'totalPages' => $totalPages,
+                ],
+            ]);
+        } catch (\Throwable $e) {
+            return $this->sendMixError($e);
+        }
+    }
+
+    public function adminUpdate($vars = [])
+    {
+        try {
+            $this->requireAdmin();
+            $id = (int)($vars['id'] ?? 0);
+            $existingMix = $this->mixService->getById($id);
+
+            if (!$existingMix) {
+                return $this->sendErrorResponse('Mix not found', 404);
+            }
+
+            $data = $this->getJsonInput();
+            $this->validateAdminUpdate($data);
+
+            $mix = new Mix([
+                'id' => $id,
+                'title' => trim($data['title']),
+                'artist' => trim($data['artist']),
+                'genre' => trim($data['genre']),
+                'platform' => trim($data['platform']),
+                'mixUrl' => trim($data['mixUrl']),
+                'coverImageUrl' => trim($data['coverImageUrl'] ?? ''),
+                'duration' => trim($data['duration'] ?? ''),
+                'submittedBy' => $existingMix->submittedBy,
+                'submittedByUserId' => $existingMix->submittedByUserId,
+                'submittedDate' => $existingMix->submittedDate,
+                'description' => trim($data['description'] ?? ''),
+                'status' => trim($data['status']),
+                'featured' => (bool)($data['featured'] ?? false),
+                'reviewNote' => $existingMix->reviewNote,
+            ]);
+
+            return $this->sendSuccessResponse($this->mixService->updateAndReturn($id, $mix));
+        } catch (\Throwable $e) {
+            return $this->sendMixError($e);
+        }
+    }
+
+    public function adminDelete($vars = [])
+    {
+        try {
+            $this->requireAdmin();
+            $id = (int)($vars['id'] ?? 0);
+
+            if (!$this->mixService->delete($id)) {
+                return $this->sendErrorResponse('Mix not found', 404);
+            }
+
+            return $this->sendSuccessResponse(['message' => 'Mix deleted successfully']);
+        } catch (\Throwable $e) {
+            return $this->sendMixError($e);
+        }
+    }
+
     public function approve($vars = [])
     {
         try {
@@ -161,6 +257,40 @@ class MixController extends Controller
         }
     }
 
+    public function feature($vars = [])
+    {
+        try {
+            $this->requireAdmin();
+            $id = (int)($vars['id'] ?? 0);
+            $mix = $this->mixService->setFeatured($id, true);
+
+            if (!$mix) {
+                return $this->sendErrorResponse('Mix not found', 404);
+            }
+
+            return $this->sendSuccessResponse($mix);
+        } catch (\Throwable $e) {
+            return $this->sendMixError($e);
+        }
+    }
+
+    public function unfeature($vars = [])
+    {
+        try {
+            $this->requireAdmin();
+            $id = (int)($vars['id'] ?? 0);
+            $mix = $this->mixService->setFeatured($id, false);
+
+            if (!$mix) {
+                return $this->sendErrorResponse('Mix not found', 404);
+            }
+
+            return $this->sendSuccessResponse($mix);
+        } catch (\Throwable $e) {
+            return $this->sendMixError($e);
+        }
+    }
+
     private function validateSubmission(array $data): void
     {
         $requiredFields = ['title', 'artist', 'genre', 'platform', 'mixUrl'];
@@ -169,6 +299,17 @@ class MixController extends Controller
             if (trim($data[$field] ?? '') === '') {
                 throw new \InvalidArgumentException($field . ' is required', 400);
             }
+        }
+    }
+
+    private function validateAdminUpdate(array $data): void
+    {
+        $this->validateSubmission($data);
+
+        $status = trim($data['status'] ?? '');
+
+        if (!in_array($status, ['pending', 'published', 'rejected'], true)) {
+            throw new \InvalidArgumentException('Status must be pending, published, or rejected', 400);
         }
     }
 
