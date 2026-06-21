@@ -5,7 +5,7 @@
     <main class="app-container max-w-6xl">
       <RouterLink
         to="/mixes"
-        class="mb-6 inline-block text-sm font-medium text-blue-600 hover:text-blue-700"
+        class="mb-6 inline-block text-sm font-bold uppercase text-[var(--color-accent)] hover:text-[var(--color-accent-bright)]"
       >
         Back to mixes
       </RouterLink>
@@ -28,7 +28,18 @@
       <div v-else-if="mix" class="space-y-6">
         <section class="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_340px]">
           <article class="panel panel-padding">
-            <CategoryBadge :genre="mix.genre" />
+            <div v-if="embedUrl" class="mb-6 overflow-hidden rounded-lg border border-[var(--color-border-strong)] bg-black shadow-[0_0_24px_rgba(124,255,65,0.12)]">
+              <iframe
+                :src="embedUrl"
+                :title="`${mix.title} player`"
+                class="h-80 w-full"
+                loading="lazy"
+                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                allowfullscreen
+              ></iframe>
+            </div>
+
+            <GenreBadge :genre="mix.genre" />
 
             <Heading :level="1" size="3xl" class="mt-4 mb-2">
               {{ mix.title }}
@@ -38,22 +49,22 @@
               {{ mix.artist }}
             </Text>
 
-            <div class="grid grid-cols-1 gap-4 border-y border-gray-200 py-5 sm:grid-cols-2">
+            <div class="grid grid-cols-1 gap-4 border-y border-[var(--color-border)] py-5 sm:grid-cols-2">
               <div>
-                <p class="text-xs font-semibold uppercase text-gray-500">Platform</p>
-                <p class="text-sm text-gray-900">{{ mix.platform }}</p>
+                <p class="text-xs font-semibold uppercase text-[var(--color-text-muted)]">Platform</p>
+                <p class="text-sm text-[var(--color-text)]">{{ mix.platform }}</p>
               </div>
               <div>
-                <p class="text-xs font-semibold uppercase text-gray-500">Duration</p>
-                <p class="text-sm text-gray-900">{{ mix.duration || 'Not listed' }}</p>
+                <p class="text-xs font-semibold uppercase text-[var(--color-text-muted)]">Duration</p>
+                <p class="text-sm text-[var(--color-text)]">{{ mix.duration || 'Not listed' }}</p>
               </div>
               <div>
-                <p class="text-xs font-semibold uppercase text-gray-500">Submitted by</p>
-                <p class="text-sm text-gray-900">{{ mix.submittedBy }}</p>
+                <p class="text-xs font-semibold uppercase text-[var(--color-text-muted)]">Submitted by</p>
+                <p class="text-sm text-[var(--color-text)]">{{ mix.submittedBy }}</p>
               </div>
               <div>
-                <p class="text-xs font-semibold uppercase text-gray-500">Submitted date</p>
-                <p class="text-sm text-gray-900">{{ formatDate(mix.submittedDate) }}</p>
+                <p class="text-xs font-semibold uppercase text-[var(--color-text-muted)]">Submitted date</p>
+                <p class="text-sm text-[var(--color-text)]">{{ formatDate(mix.submittedDate) }}</p>
               </div>
             </div>
 
@@ -88,16 +99,16 @@
           <div class="mb-5 flex flex-wrap items-center justify-between gap-3">
             <div>
               <Heading :level="2" size="2xl">
-                Comments
+                LISTENER NOTES
               </Heading>
               <Text as="p" size="sm" color="muted">
-                Read reactions from the SK Production Hub community.
+                Read reactions from the SK HUB community.
               </Text>
             </div>
           </div>
 
           <form v-if="authStore.isAuthenticated" class="mb-6" @submit.prevent="submitComment">
-            <label for="comment-body" class="mb-2 block text-sm font-semibold text-gray-900">
+            <label for="comment-body" class="mb-2 block text-sm font-semibold uppercase text-[var(--color-text-soft)]">
               Add a comment
             </label>
             <textarea
@@ -136,25 +147,25 @@
             <article
               v-for="comment in comments"
               :key="comment.id"
-              class="rounded-lg border border-gray-200 bg-gray-50 p-4"
+              class="rounded-lg border border-[var(--color-border)] bg-[var(--color-surface-2)] p-4"
             >
               <div class="mb-2 flex flex-wrap items-center justify-between gap-2">
                 <div>
-                  <p class="text-sm font-semibold text-gray-900">{{ comment.userName }}</p>
-                  <p class="text-xs text-gray-500">{{ formatDateTime(comment.createdAt) }}</p>
+                  <p class="text-sm font-semibold text-[var(--color-text)]">{{ comment.userName }}</p>
+                  <p class="text-xs text-[var(--color-text-muted)]">{{ formatDateTime(comment.createdAt) }}</p>
                 </div>
 
                 <button
                   v-if="canDeleteComment(comment)"
                   type="button"
-                  class="text-sm font-semibold text-red-600 hover:text-red-700"
+                  class="text-sm font-semibold uppercase text-[var(--color-danger)] hover:text-red-300"
                   @click="deleteComment(comment.id)"
                 >
                   Delete
                 </button>
               </div>
 
-              <p class="text-sm leading-6 text-gray-700">{{ comment.body }}</p>
+              <p class="text-sm leading-6 text-[var(--color-text-soft)]">{{ comment.body }}</p>
             </article>
           </div>
 
@@ -173,12 +184,13 @@
 import { computed, onMounted, ref, watch } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
 import { useAuthStore } from '../../../stores/authStore.js'
-import { del, get, post, readJsonResponse } from '../../../utils/api.js'
+import { deleteComment as deleteCommentApi, fetchComments as fetchCommentsApi, postComment } from '../../../api/commentApi.js'
+import { fetchMixById } from '../../../api/mixApi.js'
 import Header from '../../organisms/Header/Header.vue'
 import Footer from '../../organisms/Footer/Footer.vue'
 import Heading from '../../atoms/Heading/Heading.vue'
 import Text from '../../atoms/Text/Text.vue'
-import CategoryBadge from '../../molecules/CategoryBadge/CategoryBadge.vue'
+import GenreBadge from '../../molecules/GenreBadge/GenreBadge.vue'
 import VoteButtons from '../../molecules/VoteButtons/VoteButtons.vue'
 
 const route = useRoute()
@@ -193,14 +205,14 @@ const error = ref('')
 const commentError = ref('')
 
 const mixId = computed(() => route.params.id)
+const embedUrl = computed(() => getEmbedUrl(mix.value?.mixUrl || ''))
 
 const fetchMix = async () => {
   loading.value = true
   error.value = ''
 
   try {
-    const response = await get(`/mixes/${mixId.value}`)
-    mix.value = await readJsonResponse(response)
+    mix.value = await fetchMixById(mixId.value)
   } catch (err) {
     error.value = err.message
   } finally {
@@ -213,8 +225,7 @@ const fetchComments = async () => {
   commentError.value = ''
 
   try {
-    const response = await get(`/mixes/${mixId.value}/comments`)
-    comments.value = await readJsonResponse(response)
+    comments.value = await fetchCommentsApi(mixId.value)
   } catch (err) {
     commentError.value = err.message
   } finally {
@@ -232,10 +243,7 @@ const submitComment = async () => {
   commentError.value = ''
 
   try {
-    const response = await post(`/mixes/${mixId.value}/comments`, {
-      body: newComment.value,
-    })
-    const createdComment = await readJsonResponse(response)
+    const createdComment = await postComment(mixId.value, newComment.value)
     comments.value = [...comments.value, createdComment]
     newComment.value = ''
   } catch (err) {
@@ -249,8 +257,7 @@ const deleteComment = async (commentId) => {
   commentError.value = ''
 
   try {
-    const response = await del(`/comments/${commentId}`)
-    await readJsonResponse(response)
+    await deleteCommentApi(commentId)
     comments.value = comments.value.filter((comment) => comment.id !== commentId)
   } catch (err) {
     commentError.value = err.message
@@ -259,6 +266,38 @@ const deleteComment = async (commentId) => {
 
 const canDeleteComment = (comment) => {
   return authStore.isAdmin || Number(comment.userId) === Number(authStore.user?.id)
+}
+
+const getEmbedUrl = (value) => {
+  try {
+    const url = new URL(value)
+    const hostname = url.hostname.replace(/^www\./, '').toLowerCase()
+
+    if (url.protocol !== 'https:' && url.protocol !== 'http:') {
+      return ''
+    }
+
+    if (hostname === 'soundcloud.com') {
+      return `https://w.soundcloud.com/player/?url=${encodeURIComponent(url.toString())}`
+    }
+
+    if (hostname === 'mixcloud.com') {
+      const feedPath = url.pathname.endsWith('/') ? url.pathname : `${url.pathname}/`
+      return `https://www.mixcloud.com/widget/iframe/?feed=${encodeURIComponent(feedPath)}`
+    }
+
+    if (hostname === 'youtube.com' || hostname === 'youtu.be') {
+      const videoId = hostname === 'youtu.be'
+        ? url.pathname.replace('/', '')
+        : url.searchParams.get('v')
+
+      return videoId ? `https://www.youtube.com/embed/${encodeURIComponent(videoId)}` : ''
+    }
+  } catch (error) {
+    return ''
+  }
+
+  return ''
 }
 
 const formatDate = (value) => {

@@ -2,20 +2,20 @@
   <article class="max-w-4xl mx-auto">
     <header class="mb-6">
       <div class="mb-4">
-        <CategoryBadge :genre="article.genre" />
+        <GenreBadge :genre="mix.genre" />
       </div>
 
       <Heading :level="1" size="3xl" class="mb-4">
-        {{ article.title }}
+        {{ mix.title }}
       </Heading>
 
       <Text as="p" size="lg" color="default" weight="semibold" class="mb-4">
-        {{ article.artist }}
+        {{ mix.artist }}
       </Text>
 
-      <ArticleMeta
-        :submitted-by="article.submittedBy"
-        :submitted-date="article.submittedDate"
+      <MixMeta
+        :submitted-by="mix.submittedBy"
+        :submitted-date="mix.submittedDate"
         class="mb-6"
       />
     </header>
@@ -27,7 +27,7 @@
         color="default"
         class="whitespace-pre-line leading-relaxed"
       >
-        {{ article.description }}
+        {{ mix.description }}
       </Text>
     </div>
   </article>
@@ -36,11 +36,11 @@
 <script setup>
 import Heading from '../../atoms/Heading/Heading.vue';
 import Text from '../../atoms/Text/Text.vue';
-import ArticleMeta from '../../molecules/ArticleMeta/ArticleMeta.vue';
-import CategoryBadge from '../../molecules/CategoryBadge/CategoryBadge.vue';
+import MixMeta from '../../molecules/MixMeta/MixMeta.vue';
+import GenreBadge from '../../molecules/GenreBadge/GenreBadge.vue';
 
 defineProps({
-  article: {
+  mix: {
     type: Object,
     required: true,
     validator: (value) => {
@@ -52,7 +52,7 @@ defineProps({
 
 <style scoped>
 .prose {
-  color: #374151;
+  color: var(--color-text-soft);
 }
 
 .prose p {

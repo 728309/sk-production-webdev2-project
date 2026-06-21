@@ -1,4 +1,4 @@
-import ArticleCard from './ArticleCard.vue';
+import MixCard from './MixCard.vue';
 
 const sampleMix = {
   id: 1,
@@ -18,10 +18,10 @@ const sampleMix = {
 
 export default {
   title: 'Organisms/MixCard',
-  component: ArticleCard,
+  component: MixCard,
   tags: ['autodocs'],
   argTypes: {
-    article: {
+    mix: {
       control: 'object',
     },
   },
@@ -29,13 +29,13 @@ export default {
 
 export const Default = {
   args: {
-    article: sampleMix,
+    mix: sampleMix,
   },
 };
 
 export const Techno = {
   args: {
-    article: {
+    mix: {
       ...sampleMix,
       id: 2,
       title: 'Warehouse Pulse 132',
@@ -53,7 +53,7 @@ export const Techno = {
 
 export const LongDescription = {
   args: {
-    article: {
+    mix: {
       ...sampleMix,
       id: 3,
       title: 'Rooftop House Session',
@@ -70,7 +70,7 @@ export const LongDescription = {
 
 export const Grid = {
   render: () => ({
-    components: { ArticleCard },
+    components: { MixCard },
     setup() {
       const mixes = [
         sampleMix,
@@ -99,7 +99,7 @@ export const Grid = {
     },
     template: `
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <ArticleCard v-for="mix in mixes" :key="mix.id" :article="mix" />
+        <MixCard v-for="mix in mixes" :key="mix.id" :mix="mix" />
       </div>
     `,
   }),

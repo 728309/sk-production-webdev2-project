@@ -35,6 +35,6 @@ class JwtHelper
 
     private static function getSigningKey(): string
     {
-        return hash('sha256', self::SECRET);
+        return hash('sha256', getenv('JWT_SECRET') ?: self::SECRET);
     }
 }

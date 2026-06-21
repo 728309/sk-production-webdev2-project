@@ -36,11 +36,11 @@ export default {
     props = reactive(props);
     return {
       classes: computed(() => {
-        const baseClasses = "inline-block cursor-pointer border-0 rounded-full font-bold leading-none font-sans bg-blue-500";
+        const baseClasses = "inline-block cursor-pointer rounded-md border font-bold uppercase leading-none transition-colors";
         
         const variantClasses = props.primary
-          ? "bg-[#555ab9] text-white"
-          : "bg-transparent text-gray-800 ring-1 ring-black/15";
+          ? "border-[var(--color-accent)] bg-[var(--color-accent)] text-black"
+          : "border-[var(--color-border-strong)] bg-transparent text-[var(--color-accent)]";
         
         const sizeClasses = {
           small: "px-4 py-2.5 text-xs",
@@ -62,4 +62,3 @@ export default {
   },
 };
 </script>
-

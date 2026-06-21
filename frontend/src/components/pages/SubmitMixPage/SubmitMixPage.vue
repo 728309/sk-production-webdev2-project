@@ -4,13 +4,25 @@
 
     <main class="app-container-narrow">
       <div class="page-header">
+        <p class="page-kicker">Upload signal</p>
         <Heading :level="1" size="3xl" class="mb-2">
-          Submit a Mix
+          SUBMIT A MIX
         </Heading>
         <Text as="p" size="base" color="muted">
           Submitted mixes are reviewed before they appear in the public archive.
         </Text>
       </div>
+
+      <section class="panel panel-padding mb-6">
+        <Heading :level="2" size="lg" class="mb-3">
+          HOW IT WORKS
+        </Heading>
+        <ol class="space-y-2 text-sm text-[var(--color-text-soft)]">
+          <li><span class="terminal-text font-bold">1.</span> Submit your mix</li>
+          <li><span class="terminal-text font-bold">2.</span> Admin reviews it</li>
+          <li><span class="terminal-text font-bold">3.</span> Approved mixes appear in the archive</li>
+        </ol>
+      </section>
 
       <form class="panel panel-padding space-y-5" @submit.prevent="handleSubmit">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -56,7 +68,7 @@
         </div>
 
         <div v-if="error" class="form-error">
-          <Text as="p" size="sm" color="muted" class="text-red-700">
+          <Text as="p" size="sm" color="muted" class="text-[var(--color-danger)]">
             {{ error }}
           </Text>
         </div>
@@ -78,7 +90,7 @@
 <script setup>
 import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { post, readJsonResponse } from '../../../utils/api.js'
+import { submitMix } from '../../../api/mixApi.js'
 import Header from '../../organisms/Header/Header.vue'
 import Footer from '../../organisms/Footer/Footer.vue'
 import Heading from '../../atoms/Heading/Heading.vue'
@@ -104,8 +116,7 @@ const handleSubmit = async () => {
   error.value = ''
 
   try {
-    const response = await post('/mixes', { ...form })
-    await readJsonResponse(response)
+    await submitMix({ ...form })
     router.push('/my-submissions')
   } catch (err) {
     error.value = err.message

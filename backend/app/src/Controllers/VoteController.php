@@ -3,7 +3,6 @@
 namespace App\Controllers;
 
 use App\Framework\Controller;
-use App\Models\User;
 use App\Services\AuthService;
 use App\Services\IAuthService;
 use App\Services\IMixService;
@@ -35,7 +34,7 @@ class VoteController extends Controller
                 return $this->sendErrorResponse('Mix not found', 404);
             }
 
-            $user = $this->getOptionalUser();
+            $user = $this->getOptionalUser($this->authService);
 
             return $this->sendSuccessResponse($this->voteService->getSummary($mixId, $user?->id));
         } catch (\Throwable $e) {
@@ -46,7 +45,7 @@ class VoteController extends Controller
     public function vote($vars = [])
     {
         try {
-            $user = $this->requireUser();
+            $user = $this->requireUser($this->authService);
             $mixId = (int)($vars['id'] ?? 0);
 
             $mix = $this->mixService->getById($mixId);
@@ -64,69 +63,8 @@ class VoteController extends Controller
         }
     }
 
-    private function getOptionalUser(): ?User
-    {
-        $token = $this->getBearerToken();
-
-        if (!$token) {
-            return null;
-        }
-
-        $user = $this->authService->getUserFromToken($token);
-
-        if (!$user) {
-            throw new \RuntimeException('Invalid token', 401);
-        }
-
-        return $user;
-    }
-
-    private function requireUser(): User
-    {
-        $token = $this->getBearerToken();
-
-        if (!$token) {
-            throw new \RuntimeException('Invalid token', 401);
-        }
-
-        $user = $this->authService->getUserFromToken($token);
-
-        if (!$user) {
-            throw new \RuntimeException('Invalid token', 401);
-        }
-
-        return $user;
-    }
-
-    private function getJsonInput(): array
-    {
-        $input = file_get_contents('php://input');
-        $data = json_decode($input, true);
-
-        return is_array($data) ? $data : [];
-    }
-
-    private function getBearerToken(): ?string
-    {
-        $header = $_SERVER['HTTP_AUTHORIZATION'] ?? $_SERVER['REDIRECT_HTTP_AUTHORIZATION'] ?? '';
-
-        if (preg_match('/Bearer\s+(\S+)/', $header, $matches)) {
-            return $matches[1];
-        }
-
-        return null;
-    }
-
     private function sendVoteError(\Throwable $e)
     {
-        $code = $e->getCode();
-
-        if (!in_array($code, [400, 401, 403, 404], true)) {
-            $code = 500;
-        }
-
-        $message = $code === 500 ? 'Internal server error' : $e->getMessage();
-
-        return $this->sendErrorResponse($message, $code);
+        return $this->sendApiError($e, [400, 401, 403, 404]);
     }
 }

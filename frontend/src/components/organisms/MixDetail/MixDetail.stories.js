@@ -1,4 +1,4 @@
-import ArticleDetail from './ArticleDetail.vue';
+import MixDetail from './MixDetail.vue';
 
 const sampleMix = {
   id: 1,
@@ -18,10 +18,10 @@ const sampleMix = {
 
 export default {
   title: 'Organisms/MixDetail',
-  component: ArticleDetail,
+  component: MixDetail,
   tags: ['autodocs'],
   argTypes: {
-    article: {
+    mix: {
       control: 'object',
     },
   },
@@ -29,13 +29,13 @@ export default {
 
 export const Default = {
   args: {
-    article: sampleMix,
+    mix: sampleMix,
   },
 };
 
 export const Techno = {
   args: {
-    article: {
+    mix: {
       ...sampleMix,
       id: 2,
       title: 'Warehouse Pulse 132',
@@ -53,7 +53,7 @@ export const Techno = {
 
 export const RnB = {
   args: {
-    article: {
+    mix: {
       ...sampleMix,
       id: 6,
       title: 'Velvet Room Slow Jams',

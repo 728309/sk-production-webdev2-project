@@ -5,10 +5,10 @@
     <main class="flex flex-1 items-center justify-center px-4 py-10 sm:py-14">
       <section class="panel panel-padding w-full max-w-md">
         <Heading :level="1" size="2xl" class="mb-2">
-          Register
+          CREATE YOUR ACCOUNT
         </Heading>
         <Text as="p" size="sm" color="muted" class="mb-6">
-          Create your SK Production Hub account.
+          Join SK HUB to submit mixes and react to the archive.
         </Text>
 
         <form class="space-y-4" @submit.prevent="handleSubmit">
@@ -56,7 +56,7 @@
           </div>
 
           <div v-if="error" class="form-error">
-            <Text as="p" size="sm" color="muted" class="text-red-700">
+            <Text as="p" size="sm" color="muted" class="text-[var(--color-danger)]">
               {{ error }}
             </Text>
           </div>

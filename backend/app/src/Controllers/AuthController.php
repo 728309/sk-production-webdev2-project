@@ -28,7 +28,7 @@ class AuthController extends Controller
 
             return $this->sendSuccessResponse($result, 201);
         } catch (\Throwable $e) {
-            return $this->sendAuthError($e);
+            return $this->sendApiError($e, [400, 401, 409]);
         }
     }
 
@@ -44,60 +44,18 @@ class AuthController extends Controller
 
             return $this->sendSuccessResponse($result);
         } catch (\Throwable $e) {
-            return $this->sendAuthError($e);
+            return $this->sendApiError($e, [400, 401, 409]);
         }
     }
 
     public function me()
     {
         try {
-            $token = $this->getBearerToken();
-
-            if (!$token) {
-                return $this->sendErrorResponse('Invalid token', 401);
-            }
-
-            $user = $this->authService->getUserFromToken($token);
-
-            if (!$user) {
-                return $this->sendErrorResponse('Invalid token', 401);
-            }
+            $user = $this->requireUser($this->authService);
 
             return $this->sendSuccessResponse($this->authService->userToArray($user));
         } catch (\Throwable $e) {
-            return $this->sendAuthError($e);
+            return $this->sendApiError($e, [400, 401, 409]);
         }
-    }
-
-    private function getJsonInput(): array
-    {
-        $input = file_get_contents('php://input');
-        $data = json_decode($input, true);
-
-        return is_array($data) ? $data : [];
-    }
-
-    private function getBearerToken(): ?string
-    {
-        $header = $_SERVER['HTTP_AUTHORIZATION'] ?? $_SERVER['REDIRECT_HTTP_AUTHORIZATION'] ?? '';
-
-        if (preg_match('/Bearer\s+(\S+)/', $header, $matches)) {
-            return $matches[1];
-        }
-
-        return null;
-    }
-
-    private function sendAuthError(\Throwable $e)
-    {
-        $code = $e->getCode();
-
-        if (!in_array($code, [400, 401, 409], true)) {
-            $code = 500;
-        }
-
-        $message = $code === 500 ? 'Internal server error' : $e->getMessage();
-
-        return $this->sendErrorResponse($message, $code);
     }
 }

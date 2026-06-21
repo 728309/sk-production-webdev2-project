@@ -7,6 +7,15 @@
  * See the documentation for FastRoute for more information: https://github.com/nikic/FastRoute
  */
 
+ini_set('display_errors', '0');
+
+function sendJsonError(string $message, int $code): void
+{
+    header('Content-Type: application/json; charset=utf-8');
+    http_response_code($code);
+    echo json_encode(['error' => $message], JSON_PRETTY_PRINT);
+}
+
 // CORS headers for localhost requests
 $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
 if (preg_match('/^https?:\/\/(localhost|127\.0\.0\.1|::1)(:\d+)?$/', $origin)) {
@@ -36,6 +45,10 @@ use function FastRoute\simpleDispatcher;
  * Define the routes for the application.
  */
 $dispatcher = simpleDispatcher(function (RouteCollector $r) {
+    // Health routes
+    $r->addRoute('GET', '/health', ['App\Controllers\HealthController', 'api']);
+    $r->addRoute('GET', '/health/db', ['App\Controllers\HealthController', 'database']);
+
     // Auth routes
     $r->addRoute('POST', '/auth/register', ['App\Controllers\AuthController', 'register']);
     $r->addRoute('POST', '/auth/login', ['App\Controllers\AuthController', 'login']);
@@ -50,6 +63,8 @@ $dispatcher = simpleDispatcher(function (RouteCollector $r) {
     $r->addRoute('POST', '/mixes/{id}/votes', ['App\Controllers\VoteController', 'vote']);
     $r->addRoute('GET', '/mixes/{id}', ['App\Controllers\MixController', 'get']);
     $r->addRoute('POST', '/mixes', ['App\Controllers\MixController', 'create']);
+    $r->addRoute('PUT', '/mixes/{id}', ['App\Controllers\MixController', 'adminUpdate']);
+    $r->addRoute('DELETE', '/mixes/{id}', ['App\Controllers\MixController', 'adminDelete']);
     $r->addRoute('GET', '/my/mixes', ['App\Controllers\MixController', 'getMyMixes']);
     $r->addRoute('DELETE', '/comments/{id}', ['App\Controllers\CommentController', 'delete']);
 
@@ -78,22 +93,22 @@ $routeInfo = $dispatcher->dispatch($httpMethod, $uri);
 switch ($routeInfo[0]) {
     // Handle not found routes
     case FastRoute\Dispatcher::NOT_FOUND:
-        header('Content-Type: application/json; charset=utf-8');
-        http_response_code(404);
-        echo json_encode(['error' => 'Route not found'], JSON_PRETTY_PRINT);
+        sendJsonError('Route not found', 404);
         break;
     // Handle routes that were invoked with the wrong HTTP method
     case FastRoute\Dispatcher::METHOD_NOT_ALLOWED:
-        header('Content-Type: application/json; charset=utf-8');
-        http_response_code(405);
-        echo json_encode(['error' => 'Method not allowed'], JSON_PRETTY_PRINT);
+        sendJsonError('Method not allowed', 405);
         break;
     // Handle found routes
     case FastRoute\Dispatcher::FOUND:
         $class = $routeInfo[1][0];
         $method = $routeInfo[1][1];
-        $controller = new $class();
-        $vars = $routeInfo[2];
-        $controller->$method($vars);
+        try {
+            $controller = new $class();
+            $vars = $routeInfo[2];
+            $controller->$method($vars);
+        } catch (\Throwable $e) {
+            sendJsonError('Internal server error', 500);
+        }
         break;
 }

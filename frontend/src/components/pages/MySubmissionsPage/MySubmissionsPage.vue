@@ -4,8 +4,9 @@
 
     <main class="app-container-medium">
       <div class="page-header">
+        <p class="page-kicker">User console</p>
         <Heading :level="1" size="3xl" class="mb-2">
-          My Submissions
+          MY SUBMISSIONS
         </Heading>
         <Text as="p" size="base" color="muted">
           Track the review status of mixes you have submitted.
@@ -54,7 +55,7 @@
             as="p"
             size="sm"
             color="muted"
-            class="mt-3 text-red-700"
+            class="mt-3 text-[var(--color-danger)]"
           >
             Review note: {{ mix.reviewNote }}
           </Text>
@@ -74,7 +75,7 @@
 
 <script setup>
 import { onMounted, ref } from 'vue'
-import { get, readJsonResponse } from '../../../utils/api.js'
+import { fetchMyMixes } from '../../../api/mixApi.js'
 import Header from '../../organisms/Header/Header.vue'
 import Footer from '../../organisms/Footer/Footer.vue'
 import Heading from '../../atoms/Heading/Heading.vue'
@@ -89,8 +90,7 @@ const fetchSubmissions = async () => {
   error.value = ''
 
   try {
-    const response = await get('/my/mixes')
-    submissions.value = await readJsonResponse(response)
+    submissions.value = await fetchMyMixes()
   } catch (err) {
     error.value = err.message
   } finally {
@@ -100,12 +100,12 @@ const fetchSubmissions = async () => {
 
 const statusClass = (status) => {
   const classes = {
-    pending: 'bg-yellow-100 text-yellow-800',
-    published: 'bg-green-100 text-green-800',
-    rejected: 'bg-red-100 text-red-800',
+    pending: 'status-pending',
+    published: 'status-published',
+    rejected: 'status-rejected',
   }
 
-  return `rounded-full px-3 py-1 text-xs font-semibold uppercase ${classes[status] || 'bg-gray-100 text-gray-800'}`
+  return `status-badge ${classes[status] || ''}`
 }
 
 onMounted(fetchSubmissions)

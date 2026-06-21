@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { get, post, readJsonResponse } from '../utils/api.js'
+import { fetchCurrentUser, login as loginApi, register as registerApi } from '../api/authApi.js'
 
 const TOKEN_KEY = 'skProductionToken'
 
@@ -14,8 +14,7 @@ export const useAuthStore = defineStore('auth', {
   },
   actions: {
     async login(email, password) {
-      const response = await post('/auth/login', { email, password })
-      const data = await readJsonResponse(response)
+      const data = await loginApi(email, password)
 
       this.token = data.token
       this.user = data.user
@@ -25,8 +24,7 @@ export const useAuthStore = defineStore('auth', {
     },
 
     async register(name, email, password) {
-      const response = await post('/auth/register', { name, email, password })
-      return readJsonResponse(response)
+      return registerApi(name, email, password)
     },
 
     logout() {
@@ -41,8 +39,7 @@ export const useAuthStore = defineStore('auth', {
       }
 
       try {
-        const response = await get('/auth/me')
-        const user = await readJsonResponse(response)
+        const user = await fetchCurrentUser()
         this.user = user
 
         return user

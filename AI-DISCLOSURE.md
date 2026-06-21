@@ -2,29 +2,37 @@
 
 AI was used as a development assistant while building SK Production Hub.
 
+## How AI Was Used
+
 AI support was used for:
 
-- Planning the project structure
-- Generating first drafts of code
-- Debugging errors
-- Improving readability
-- Checking rubric coverage
-- Writing documentation drafts
+- Planning the project structure.
+- Drafting and improving documentation.
+- Suggesting frontend component organization.
+- Suggesting backend Controller -> Service -> Repository organization.
+- Debugging errors and checking route consistency.
+- Reviewing security and final submission quality.
+- Explaining rubric coverage and demo flow.
 
-The student reviewed, tested, edited, and worked through the code during development. AI was not used to blindly submit code without understanding it. The final project was adjusted, tested, and organized by the student so it fits the Web Development 2 assignment goals.
+## Student Responsibility
+
+The student reviewed, edited, tested, and organized the project. AI output was not used as a blind replacement for understanding the code. The final project remains the student's responsibility and should be explainable during grading.
 
 ## Important Learning Points
 
 This project helped reinforce:
 
-- Vue components
-- Vue Router
-- Pinia state management
-- API requests from the frontend
-- PHP REST API structure
-- JWT authentication
-- Role-based authorization
-- Database access with PDO
-- Docker workflow for PHP, nginx, MariaDB, and phpMyAdmin
+- Vue 3 components and page structure.
+- Vue Router navigation and route guards.
+- Pinia authentication state.
+- Frontend API calls with JWT bearer tokens.
+- PHP REST API routes and JSON responses.
+- Controller -> Service -> Repository separation.
+- Password hashing and JWT validation.
+- Role-based authorization for admin endpoints.
+- PDO prepared statements.
+- Docker workflow with nginx, PHP, MariaDB, and phpMyAdmin.
 
-The AI assistant helped with direction and drafts, but the student remains responsible for understanding and explaining the project.
+## Reference Material Note
+
+Visual Shield was inspected only as a quality benchmark for structure, documentation depth, and final submission polish. SK Production Hub keeps its own topic, code, domain logic, text, styling, component names, and files.

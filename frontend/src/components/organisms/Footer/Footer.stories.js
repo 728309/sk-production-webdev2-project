@@ -11,14 +11,10 @@ export const Default = {
     quickLinks: [
       { name: 'Home', href: '/' },
       { name: 'Mixes', href: '/mixes' },
-      { name: 'Genres', href: '/genres' },
       { name: 'About', href: '/about' },
+      { name: 'Contact', href: '/contact' },
     ],
-    legalLinks: [
-      { name: 'Privacy Policy', href: '/privacy' },
-      { name: 'Terms of Service', href: '/terms' },
-      { name: 'Cookie Policy', href: '/cookies' },
-    ],
+    legalLinks: [],
   },
 };
 
@@ -28,8 +24,6 @@ export const Minimal = {
       { name: 'Home', href: '/' },
       { name: 'Mixes', href: '/mixes' },
     ],
-    legalLinks: [
-      { name: 'Privacy Policy', href: '/privacy' },
-    ],
+    legalLinks: [],
   },
 };

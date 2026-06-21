@@ -4,7 +4,6 @@ namespace App\Controllers;
 
 use App\Framework\Controller;
 use App\Models\Mix;
-use App\Models\User;
 use App\Services\AuthService;
 use App\Services\IAuthService;
 use App\Services\IMixService;
@@ -78,7 +77,7 @@ class MixController extends Controller
     public function create()
     {
         try {
-            $user = $this->requireUser();
+            $user = $this->requireUser($this->authService);
             $data = $this->getJsonInput();
             $this->validateSubmission($data);
 
@@ -110,7 +109,7 @@ class MixController extends Controller
     public function getMyMixes()
     {
         try {
-            $user = $this->requireUser();
+            $user = $this->requireUser($this->authService);
 
             return $this->sendSuccessResponse($this->mixService->getByUserId((int)$user->id));
         } catch (\Throwable $e) {
@@ -121,7 +120,7 @@ class MixController extends Controller
     public function getPending()
     {
         try {
-            $this->requireAdmin();
+            $this->requireAdmin($this->authService);
 
             return $this->sendSuccessResponse($this->mixService->getPending());
         } catch (\Throwable $e) {
@@ -132,7 +131,7 @@ class MixController extends Controller
     public function getAdminAll()
     {
         try {
-            $this->requireAdmin();
+            $this->requireAdmin($this->authService);
 
             $page = max(1, (int)($_GET['page'] ?? 1));
             $limit = max(1, (int)($_GET['limit'] ?? 6));
@@ -165,7 +164,7 @@ class MixController extends Controller
     public function adminUpdate($vars = [])
     {
         try {
-            $this->requireAdmin();
+            $this->requireAdmin($this->authService);
             $id = (int)($vars['id'] ?? 0);
             $existingMix = $this->mixService->getById($id);
 
@@ -203,7 +202,7 @@ class MixController extends Controller
     public function adminDelete($vars = [])
     {
         try {
-            $this->requireAdmin();
+            $this->requireAdmin($this->authService);
             $id = (int)($vars['id'] ?? 0);
 
             if (!$this->mixService->delete($id)) {
@@ -219,7 +218,7 @@ class MixController extends Controller
     public function approve($vars = [])
     {
         try {
-            $this->requireAdmin();
+            $this->requireAdmin($this->authService);
             $id = (int)($vars['id'] ?? 0);
             $mix = $this->mixService->approve($id);
 
@@ -236,7 +235,7 @@ class MixController extends Controller
     public function reject($vars = [])
     {
         try {
-            $this->requireAdmin();
+            $this->requireAdmin($this->authService);
             $id = (int)($vars['id'] ?? 0);
             $data = $this->getJsonInput();
             $reviewNote = trim($data['reviewNote'] ?? '');
@@ -260,7 +259,7 @@ class MixController extends Controller
     public function feature($vars = [])
     {
         try {
-            $this->requireAdmin();
+            $this->requireAdmin($this->authService);
             $id = (int)($vars['id'] ?? 0);
             $mix = $this->mixService->setFeatured($id, true);
 
@@ -277,7 +276,7 @@ class MixController extends Controller
     public function unfeature($vars = [])
     {
         try {
-            $this->requireAdmin();
+            $this->requireAdmin($this->authService);
             $id = (int)($vars['id'] ?? 0);
             $mix = $this->mixService->setFeatured($id, false);
 
@@ -300,6 +299,13 @@ class MixController extends Controller
                 throw new \InvalidArgumentException($field . ' is required', 400);
             }
         }
+
+        $this->validateHttpUrl(trim($data['mixUrl']), 'Mix URL');
+
+        $coverImageUrl = trim($data['coverImageUrl'] ?? '');
+        if ($coverImageUrl !== '') {
+            $this->validateHttpUrl($coverImageUrl, 'Cover image URL');
+        }
     }
 
     private function validateAdminUpdate(array $data): void
@@ -313,63 +319,21 @@ class MixController extends Controller
         }
     }
 
-    private function requireUser(): User
+    private function validateHttpUrl(string $url, string $label): void
     {
-        $token = $this->getBearerToken();
-
-        if (!$token) {
-            throw new \RuntimeException('Invalid token', 401);
+        if (!filter_var($url, FILTER_VALIDATE_URL)) {
+            throw new \InvalidArgumentException($label . ' must be a valid URL', 400);
         }
 
-        $user = $this->authService->getUserFromToken($token);
+        $scheme = strtolower((string)parse_url($url, PHP_URL_SCHEME));
 
-        if (!$user) {
-            throw new \RuntimeException('Invalid token', 401);
+        if (!in_array($scheme, ['http', 'https'], true)) {
+            throw new \InvalidArgumentException($label . ' must use http or https', 400);
         }
-
-        return $user;
-    }
-
-    private function requireAdmin(): User
-    {
-        $user = $this->requireUser();
-
-        if ($user->role !== 'admin') {
-            throw new \RuntimeException('Admin access required', 403);
-        }
-
-        return $user;
-    }
-
-    private function getJsonInput(): array
-    {
-        $input = file_get_contents('php://input');
-        $data = json_decode($input, true);
-
-        return is_array($data) ? $data : [];
-    }
-
-    private function getBearerToken(): ?string
-    {
-        $header = $_SERVER['HTTP_AUTHORIZATION'] ?? $_SERVER['REDIRECT_HTTP_AUTHORIZATION'] ?? '';
-
-        if (preg_match('/Bearer\s+(\S+)/', $header, $matches)) {
-            return $matches[1];
-        }
-
-        return null;
     }
 
     private function sendMixError(\Throwable $e)
     {
-        $code = $e->getCode();
-
-        if (!in_array($code, [400, 401, 403, 404], true)) {
-            $code = 500;
-        }
-
-        $message = $code === 500 ? 'Internal server error' : $e->getMessage();
-
-        return $this->sendErrorResponse($message, $code);
+        return $this->sendApiError($e, [400, 401, 403, 404]);
     }
 }

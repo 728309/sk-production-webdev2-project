@@ -4,15 +4,16 @@
 
     <main class="app-container">
       <div class="page-header">
+        <p class="page-kicker">Approved signal library</p>
         <Heading :level="1" size="3xl" class="mb-2">
-          SK Production Hub
+          MIX ARCHIVE
         </Heading>
         <Text as="p" size="lg" color="muted" class="max-w-3xl">
-          Browse curated mixes from producers, DJs, and selectors.
+          Browse approved mixes by genre, artist, or platform.
         </Text>
       </div>
 
-      <div class="panel panel-padding mb-6 grid grid-cols-1 gap-4 md:grid-cols-[1fr_220px]">
+      <div class="panel panel-padding mb-6 grid grid-cols-1 gap-4 md:grid-cols-[1fr_220px_auto]">
         <div>
           <label for="mix-search" class="field-label-small">Search mixes</label>
           <input
@@ -39,6 +40,16 @@
             </option>
           </select>
         </div>
+
+        <div class="flex items-end">
+          <button
+            type="button"
+            class="button-secondary w-full md:w-auto"
+            @click="handleReset"
+          >
+            Reset
+          </button>
+        </div>
       </div>
 
       <div v-if="loading" class="state-panel mb-6">
@@ -58,10 +69,10 @@
         v-if="mixes && mixes.length > 0"
         class="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3"
       >
-        <ArticleCard
+        <MixCard
           v-for="mix in mixes"
           :key="mix.id"
-          :article="mix"
+          :mix="mix"
           @click="handleMixClick"
         />
       </div>
@@ -111,7 +122,7 @@
 <script setup>
 import Header from '../../organisms/Header/Header.vue';
 import Footer from '../../organisms/Footer/Footer.vue';
-import ArticleCard from '../../organisms/ArticleCard/ArticleCard.vue';
+import MixCard from '../../organisms/MixCard/MixCard.vue';
 import Heading from '../../atoms/Heading/Heading.vue';
 import Text from '../../atoms/Text/Text.vue';
 
@@ -163,17 +174,13 @@ defineProps({
     default: () => [
       { name: 'Home', href: '/' },
       { name: 'Mixes', href: '/mixes' },
-      { name: 'Genres', href: '/genres' },
       { name: 'About', href: '/about' },
+      { name: 'Contact', href: '/contact' },
     ],
   },
   footerLegalLinks: {
     type: Array,
-    default: () => [
-      { name: 'Privacy Policy', href: '/privacy' },
-      { name: 'Terms of Service', href: '/terms' },
-      { name: 'Cookie Policy', href: '/cookies' },
-    ],
+    default: () => [],
   },
 });
 
@@ -194,6 +201,11 @@ const handleSearchInput = (event) => {
 
 const handleGenreChange = (event) => {
   emit('genre-change', event.target.value);
+};
+
+const handleReset = () => {
+  emit('search-change', '');
+  emit('genre-change', '');
 };
 
 const handlePageChange = (page) => {

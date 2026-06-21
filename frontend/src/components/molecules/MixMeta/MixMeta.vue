@@ -1,12 +1,12 @@
 <template>
-  <div class="space-y-1 text-sm text-gray-600">
+  <div class="space-y-1 text-sm text-[var(--color-text-muted)]">
     <Text as="p" size="sm" color="muted">
-      <span class="font-semibold text-gray-700">Submitted by</span>
+      <span class="font-semibold uppercase text-[var(--color-text-soft)]">Submitted by</span>
       {{ ' ' }}
       {{ submittedBy }}
     </Text>
     <Text as="p" size="sm" color="muted">
-      <span class="font-semibold text-gray-700">Submitted on</span>
+      <span class="font-semibold uppercase text-[var(--color-text-soft)]">Submitted on</span>
       {{ ' ' }}
       <DateDisplay :date="submittedDate" format="short" />
     </Text>

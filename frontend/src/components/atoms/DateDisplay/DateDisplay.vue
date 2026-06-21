@@ -47,5 +47,5 @@ const formattedDate = computed(() => {
   }
 });
 
-const classes = 'text-gray-600 text-sm';
+const classes = 'text-[0.92rem] leading-6 text-[var(--color-text-muted)]';
 </script>

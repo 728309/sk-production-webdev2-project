@@ -43,9 +43,9 @@ const classes = computed(() => {
   };
   
   if (props.size !== 'auto') {
-    return `${sizeMap[props.size]} font-bold`;
+    return `${sizeMap[props.size]} font-bold tracking-normal text-[var(--color-text)]`;
   }
-  
-  return defaultSizes[props.level];
+
+  return `${defaultSizes[props.level]} tracking-normal text-[var(--color-text)]`;
 });
 </script>

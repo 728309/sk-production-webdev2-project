@@ -1,56 +1,68 @@
 # SK Production Hub Frontend
 
-This folder contains the Vue 3 frontend for SK Production Hub.
+This folder contains the Vue 3 frontend for SK Production Hub. It is a single-page application for browsing published mixes, submitting new mixes, commenting, voting, and managing admin review workflows.
 
-The app lets visitors browse published music mixes, view featured mixes, open mix details, read comments, and see vote counts. Logged-in users can submit mixes, view their own submissions, comment, and vote. Admin users can review and manage mixes through protected admin pages.
+## Stack
 
-## Tech Stack
+| Tool | Purpose |
+| --- | --- |
+| Vue 3 | Component framework |
+| Vite | Development server and build tool |
+| JavaScript | Frontend language |
+| Vue Router | Page routing and route guards |
+| Pinia | Auth state management |
+| CSS/Tailwind utilities | Responsive styling |
+| Storybook | Component previews |
 
-- Vue 3
-- Vite
-- JavaScript
-- Vue Router
-- Pinia
-- Tailwind CSS
-- Storybook
-
-API requests are made through `src/utils/api.js`, which wraps browser `fetch` and adds the JWT authorization header when a token exists.
-
-## Project Structure
+## Project Layout
 
 ```text
-src/
-  assets/        Global CSS
-  components/    Reusable Vue components and page views
-  router/        Vue Router setup
-  stores/        Pinia stores
-  utils/         API helper functions
-  config.js      Frontend configuration
-  main.js        App entry point
+frontend/src/
+  api/          Feature API modules
+  assets/       Global CSS
+  components/   Reusable UI and pages
+  router/       Route definitions and guards
+  stores/       Pinia stores
+  utils/        Shared API fetch helper
+  config.js     Runtime API base URL
 ```
 
-Some component filenames are inherited from the original boilerplate. They now display mix data in the SK Production Hub interface.
+## API Structure
+
+The frontend keeps one shared fetch helper in `src/utils/api.js`. Feature modules in `src/api/` wrap the actual backend endpoints:
+
+- `authApi.js`
+- `mixApi.js`
+- `commentApi.js`
+- `voteApi.js`
+
+The shared helper adds the JWT bearer token from local storage when available. Pages use the feature API modules, which keeps page code easier to explain.
+
+## Environment Variables
+
+`frontend/.env.example` contains the development default:
+
+```text
+VITE_API_BASE_URL=http://localhost
+```
+
+The current config falls back to `http://localhost`, so Docker development works without extra setup.
 
 ## Setup
 
 ```bash
+cd frontend
 npm install
 npm run dev
 ```
 
-One-line version from the project root:
-
-```bash
-cd frontend && npm install && npm run dev
-```
-
-The frontend runs at:
+Open:
 
 ```text
 http://localhost:5173
 ```
 
-The backend API should be running at:
+The backend should be running at:
 
 ```text
 http://localhost
@@ -65,14 +77,34 @@ npm run preview
 npm run storybook
 ```
 
-## Main Pages
+## Routes
 
-- `/` - Home page with featured mixes
-- `/mixes` - Public mix archive with search, filter, and pagination
-- `/mixes/:id` - Mix detail page
-- `/login` - Login page
-- `/register` - Register page
-- `/submit` - Submit a mix
-- `/my-submissions` - User submissions
-- `/admin/pending` - Admin pending review
-- `/admin/mixes` - Admin mix management
+| Path | Purpose |
+| --- | --- |
+| `/` | Home page with featured mixes |
+| `/mixes` | Public mix archive with search, filter, and pagination |
+| `/mixes/:id` | Published mix detail page |
+| `/login` | Login |
+| `/register` | Register |
+| `/submit` | Submit a mix, login required |
+| `/my-submissions` | User submissions, login required |
+| `/admin/pending` | Pending review queue, admin required |
+| `/admin/mixes` | Admin management table, admin required |
+| `/about` | Project/context page |
+| `/contact` | Contact page |
+
+## User Flow
+
+- Visitors can browse and inspect published mixes.
+- Logged-in users can submit mixes, comment, and vote.
+- Admin users get admin links inside the My Account dropdown.
+- Route guards prevent unauthenticated users from opening protected pages.
+- Backend role checks still protect admin endpoints even if someone manually enters a URL.
+
+## Responsiveness And Accessibility
+
+- The header has a desktop menu and mobile menu.
+- Cards collapse into one column on small screens.
+- Admin tables use horizontal scrolling on smaller screens.
+- Forms use labels and appropriate input types.
+- Buttons and links have clear visual states.

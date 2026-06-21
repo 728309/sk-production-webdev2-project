@@ -1,4 +1,4 @@
-import ArticleArchive from './ArticleArchive.vue';
+import MixArchive from './MixArchive.vue';
 
 const sampleMixes = [
   {
@@ -65,7 +65,7 @@ const sampleMixes = [
 
 export default {
   title: 'Templates/MixArchive',
-  component: ArticleArchive,
+  component: MixArchive,
   tags: ['autodocs'],
   argTypes: {
     mixes: {

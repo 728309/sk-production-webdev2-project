@@ -14,6 +14,8 @@ storybook-static/
 .env
 .env.*
 !.env.example
+!backend/.env.example
+!frontend/.env.example
 
 # Logs and caches
 *.log

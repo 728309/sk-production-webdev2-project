@@ -5,8 +5,9 @@
     <main class="app-container">
       <div class="page-header flex flex-wrap items-end justify-between gap-3">
         <div>
+          <p class="page-kicker">Admin control panel</p>
           <Heading :level="1" size="3xl" class="mb-2">
-            Admin Mixes
+            MANAGE MIXES
           </Heading>
           <Text as="p" size="base" color="muted">
             Manage submitted, published, and rejected mixes.
@@ -81,7 +82,7 @@
       </div>
 
       <div v-if="error" class="form-error mb-6">
-        <Text as="p" size="sm" color="muted" class="text-red-700">
+        <Text as="p" size="sm" color="muted" class="text-[var(--color-danger)]">
           {{ error }}
         </Text>
       </div>
@@ -89,49 +90,49 @@
       <section class="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_380px]">
         <div class="table-shell">
           <div class="table-scroll">
-            <table class="min-w-full divide-y divide-gray-200">
-              <thead class="bg-gray-100">
+            <table class="min-w-full divide-y divide-[var(--color-border)]">
+              <thead class="bg-[var(--color-surface-2)]">
                 <tr>
-                  <th class="px-4 py-3 text-left text-xs font-semibold uppercase text-gray-500">Title</th>
-                  <th class="px-4 py-3 text-left text-xs font-semibold uppercase text-gray-500">Artist</th>
-                  <th class="px-4 py-3 text-left text-xs font-semibold uppercase text-gray-500">Genre</th>
-                  <th class="px-4 py-3 text-left text-xs font-semibold uppercase text-gray-500">Status</th>
-                  <th class="px-4 py-3 text-left text-xs font-semibold uppercase text-gray-500">Featured</th>
-                  <th class="min-w-64 px-4 py-3 text-left text-xs font-semibold uppercase text-gray-500">Actions</th>
+                  <th class="px-4 py-3 text-left text-xs font-semibold uppercase text-[var(--color-text-muted)]">Title</th>
+                  <th class="px-4 py-3 text-left text-xs font-semibold uppercase text-[var(--color-text-muted)]">Artist</th>
+                  <th class="px-4 py-3 text-left text-xs font-semibold uppercase text-[var(--color-text-muted)]">Genre</th>
+                  <th class="px-4 py-3 text-left text-xs font-semibold uppercase text-[var(--color-text-muted)]">Status</th>
+                  <th class="px-4 py-3 text-left text-xs font-semibold uppercase text-[var(--color-text-muted)]">Featured</th>
+                  <th class="min-w-64 px-4 py-3 text-left text-xs font-semibold uppercase text-[var(--color-text-muted)]">Actions</th>
                 </tr>
               </thead>
-              <tbody class="divide-y divide-gray-200 bg-white">
-                <tr v-for="mix in mixes" :key="mix.id">
-                  <td class="px-4 py-3 text-sm font-semibold text-gray-900">{{ mix.title }}</td>
-                  <td class="px-4 py-3 text-sm text-gray-700">{{ mix.artist }}</td>
-                  <td class="px-4 py-3 text-sm text-gray-700">{{ mix.genre }}</td>
+              <tbody class="divide-y divide-[var(--color-border)] bg-[var(--color-surface)]">
+                <tr v-for="mix in mixes" :key="mix.id" class="transition-colors hover:bg-[rgba(124,255,65,0.04)]">
+                  <td class="px-4 py-3 text-sm font-semibold text-[var(--color-text)]">{{ mix.title }}</td>
+                  <td class="px-4 py-3 text-sm text-[var(--color-text-soft)]">{{ mix.artist }}</td>
+                  <td class="px-4 py-3 text-sm text-[var(--color-text-soft)]">{{ mix.genre }}</td>
                   <td class="px-4 py-3">
                     <span :class="statusClass(mix.status)">
                       {{ mix.status }}
                     </span>
                   </td>
-                  <td class="px-4 py-3 text-sm text-gray-700">
+                  <td class="px-4 py-3 text-sm text-[var(--color-text-soft)]">
                     {{ mix.featured ? 'Yes' : 'No' }}
                   </td>
                   <td class="min-w-64 px-4 py-3 align-top">
                     <div class="flex min-w-56 flex-wrap items-center gap-2">
                       <button
                         type="button"
-                        class="action-button border-gray-300 text-gray-700 hover:bg-gray-100"
+                        class="action-button action-button-neutral"
                         @click="startEdit(mix)"
                       >
                         Edit
                       </button>
                       <button
                         type="button"
-                        class="action-button min-w-24 border-blue-300 text-blue-700 hover:bg-blue-50"
+                        class="action-button action-button-accent min-w-24"
                         @click="toggleFeatured(mix)"
                       >
                         {{ mix.featured ? 'Unfeature' : 'Feature' }}
                       </button>
                       <button
                         type="button"
-                        class="action-button border-red-300 text-red-700 hover:bg-red-50"
+                        class="action-button action-button-danger"
                         @click="deleteMix(mix)"
                       >
                         Delete
@@ -151,7 +152,7 @@
 
           <div
             v-if="pagination.totalPages > 1"
-            class="flex flex-wrap items-center justify-center gap-3 border-t border-gray-200 p-4"
+            class="flex flex-wrap items-center justify-center gap-3 border-t border-[var(--color-border)] p-4"
           >
             <button
               type="button"
@@ -221,8 +222,8 @@
                 <option value="rejected">Rejected</option>
               </select>
             </div>
-            <label class="flex items-center gap-2 text-sm font-semibold text-gray-700">
-              <input v-model="editForm.featured" type="checkbox" class="h-4 w-4 rounded border-gray-300" />
+            <label class="flex items-center gap-2 text-sm font-semibold text-[var(--color-text-soft)]">
+              <input v-model="editForm.featured" type="checkbox" class="h-4 w-4 rounded border-[var(--color-border)] accent-[var(--color-accent)]" />
               Featured
             </label>
             <div>
@@ -257,7 +258,12 @@
 
 <script setup>
 import { onMounted, reactive, ref } from 'vue'
-import { del, get, put, readJsonResponse } from '../../../utils/api.js'
+import {
+  deleteAdminMix,
+  fetchAdminMixes,
+  setMixFeatured,
+  updateAdminMix,
+} from '../../../api/mixApi.js'
 import Header from '../../organisms/Header/Header.vue'
 import Footer from '../../organisms/Footer/Footer.vue'
 import Heading from '../../atoms/Heading/Heading.vue'
@@ -331,8 +337,7 @@ const fetchMixes = async () => {
   }
 
   try {
-    const response = await get(`/admin/mixes?${params.toString()}`)
-    const result = await readJsonResponse(response)
+    const result = await fetchAdminMixes(params)
     mixes.value = result.data || []
     pagination.value = result.pagination || pagination.value
   } catch (err) {
@@ -389,8 +394,7 @@ const saveMix = async () => {
   error.value = ''
 
   try {
-    const response = await put(`/admin/mixes/${editForm.id}`, { ...editForm })
-    const updatedMix = await readJsonResponse(response)
+    const updatedMix = await updateAdminMix(editForm.id, { ...editForm })
     mixes.value = mixes.value.map((mix) => (mix.id === updatedMix.id ? updatedMix : mix))
     startEdit(updatedMix)
   } catch (err) {
@@ -408,8 +412,7 @@ const deleteMix = async (mix) => {
   error.value = ''
 
   try {
-    const response = await del(`/admin/mixes/${mix.id}`)
-    await readJsonResponse(response)
+    await deleteAdminMix(mix.id)
     if (editForm.id === mix.id) {
       clearEdit()
     }
@@ -421,11 +424,8 @@ const deleteMix = async (mix) => {
 
 const toggleFeatured = async (mix) => {
   error.value = ''
-  const endpoint = mix.featured ? 'unfeature' : 'feature'
-
   try {
-    const response = await put(`/admin/mixes/${mix.id}/${endpoint}`, {})
-    const updatedMix = await readJsonResponse(response)
+    const updatedMix = await setMixFeatured(mix.id, !mix.featured)
     mixes.value = mixes.value.map((item) => (item.id === updatedMix.id ? updatedMix : item))
     if (editForm.id === updatedMix.id) {
       startEdit(updatedMix)
@@ -437,12 +437,12 @@ const toggleFeatured = async (mix) => {
 
 const statusClass = (status) => {
   const classes = {
-    pending: 'bg-yellow-100 text-yellow-800',
-    published: 'bg-green-100 text-green-800',
-    rejected: 'bg-red-100 text-red-800',
+    pending: 'status-pending',
+    published: 'status-published',
+    rejected: 'status-rejected',
   }
 
-  return `rounded-full px-3 py-1 text-xs font-semibold uppercase ${classes[status] || 'bg-gray-100 text-gray-800'}`
+  return `status-badge ${classes[status] || ''}`
 }
 
 onMounted(fetchMixes)
@@ -454,13 +454,44 @@ onMounted(fetchMixes)
   min-height: 2rem;
   align-items: center;
   justify-content: center;
-  border-width: 1px;
+  border: 1px solid var(--color-border);
   border-radius: 0.375rem;
   padding: 0.375rem 0.75rem;
   font-size: 0.75rem;
-  font-weight: 600;
+  font-weight: 800;
   line-height: 1;
-  transition: background-color 150ms ease, color 150ms ease;
+  text-transform: uppercase;
+  transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease, box-shadow 150ms ease;
   white-space: nowrap;
+}
+
+.action-button-neutral {
+  color: var(--color-text-soft);
+}
+
+.action-button-neutral:hover {
+  border-color: var(--color-text-muted);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.action-button-accent {
+  border-color: var(--color-border-strong);
+  color: var(--color-accent);
+}
+
+.action-button-accent:hover {
+  border-color: var(--color-accent);
+  background: rgba(124, 255, 65, 0.08);
+  box-shadow: 0 0 18px rgba(124, 255, 65, 0.14);
+}
+
+.action-button-danger {
+  border-color: rgba(255, 92, 92, 0.55);
+  color: var(--color-danger);
+}
+
+.action-button-danger:hover {
+  border-color: var(--color-danger);
+  background: rgba(255, 92, 92, 0.1);
 }
 </style>

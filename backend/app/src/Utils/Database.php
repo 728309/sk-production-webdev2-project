@@ -13,9 +13,14 @@ class Database
 
     public static function connect(): PDO
     {
-        $dsn = 'mysql:host=' . self::HOST . ';dbname=' . self::DATABASE . ';charset=utf8mb4';
+        $host = getenv('DB_HOST') ?: self::HOST;
+        $database = getenv('DB_NAME') ?: self::DATABASE;
+        $user = getenv('DB_USER') ?: self::USER;
+        $password = getenv('DB_PASSWORD') ?: self::PASSWORD;
 
-        return new PDO($dsn, self::USER, self::PASSWORD, [
+        $dsn = 'mysql:host=' . $host . ';dbname=' . $database . ';charset=utf8mb4';
+
+        return new PDO($dsn, $user, $password, [
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
         ]);

@@ -2,8 +2,8 @@
   <section class="panel panel-padding">
     <div class="flex flex-wrap items-center justify-between gap-3">
       <div>
-        <p class="text-sm font-semibold text-gray-900">Mix rating</p>
-        <p class="text-sm text-gray-600">
+        <p class="text-sm font-semibold uppercase text-[var(--color-text)]">Mix rating</p>
+        <p class="text-sm text-[var(--color-text-muted)]">
           {{ votes.likes }} likes &middot; {{ votes.dislikes }} dislikes
         </p>
       </div>
@@ -28,11 +28,11 @@
       </div>
     </div>
 
-    <p v-if="!authStore.isAuthenticated" class="mt-3 text-sm text-gray-600">
+    <p v-if="!authStore.isAuthenticated" class="mt-3 text-sm text-[var(--color-text-muted)]">
       Log in to vote.
     </p>
 
-    <p v-if="error" class="mt-3 text-sm text-red-600">
+    <p v-if="error" class="mt-3 text-sm text-[var(--color-danger)]">
       {{ error }}
     </p>
   </section>
@@ -41,7 +41,7 @@
 <script setup>
 import { onMounted, ref, watch } from 'vue'
 import { useAuthStore } from '../../../stores/authStore.js'
-import { get, post, readJsonResponse } from '../../../utils/api.js'
+import { fetchVotes as fetchVotesApi, submitVote as submitVoteApi } from '../../../api/voteApi.js'
 
 const props = defineProps({
   mixId: {
@@ -64,8 +64,7 @@ const fetchVotes = async () => {
   error.value = ''
 
   try {
-    const response = await get(`/mixes/${props.mixId}/votes`)
-    votes.value = await readJsonResponse(response)
+    votes.value = await fetchVotesApi(props.mixId)
   } catch (err) {
     error.value = err.message
   } finally {
@@ -78,8 +77,7 @@ const submitVote = async (voteType) => {
   error.value = ''
 
   try {
-    const response = await post(`/mixes/${props.mixId}/votes`, { voteType })
-    votes.value = await readJsonResponse(response)
+    votes.value = await submitVoteApi(props.mixId, voteType)
   } catch (err) {
     error.value = err.message
   } finally {

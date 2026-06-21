@@ -4,8 +4,9 @@
 
     <main class="app-container-medium">
       <div class="page-header">
+        <p class="page-kicker">Admin review queue</p>
         <Heading :level="1" size="3xl" class="mb-2">
-          Admin Pending
+          PENDING MIXES
         </Heading>
         <Text as="p" size="base" color="muted">
           Review mixes waiting for approval.
@@ -19,9 +20,9 @@
       </div>
 
       <div v-if="error" class="form-error mb-6">
-        <Text as="p" size="sm" color="muted" class="text-red-700">
-          {{ error }}
-        </Text>
+          <Text as="p" size="sm" color="muted" class="text-[var(--color-danger)]">
+            {{ error }}
+          </Text>
       </div>
 
       <div v-if="!loading && pendingMixes.length > 0" class="space-y-4">
@@ -40,7 +41,7 @@
               </Text>
             </div>
 
-            <span class="rounded-full bg-yellow-100 px-3 py-1 text-xs font-semibold uppercase text-yellow-800">
+            <span class="status-badge status-pending">
               {{ mix.status }}
             </span>
           </div>
@@ -81,7 +82,11 @@
 
 <script setup>
 import { onMounted, ref } from 'vue'
-import { get, put, readJsonResponse } from '../../../utils/api.js'
+import {
+  approveMix as approveMixApi,
+  fetchPendingMixes as fetchPendingMixesApi,
+  rejectMix as rejectMixApi,
+} from '../../../api/mixApi.js'
 import Header from '../../organisms/Header/Header.vue'
 import Footer from '../../organisms/Footer/Footer.vue'
 import Heading from '../../atoms/Heading/Heading.vue'
@@ -96,8 +101,7 @@ const fetchPendingMixes = async () => {
   error.value = ''
 
   try {
-    const response = await get('/admin/mixes/pending')
-    pendingMixes.value = await readJsonResponse(response)
+    pendingMixes.value = await fetchPendingMixesApi()
   } catch (err) {
     error.value = err.message
   } finally {
@@ -107,8 +111,7 @@ const fetchPendingMixes = async () => {
 
 const approveMix = async (id) => {
   try {
-    const response = await put(`/admin/mixes/${id}/approve`, {})
-    await readJsonResponse(response)
+    await approveMixApi(id)
     fetchPendingMixes()
   } catch (err) {
     error.value = err.message
@@ -123,8 +126,7 @@ const rejectMix = async (id) => {
   }
 
   try {
-    const response = await put(`/admin/mixes/${id}/reject`, { reviewNote })
-    await readJsonResponse(response)
+    await rejectMixApi(id, reviewNote)
     fetchPendingMixes()
   } catch (err) {
     error.value = err.message

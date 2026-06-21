@@ -1,12 +1,12 @@
 <template>
   <div>
     <!-- Loading State -->
-    <div v-if="showFullPageLoading" class="min-h-screen flex items-center justify-center">
+    <div v-if="showFullPageLoading" class="flex min-h-screen items-center justify-center bg-black">
       <div class="text-center">
         <div
-          class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mb-4"
+          class="mb-4 inline-block h-12 w-12 animate-spin rounded-full border-b-2 border-[var(--color-accent)]"
         ></div>
-        <p class="text-gray-600">Loading mixes...</p>
+        <p class="text-[var(--color-text-muted)]">Loading mixes...</p>
       </div>
     </div>
 
@@ -16,14 +16,14 @@
       class="min-h-screen flex items-center justify-center"
     >
       <div class="text-center max-w-md">
-        <div class="text-red-600 text-5xl mb-4">!</div>
-        <h2 class="text-2xl font-bold text-gray-900 mb-2">
+        <div class="text-[var(--color-danger)] text-5xl mb-4">!</div>
+        <h2 class="text-2xl font-bold text-[var(--color-text)] mb-2">
           Error Loading Mixes
         </h2>
-        <p class="text-gray-600 mb-4">{{ error }}</p>
+        <p class="text-[var(--color-text-muted)] mb-4">{{ error }}</p>
         <button
           @click="fetchMixes"
-          class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          class="button-primary"
         >
           Try Again
         </button>
@@ -31,7 +31,7 @@
     </div>
 
     <!-- Mix Archive Template -->
-    <ArticleArchive
+    <MixArchive
       v-else
       :mixes="mixes"
       :genres="genres"
@@ -49,8 +49,8 @@
 
 <script setup>
 import { computed, ref, onMounted } from "vue";
-import ArticleArchive from "../../templates/ArticleArchive/ArticleArchive.vue";
-import { get } from "../../../utils/api.js";
+import MixArchive from "../../templates/MixArchive/MixArchive.vue";
+import { fetchMixes as fetchMixesApi } from "../../../api/mixApi.js";
 
 const mixes = ref([]);
 const loading = ref(true);
@@ -101,15 +101,7 @@ const fetchMixes = async () => {
   }
 
   try {
-    const response = await get(`/mixes?${params.toString()}`);
-
-    if (!response.ok) {
-      throw new Error(
-        `Failed to fetch mixes: ${response.status} ${response.statusText}`,
-      );
-    }
-
-    const result = await response.json();
+    const result = await fetchMixesApi(params);
     mixes.value = result.data || [];
     pagination.value = result.pagination || {
       page: page.value,

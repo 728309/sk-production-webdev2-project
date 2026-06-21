@@ -1,34 +1,62 @@
 # API Endpoints
 
-Base URL for local development:
+Local base URL:
 
 ```text
 http://localhost
 ```
 
-Authentication uses a JWT in the `Authorization` header:
+Authenticated requests use:
 
 ```text
 Authorization: Bearer TOKEN
 ```
 
+All responses are JSON.
+
+## Health
+
+| Method | Path | Auth | Description |
+| --- | --- | --- | --- |
+| GET | `/health` | Public | Verifies that the API route layer is running. |
+| GET | `/health/db` | Public | Verifies that the API can connect to the database. |
+
 ## Auth
 
 | Method | Path | Auth | Description |
 | --- | --- | --- | --- |
-| POST | `/auth/register` | Public | Register a new user account. |
+| POST | `/auth/register` | Public | Create a normal user account. |
 | POST | `/auth/login` | Public | Log in and receive a JWT token. |
-| GET | `/auth/me` | User token required | Return the currently logged-in user. |
+| GET | `/auth/me` | User token | Return the current user. |
 
-## Mixes
+Register body:
+
+```json
+{
+  "name": "Demo User",
+  "email": "demo@example.com",
+  "password": "password123"
+}
+```
+
+Login body:
+
+```json
+{
+  "email": "user@skproduction.test",
+  "password": "password123"
+}
+```
+
+## Public Mixes
 
 | Method | Path | Auth | Description |
 | --- | --- | --- | --- |
-| GET | `/mixes` | Public | Return published mixes with pagination, search, and genre filtering. |
-| GET | `/mixes/featured` | Public | Return featured published mixes for the home page. |
-| GET | `/mixes/{id}` | Public | Return one published mix by ID. Pending and rejected mixes return 404 on this public endpoint. |
-| POST | `/mixes` | User token required | Submit a new mix. Submitted mixes start as pending. |
-| GET | `/my/mixes` | User token required | Return mixes submitted by the logged-in user. |
+| GET | `/mixes` | Public | Returns published mixes only. Supports pagination, search, and genre filtering. |
+| GET | `/mixes/featured` | Public | Returns featured published mixes for the home page. |
+| GET | `/mixes/{id}` | Public | Returns one published mix. Pending or rejected mixes return `404`. |
+| PUT | `/mixes/{id}` | Admin token | REST-style alias for editing a mix. |
+| DELETE | `/mixes/{id}` | Admin token | REST-style alias for deleting a mix. |
 
 Supported query parameters for `GET /mixes`:
 
@@ -37,35 +65,77 @@ Supported query parameters for `GET /mixes`:
 - `genre`
 - `search`
 
+## User Mixes
+
+| Method | Path | Auth | Description |
+| --- | --- | --- | --- |
+| POST | `/mixes` | User token | Submit a new mix. New submissions start as `pending`. |
+| GET | `/my/mixes` | User token | Return mixes submitted by the logged-in user. |
+
+Submission body:
+
+```json
+{
+  "title": "Late Night Mix",
+  "artist": "DJ Demo",
+  "genre": "House",
+  "platform": "SoundCloud",
+  "mixUrl": "https://example.com/mix",
+  "coverImageUrl": "https://example.com/image.jpg",
+  "duration": "42:18",
+  "description": "Short description of the mix."
+}
+```
+
 ## Comments
 
 | Method | Path | Auth | Description |
 | --- | --- | --- | --- |
-| GET | `/mixes/{id}/comments` | Public | Return comments for a published mix. Pending and rejected mixes return 404. |
-| POST | `/mixes/{id}/comments` | User token required | Add a comment to a published mix. Pending and rejected mixes return 404. |
-| DELETE | `/comments/{id}` | User token required | Delete a comment. Admins can delete any comment. Users can delete their own comments. |
+| GET | `/mixes/{id}/comments` | Public | Return comments for a published mix. |
+| POST | `/mixes/{id}/comments` | User token | Add a comment to a published mix. |
+| DELETE | `/comments/{id}` | User token | Delete own comment. Admins can delete any comment. |
+
+Comment body:
+
+```json
+{
+  "body": "Great selection."
+}
+```
+
+Comments are blocked for pending or rejected mixes.
 
 ## Votes
 
 | Method | Path | Auth | Description |
 | --- | --- | --- | --- |
-| GET | `/mixes/{id}/votes` | Public | Return like and dislike counts for a published mix. If a valid token is included, also returns the user's vote. Pending and rejected mixes return 404. |
-| POST | `/mixes/{id}/votes` | User token required | Like or dislike a published mix. Sending a different vote updates the existing vote. Pending and rejected mixes return 404. |
+| GET | `/mixes/{id}/votes` | Public | Return like/dislike counts. If a valid token is sent, also returns the user's vote. |
+| POST | `/mixes/{id}/votes` | User token | Create or update the logged-in user's vote. |
 
-## Admin
+Vote body:
 
-All admin endpoints require a valid JWT token from a user with the `admin` role.
+```json
+{
+  "voteType": "like"
+}
+```
+
+Allowed vote types are `like` and `dislike`. Votes are blocked for pending or rejected mixes.
+
+## Admin Mixes
+
+All admin routes require a JWT for a user with role `admin`.
 
 | Method | Path | Auth | Description |
 | --- | --- | --- | --- |
-| GET | `/admin/mixes` | Admin token required | Return all mixes, including pending, published, and rejected. Supports pagination and filters. |
-| GET | `/admin/mixes/pending` | Admin token required | Return only pending mix submissions. |
-| PUT | `/admin/mixes/{id}` | Admin token required | Edit a mix. |
-| DELETE | `/admin/mixes/{id}` | Admin token required | Delete a mix. |
-| PUT | `/admin/mixes/{id}/approve` | Admin token required | Approve a pending mix and publish it. |
-| PUT | `/admin/mixes/{id}/reject` | Admin token required | Reject a pending mix with a review note. |
-| PUT | `/admin/mixes/{id}/feature` | Admin token required | Mark a mix as featured. |
-| PUT | `/admin/mixes/{id}/unfeature` | Admin token required | Remove a mix from featured mixes. |
+| GET | `/admin/mixes` | Admin token | Return all mixes, including pending, published, and rejected. |
+| GET | `/admin/mixes/pending` | Admin token | Return only pending submissions. |
+| PUT | `/admin/mixes/{id}` | Admin token | Edit mix details, status, and featured flag. |
+| DELETE | `/admin/mixes/{id}` | Admin token | Delete a mix and related comments/votes. |
+| PUT | `/admin/mixes/{id}/approve` | Admin token | Publish a pending mix. |
+| PUT | `/admin/mixes/{id}/reject` | Admin token | Reject a mix with a review note. |
+| PUT | `/admin/mixes/{id}/feature` | Admin token | Mark a mix as featured. |
+| PUT | `/admin/mixes/{id}/unfeature` | Admin token | Remove a mix from featured mixes. |
 
 Supported query parameters for `GET /admin/mixes`:
 
@@ -74,3 +144,40 @@ Supported query parameters for `GET /admin/mixes`:
 - `search`
 - `genre`
 - `status`
+
+Reject body:
+
+```json
+{
+  "reviewNote": "Please add a working mix link."
+}
+```
+
+Admin update body uses the same fields as mix submission plus:
+
+```json
+{
+  "status": "published",
+  "featured": true
+}
+```
+
+## Error Responses
+
+| Status | Meaning |
+| --- | --- |
+| `400` | Validation problem or invalid JSON body |
+| `401` | Missing, invalid, or expired token |
+| `403` | Logged-in user does not have permission |
+| `404` | Route, mix, or comment not found |
+| `405` | Existing route called with the wrong HTTP method |
+| `409` | Duplicate email during registration |
+| `500` | Generic internal server error |
+
+Example:
+
+```json
+{
+  "error": "Invalid token"
+}
+```

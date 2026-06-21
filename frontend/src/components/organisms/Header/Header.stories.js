@@ -20,9 +20,9 @@ export const Default = {
 export const CustomNavigation = {
   args: {
     navigationLinks: [
+      { name: 'Home', href: '/' },
       { name: 'Mixes', href: '/mixes' },
-      { name: 'Genres', href: '/genres' },
-      { name: 'Platforms', href: '/platforms' },
+      { name: 'About', href: '/about' },
     ],
   },
 };
