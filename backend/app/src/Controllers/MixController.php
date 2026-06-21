@@ -19,8 +19,27 @@ class MixController extends Controller
     public function getAll()
     {
         try {
-            $mixes = $this->mixService->getAll();
-            return $this->sendSuccessResponse($mixes);
+            $page = max(1, (int)($_GET['page'] ?? 1));
+            $limit = max(1, (int)($_GET['limit'] ?? 6));
+            $genre = trim($_GET['genre'] ?? '');
+            $search = trim($_GET['search'] ?? '');
+
+            $genreFilter = $genre !== '' ? $genre : null;
+            $searchFilter = $search !== '' ? $search : null;
+
+            $mixes = $this->mixService->getAll($page, $limit, $genreFilter, $searchFilter);
+            $total = $this->mixService->count($genreFilter, $searchFilter);
+            $totalPages = (int)ceil($total / $limit);
+
+            return $this->sendSuccessResponse([
+                'data' => $mixes,
+                'pagination' => [
+                    'page' => $page,
+                    'limit' => $limit,
+                    'total' => $total,
+                    'totalPages' => $totalPages,
+                ],
+            ]);
         } catch (\Exception $e) {
             return $this->sendErrorResponse('Internal server error', 500);
         }

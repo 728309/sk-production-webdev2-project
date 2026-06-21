@@ -18,9 +18,14 @@ class MixService implements IMixService
     /**
      * @return Mix[]
      */
-    public function getAll(): array
+    public function getAll(int $page = 1, int $limit = 6, ?string $genre = null, ?string $search = null): array
     {
-        return $this->repository->getAll();
+        return $this->repository->getAll($page, $limit, $genre, $search);
+    }
+
+    public function count(?string $genre = null, ?string $search = null): int
+    {
+        return $this->repository->count($genre, $search);
     }
 
     public function getById(int $id): ?Mix

@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Models\Mix;
 use App\Utils\Database;
 use PDO;
+use PDOStatement;
 
 class MixRepository implements IMixRepository
 {
@@ -18,12 +19,39 @@ class MixRepository implements IMixRepository
     /**
      * @return Mix[]
      */
-    public function getAll(): array
+    public function getAll(int $page = 1, int $limit = 6, ?string $genre = null, ?string $search = null): array
     {
-        $statement = $this->connection->query('SELECT * FROM mixes ORDER BY id');
+        $offset = ($page - 1) * $limit;
+        $filters = $this->buildFilterSql($genre, $search);
+
+        $statement = $this->connection->prepare(
+            'SELECT * FROM mixes ' . $filters['where'] . ' ORDER BY id LIMIT :limit OFFSET :offset'
+        );
+
+        $this->bindFilterValues($statement, $filters['params']);
+        $statement->bindValue(':limit', $limit, PDO::PARAM_INT);
+        $statement->bindValue(':offset', $offset, PDO::PARAM_INT);
+        $statement->execute();
+
         $rows = $statement->fetchAll();
 
         return array_map([$this, 'mapRowToMix'], $rows);
+    }
+
+    public function count(?string $genre = null, ?string $search = null): int
+    {
+        $filters = $this->buildFilterSql($genre, $search);
+
+        $statement = $this->connection->prepare(
+            'SELECT COUNT(*) AS total FROM mixes ' . $filters['where']
+        );
+
+        $this->bindFilterValues($statement, $filters['params']);
+        $statement->execute();
+
+        $row = $statement->fetch();
+
+        return (int)$row['total'];
     }
 
     public function getById(int $id): ?Mix
@@ -149,5 +177,48 @@ class MixRepository implements IMixRepository
             'status' => $mix->status ?: 'published',
             'featured' => $mix->featured ? 1 : 0,
         ];
+    }
+
+    private function buildFilterSql(?string $genre, ?string $search): array
+    {
+        $conditions = [];
+        $params = [];
+
+        if ($genre !== null && $genre !== '') {
+            $conditions[] = 'genre = :genre';
+            $params['genre'] = $genre;
+        }
+
+        if ($search !== null && $search !== '') {
+            $conditions[] = '(
+                title LIKE :search_title
+                OR artist LIKE :search_artist
+                OR genre LIKE :search_genre
+                OR description LIKE :search_description
+            )';
+
+            $searchValue = '%' . $search . '%';
+            $params['search_title'] = $searchValue;
+            $params['search_artist'] = $searchValue;
+            $params['search_genre'] = $searchValue;
+            $params['search_description'] = $searchValue;
+        }
+
+        $where = '';
+        if (count($conditions) > 0) {
+            $where = 'WHERE ' . implode(' AND ', $conditions);
+        }
+
+        return [
+            'where' => $where,
+            'params' => $params,
+        ];
+    }
+
+    private function bindFilterValues(PDOStatement $statement, array $params): void
+    {
+        foreach ($params as $name => $value) {
+            $statement->bindValue(':' . $name, $value);
+        }
     }
 }

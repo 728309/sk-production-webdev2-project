@@ -12,6 +12,43 @@
         </Text>
       </div>
 
+      <div class="mb-6 grid grid-cols-1 md:grid-cols-[1fr_220px] gap-4">
+        <div>
+          <label for="mix-search" class="sr-only">Search mixes</label>
+          <input
+            id="mix-search"
+            :value="search"
+            type="search"
+            placeholder="Search title, artist, genre, or description"
+            class="w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-sm text-gray-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+            @input="handleSearchInput"
+          />
+        </div>
+
+        <div>
+          <label for="genre-filter" class="sr-only">Genre</label>
+          <select
+            id="genre-filter"
+            :value="selectedGenre"
+            class="w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-sm text-gray-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+            @change="handleGenreChange"
+          >
+            <option value="">All genres</option>
+            <option v-for="genre in genres" :key="genre" :value="genre">
+              {{ genre }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <Text v-if="loading" as="p" size="sm" color="muted" class="mb-4">
+        Loading mixes...
+      </Text>
+
+      <Text v-if="error" as="p" size="sm" color="muted" class="mb-4 text-red-600">
+        {{ error }}
+      </Text>
+
       <!-- Mix Grid -->
       <div
         v-if="mixes && mixes.length > 0"
@@ -26,10 +63,37 @@
       </div>
 
       <!-- Empty State -->
-      <div v-else class="text-center py-12">
+      <div v-else-if="!loading" class="text-center py-12">
         <Text as="p" size="lg" color="muted">
           No mixes found.
         </Text>
+      </div>
+
+      <div
+        v-if="pagination.totalPages > 1"
+        class="mt-8 flex flex-wrap items-center justify-center gap-3"
+      >
+        <button
+          type="button"
+          class="rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-50"
+          :disabled="pagination.page <= 1 || loading"
+          @click="handlePageChange(pagination.page - 1)"
+        >
+          Previous
+        </button>
+
+        <Text as="span" size="sm" color="muted">
+          Page {{ pagination.page }} of {{ pagination.totalPages }}
+        </Text>
+
+        <button
+          type="button"
+          class="rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-50"
+          :disabled="pagination.page >= pagination.totalPages || loading"
+          @click="handlePageChange(pagination.page + 1)"
+        >
+          Next
+        </button>
       </div>
     </main>
 
@@ -51,6 +115,35 @@ defineProps({
   mixes: {
     type: Array,
     default: () => [],
+  },
+  genres: {
+    type: Array,
+    default: () => [],
+  },
+  search: {
+    type: String,
+    default: '',
+  },
+  selectedGenre: {
+    type: String,
+    default: '',
+  },
+  pagination: {
+    type: Object,
+    default: () => ({
+      page: 1,
+      limit: 6,
+      total: 0,
+      totalPages: 0,
+    }),
+  },
+  loading: {
+    type: Boolean,
+    default: false,
+  },
+  error: {
+    type: String,
+    default: null,
   },
   navigationLinks: {
     type: Array,
@@ -78,19 +171,28 @@ defineProps({
       { name: 'Cookie Policy', href: '/cookies' },
     ],
   },
-  showFilters: {
-    type: Boolean,
-    default: false,
-  },
-  showPagination: {
-    type: Boolean,
-    default: false,
-  },
 });
 
-const emit = defineEmits(['mix-click']);
+const emit = defineEmits([
+  'mix-click',
+  'search-change',
+  'genre-change',
+  'page-change',
+]);
 
 const handleMixClick = (mixId) => {
   emit('mix-click', mixId);
+};
+
+const handleSearchInput = (event) => {
+  emit('search-change', event.target.value);
+};
+
+const handleGenreChange = (event) => {
+  emit('genre-change', event.target.value);
+};
+
+const handlePageChange = (page) => {
+  emit('page-change', page);
 };
 </script>
