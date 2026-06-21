@@ -1,4 +1,4 @@
-import Text from './Text.vue';
+import Text from './Text.vue'
 
 export default {
   title: 'Atoms/Text',
@@ -22,7 +22,7 @@ export default {
       options: ['default', 'muted', 'primary', 'secondary'],
     },
   },
-};
+}
 
 export const Default = {
   args: {
@@ -31,11 +31,11 @@ export const Default = {
   render: (args) => ({
     components: { Text },
     setup() {
-      return { args };
+      return { args }
     },
     template: '<Text v-bind="args">This is default text</Text>',
   }),
-};
+}
 
 export const Sizes = {
   render: () => ({
@@ -49,7 +49,7 @@ export const Sizes = {
       </div>
     `,
   }),
-};
+}
 
 export const Colors = {
   render: () => ({
@@ -63,4 +63,4 @@ export const Colors = {
       </div>
     `,
   }),
-};
+}

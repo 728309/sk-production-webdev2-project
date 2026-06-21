@@ -1,136 +1,126 @@
-# Articles API
+# SK HUB Backend
 
-A RESTful API for managing articles built with PHP, following MVC architecture patterns.
+This folder contains the PHP REST API for SK HUB. It provides authentication, public mix browsing, user submissions, comments, votes, admin review actions, and health checks.
 
-## Project Structure
+## Stack
 
-```
+| Tool | Purpose |
+| --- | --- |
+| PHP | Backend language |
+| FastRoute | Request routing |
+| PDO | Database access with prepared statements |
+| MariaDB/MySQL | Relational database |
+| firebase/php-jwt | JWT creation and validation |
+| Composer | PHP dependency management |
+| Docker, nginx | Local backend runtime |
+| phpMyAdmin | Database inspection during development |
+
+## Project Layout
+
+```text
 backend/
-├── app/
-│   ├── public/
-│   │   └── index.php          # Entry point and route dispatcher
-│   └── src/
-│       ├── Controllers/        # Request handlers
-│       ├── Services/           # Business logic layer
-│       ├── Repositories/       # Data access layer
-│       ├── Models/             # Data models
-│       ├── Framework/          # Base controller class and other general framework code
-│       ├── Utils/              # Utility classes (JsonStore)
-│       └── data/               # JSON data storage
-├── docker-compose.yml          # Docker services configuration
-├── nginx.conf                  # Nginx configuration
-├── PHP.Dockerfile              # PHP Docker image configuration
-└── Articles_API.postman_collection.json  # Postman collection for API testing
+  app/
+    public/index.php      Route entry point
+    src/
+      Controllers/        HTTP controllers
+      Framework/          Shared controller helpers
+      Inheritance/        Repository and service interfaces
+      Models/             Simple model classes
+      Repositories/       PDO database queries
+      Services/           Business logic and validation
+      Utils/              Database and JWT helpers
+    composer.json
+    composer.lock
+  database/init.sql       Schema and seed data
+  docker-compose.yml
+  nginx.conf
+  PHP.Dockerfile
+  .env.example
 ```
 
-## API Endpoints
+## Architecture
 
-### Get All Articles
+The backend follows a clear Controller -> Service -> Repository structure.
 
-```
-GET /articles
-```
+- Controllers read route variables, JSON bodies, and auth state, then return JSON.
+- Services contain rules such as registration validation, submission validation, comment validation, and vote validation.
+- Repositories contain SQL and use PDO prepared statements.
+- Inheritance contains the service and repository interfaces that the concrete classes implement.
+- The shared controller base class centralizes JSON body parsing, bearer token reading, user/admin checks, and consistent JSON error responses.
 
-Returns a list of all articles.
+This separation keeps the code beginner-friendly: route handling stays in controllers, business decisions stay in services, and database details stay in repositories.
 
-### Get Article by ID
+## Environment Variables
 
-```
-GET /articles/{id}
-```
+`backend/.env.example` documents the development defaults:
 
-Returns a specific article by its ID.
-
-### Create Article
-
-```
-POST /articles
-Content-Type: application/json
-
-{
-    "title": "Article Title",
-    "author": "Author Name",
-    "category": "Category",
-    "published": "2025-01-15",
-    "content": "Article content here"
-}
+```text
+DB_HOST=mysql
+DB_NAME=developmentdb
+DB_USER=developer
+DB_PASSWORD=secret123
+JWT_SECRET=sk-production-dev-secret
 ```
 
-Creates a new article and returns it with the assigned ID.
+The app can read these values from the environment. If no environment variables are set, it falls back to the Docker development defaults, so the existing Docker setup still works.
 
-### Update Article
-
-```
-PUT /articles/{id}
-Content-Type: application/json
-
-{
-    "id": 123,
-    "title": "Updated Title",
-    "author": "Author Name",
-    "category": "Category",
-    "published": "2025-01-16",
-    "content": "Updated content"
-}
-```
-
-Updates an existing article by ID.
-
-### Delete Article
-
-```
-DELETE /articles/{id}
-```
-
-Deletes an article by ID.
-
-## Getting Started
-
-### Prerequisites
-
-- Docker and Docker Compose
-
-### Installation
-
-1. Clone the repository:
+## Start Backend
 
 ```bash
 cd backend
+docker compose up -d --build
 ```
 
-2. Start the Docker containers:
+Verify:
+
+- API: http://localhost/health
+- Database: http://localhost/health/db
+- phpMyAdmin: http://localhost:8080
+
+## Reset Database
 
 ```bash
-docker-compose up
+cd backend
+docker compose down -v
+docker compose up -d --build
 ```
 
-3. Run composer commands:
+The `-v` flag removes the database volume. MariaDB then imports `database/init.sql` again.
 
-```bash
-docker-compose exec php composer [...]
-```
+## API Route Groups
 
-### Running the Application
+- `POST /auth/register`, `POST /auth/login`, `GET /auth/me`
+- `GET /mixes`, `GET /mixes/featured`, `GET /mixes/{id}`
+- `POST /mixes`, `GET /my/mixes`, `GET /my/mixes/summary`
+- `GET/POST /mixes/{id}/comments`, `DELETE /comments/{id}`
+- `GET/POST /mixes/{id}/votes`
+- `GET/PUT/DELETE /admin/mixes...`
+- `PUT /mixes/{id}`, `DELETE /mixes/{id}` as admin-token REST aliases for the main admin update/delete routes
+- `GET /health`, `GET /health/db`
 
-The application will be available at:
+See [../docs/API-ENDPOINTS.md](../docs/API-ENDPOINTS.md) for the full table.
 
-- **API**: http://localhost
-- **phpMyAdmin**: http://localhost:8080
+## Security And Error Handling
 
-### Testing the API
+- Passwords are hashed with `password_hash`.
+- JWTs are signed and validated in `JwtHelper`.
+- User routes call `requireUser`.
+- Admin routes call `requireAdmin`.
+- Admin authorization is enforced in the PHP backend, not only by frontend route guards.
+- Public mix endpoints filter to `published` mixes.
+- Comments and votes reject unpublished mixes.
+- PDO prepared statements are used for queries.
+- API errors are returned as JSON: `400`, `401`, `403`, `404`, `405`, `409`, and generic `500`.
+- Password hashes are used internally only and are not returned by auth responses.
 
-Import the `Articles_API.postman_collection.json` file into Postman to test all endpoints.
+## Seed Accounts
 
-## Docker Services
+Admin:
 
-- **nginx**: Web server (port 80)
-- **php**: PHP-FPM service
-- **mysql**: MariaDB database (port 3306)
-  - Username: `developer`
-  - Password: `secret123`
-  - Database: `developmentdb`
-- **phpmyadmin**: Database management interface (port 8080)
+- Email: `admin@skproduction.test`
+- Password: `password123`
 
-## Data Storage
+User:
 
-Currently, the application uses JSON file-based storage (`app/src/data/articles.json`) for demonstration purposes. In production, this should be replaced with a proper database implementation.
+- Email: `user@skproduction.test`
+- Password: `password123`

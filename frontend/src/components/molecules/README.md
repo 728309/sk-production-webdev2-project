@@ -1,31 +1,12 @@
 # Molecules
 
-**Simple groups of UI elements** that function together as a unit.
+Molecules combine atoms into small reusable patterns.
 
-## What belongs here?
+Current examples:
 
-- Form fields (label + input + validation message)
-- Search bars (input + button)
-- Navigation items
-- Card headers (title + icon + action)
-- Product previews (image + title + price)
-- List items with actions
+- `GenreBadge`
+- `MixMeta`
+- `MixPlayer`
+- `VoteButtons`
 
-## Characteristics
-
-- ✅ Composed of atoms and/or other molecules
-- ✅ Still relatively simple and reusable
-- ✅ May have simple state (e.g., form field validation)
-- ✅ Focused on a specific UI pattern
-
-## Example
-
-```vue
-<!-- SearchBar.vue - A molecule -->
-<template>
-  <div class="search-bar">
-    <Input v-model="query" placeholder="Search..." />
-    <Button @click="handleSearch">Search</Button>
-  </div>
-</template>
-```
+Molecules can contain a little UI behavior, but they should still stay easy to reuse from cards, detail views, and pages.

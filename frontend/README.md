@@ -1,236 +1,126 @@
-# Frontend
+# SK HUB Frontend
 
-A Vue 3 application built with Vite, Tailwind CSS, and Storybook, following atomic design principles.
+This folder contains the Vue 3 frontend for SK HUB. It is a single-page application for browsing published mixes, submitting new mixes, commenting, voting, and managing admin review workflows.
 
-## 🚀 Tech Stack
+## Stack
 
-- **Vue 3** - Progressive JavaScript framework
-- **Vite** - Frontend build tool
-- **Tailwind CSS v4** - Utility-first CSS framework
-- **Storybook** - Component development and documentation
+| Tool | Purpose |
+| --- | --- |
+| Vue 3 | Component framework |
+| Vite | Development server and build tool |
+| JavaScript | Frontend language |
+| Vue Router | Page routing and route guards |
+| Pinia | Auth state management |
+| CSS/Tailwind utilities | Responsive styling |
+| Storybook | Component previews |
 
-## 📁 Project Structure
+## Project Layout
 
-This project follows **Atomic Design** methodology, organizing components into five distinct levels:
-
-```
-src/
-├── assets/           # Global styles and assets
-│   └── main.css      # Tailwind CSS import
-├── components/       # Component library
-│   ├── atoms/        # Basic building blocks (Button, Badge, Text, etc.)
-│   ├── molecules/    # Simple component groups (ArticleMeta, CategoryBadge)
-│   ├── organisms/    # Complex components (ArticleCard, Header, Footer)
-│   ├── templates/    # Page-level layouts (ArticleArchive)
-│   └── pages/        # Specific page instances (ArticleArchivePage)
-├── config.js         # Application configuration
-├── utils/            # Utility functions
-│   └── api.js        # API request helpers
-└── main.js           # Application entry point
+```text
+frontend/src/
+  api/          Feature API modules
+  assets/       Global CSS
+  components/   Reusable UI and pages
+  router/       Route definitions and guards
+  stores/       Pinia stores
+  utils/        Shared API fetch helper
+  config.js     Runtime API base URL
 ```
 
-## 🛠️ Setup
+## API Structure
 
-### Prerequisites
+The frontend keeps one shared fetch helper in `src/utils/api.js`. Feature modules in `src/api/` wrap the actual backend endpoints:
 
-- Node.js ^20.19.0 or >=22.12.0
-- npm or yarn
+- `authApi.js`
+- `mixApi.js`
+- `commentApi.js`
+- `voteApi.js`
 
-### Installation
+The shared helper adds the JWT bearer token from local storage when available. Pages use the feature API modules, which keeps page code easier to explain.
 
-```sh
+## Environment Variables
+
+`frontend/.env.example` contains the development default:
+
+```text
+VITE_API_BASE_URL=http://localhost
+```
+
+The current config falls back to `http://localhost`, so Docker development works without extra setup.
+
+## Setup
+
+```bash
+cd frontend
 npm install
-```
-
-## 🎯 Available Scripts
-
-### Development
-
-```sh
-# Start development server
 npm run dev
-
-# Start Storybook
-npm run storybook
 ```
 
-### Production
+Open:
 
-```sh
-# Build for production
+```text
+http://localhost:5173
+```
+
+The backend should be running at:
+
+```text
+http://localhost
+```
+
+## Useful Scripts
+
+```bash
+npm run dev
 npm run build
-
-# Preview production build
 npm run preview
-
-# Build Storybook
-npm run build-storybook
-```
-
-## ⚙️ Configuration
-
-### API Configuration
-
-The application uses environment variables for configuration. If you are using this outside a local environment and need to change config details, create a `.env` file in the frontend root:
-
-```env
-# API Domain - Base URL for API requests
-VITE_API_DOMAIN=http://localhost
-```
-
-**Note:** In Vite, environment variables must be prefixed with `VITE_` to be exposed to client-side code.
-
-The default API domain is `http://localhost`. Update this to match your backend server.
-
-### Using the Config
-
-```javascript
-import config from "@/config";
-
-// Access API domain
-const apiDomain = config.apiDomain; // 'http://localhost'
-```
-
-## 📡 API Integration
-
-The project includes a utility module for making API requests:
-
-```javascript
-import { get, post, put, del } from "@/utils/api";
-
-// GET request
-const response = await get("/articles");
-const articles = await response.json();
-
-// POST request
-const newArticle = await post("/articles", {
-  title: "New Article",
-  author: "John Doe",
-  category: "Technology",
-  published: "2025-01-15",
-  content: "Article content...",
-});
-```
-
-## 🎨 Component Development
-
-### Atomic Design Structure
-
-- **Atoms**: Basic building blocks (Button, Badge, Text, Heading, DateDisplay)
-- **Molecules**: Simple component groups (ArticleMeta, CategoryBadge)
-- **Organisms**: Complex components (ArticleCard, ArticleDetail, Header, Footer)
-- **Templates**: Page layouts (ArticleArchive)
-- **Pages**: Specific page instances (ArticleArchivePage)
-
-### Creating Components
-
-1. Place components in the appropriate atomic design folder
-2. Use Tailwind CSS for styling
-3. Create a Storybook story file (`.stories.js`) alongside the component
-4. Follow Vue 3 Composition API with `<script setup>`
-
-### Example Component
-
-```vue
-<template>
-  <div class="p-4 bg-white rounded-lg shadow">
-    <h2 class="text-xl font-bold">{{ title }}</h2>
-    <p class="text-gray-600">{{ content }}</p>
-  </div>
-</template>
-
-<script setup>
-defineProps({
-  title: String,
-  content: String,
-});
-</script>
-```
-
-## 📚 Storybook
-
-Storybook is configured for component development and documentation.
-
-### Running Storybook
-
-```sh
 npm run storybook
 ```
 
-Stories are automatically discovered from `src/**/*.stories.@(js|jsx|mjs|ts|tsx)`.
+## Routes
 
-### Viewing Components
+| Path | Purpose |
+| --- | --- |
+| `/` | Home page with featured mixes |
+| `/mixes` | Public mix archive with search, filter, and pagination |
+| `/mixes/:id` | Published mix detail page |
+| `/login` | Login |
+| `/register` | Register |
+| `/submit` | Submit a mix, login required |
+| `/my-submissions` | User submissions, login required |
+| `/admin/pending` | Pending review queue, admin required |
+| `/admin/mixes` | Admin management table, admin required |
+| `/about` | Project/context page |
+| `/contact` | Contact page |
 
-- Open http://localhost:6006
-- Browse components organized by atomic design level
-- Interact with components using controls
-- View documentation generated from component props
+## User Flow
 
-## 🎯 Article Components
+- Visitors can browse and inspect published mixes.
+- Logged-in users can submit mixes, comment, and vote.
+- Admin users get admin links inside the My Account dropdown.
+- Route guards prevent unauthenticated users from opening protected pages.
+- Backend role checks still protect admin endpoints even if someone manually enters a URL.
 
-The application includes a complete set of article-related components:
+## Responsiveness And Accessibility
 
-### Atoms
+- Pages use semantic landmarks such as header, main, section, article, aside, nav, form, and footer.
+- The header has a desktop menu and mobile menu so navigation remains usable on small screens.
+- Mix cards and content cards use responsive grids that collapse into one column on mobile.
+- Admin tables sit inside horizontal scroll containers on smaller screens instead of forcing broken page overflow.
+- Forms use visible labels, appropriate input types, and clear validation/error messages.
+- Buttons, links, inputs, and textareas keep visible hover/focus states with the neon green terminal accent.
+- The dark UI uses light text on black/dark panels for readable contrast.
+- Status badges use text labels plus color, for example pending, published, and rejected.
+- The My Account menu stays as a single dropdown and shows an `Admin` badge only when the logged-in user is an admin.
 
-- **Badge**: Category labels with variants
-- **DateDisplay**: Formatted date display
-- **Heading**: Semantic headings (h1-h6)
-- **Text**: Text with size, weight, and color options
+These choices support keyboard and mobile use without claiming full WCAG certification.
 
-### Molecules
+## UI Direction
 
-- **ArticleMeta**: Author and published date display
-- **CategoryBadge**: Category badge with color mapping
+The frontend uses a dark terminal-inspired SK HUB design:
 
-### Organisms
-
-- **ArticleCard**: Article preview card for lists
-- **ArticleDetail**: Full article view
-- **Header**: Site navigation header
-- **Footer**: Site footer with links
-
-### Templates
-
-- **ArticleArchive**: Complete archive page layout
-
-### Pages
-
-- **ArticleArchivePage**: Page that fetches and displays articles
-
-## 📝 Development Guidelines
-
-### Code Style
-
-- Use Vue 3 Composition API with `<script setup>`
-- Follow atomic design principles
-- Use Tailwind CSS utility classes
-- Write Storybook stories for all components
-- Use TypeScript-style JSDoc comments
-
-### Best Practices
-
-1. **Component Organization**: Place components in appropriate atomic design folders
-2. **Styling**: Use Tailwind CSS classes, avoid custom CSS when possible
-3. **Props**: Define props with validators and default values
-4. **Events**: Use `defineEmits` for component events
-5. **API Calls**: Use the `api.js` utility functions
-6. **Configuration**: Access config through `config.js`
-
-## 🔧 Recommended IDE Setup
-
-### VS Code
-
-- [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) - Vue language support
-
-### Browser Extensions
-
-- **Chrome/Edge**: [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd)
-- **Firefox**: [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-
-## 📖 Additional Resources
-
-- [Vue 3 Documentation](https://vuejs.org/)
-- [Vite Documentation](https://vite.dev/)
-- [Tailwind CSS Documentation](https://tailwindcss.com/)
-- [Storybook Documentation](https://storybook.js.org/)
-- [Atomic Design Methodology](https://atomicdesign.bradfrost.com/)
+- True black/near-black page backgrounds
+- Neon green accent states
+- Monospace typography
+- Dark cards, panels, inputs, and admin tables
+- Compact badges and readable metadata

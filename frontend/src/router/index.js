@@ -1,0 +1,102 @@
+import { createRouter, createWebHistory } from 'vue-router'
+import HomePage from '../components/pages/HomePage/HomePage.vue'
+import MixArchivePage from '../components/pages/MixArchivePage/MixArchivePage.vue'
+import MixDetailPage from '../components/pages/MixDetailPage/MixDetailPage.vue'
+import LoginPage from '../components/pages/LoginPage/LoginPage.vue'
+import RegisterPage from '../components/pages/RegisterPage/RegisterPage.vue'
+import AboutPage from '../components/pages/AboutPage/AboutPage.vue'
+import ContactPage from '../components/pages/ContactPage/ContactPage.vue'
+import SubmitMixPage from '../components/pages/SubmitMixPage/SubmitMixPage.vue'
+import MySubmissionsPage from '../components/pages/MySubmissionsPage/MySubmissionsPage.vue'
+import AdminPendingPage from '../components/pages/AdminPendingPage/AdminPendingPage.vue'
+import AdminMixesPage from '../components/pages/AdminMixesPage/AdminMixesPage.vue'
+import { useAuthStore } from '../stores/authStore.js'
+
+const routes = [
+  {
+    path: '/',
+    name: 'home',
+    component: HomePage,
+  },
+  {
+    path: '/mixes',
+    name: 'mixes',
+    component: MixArchivePage,
+  },
+  {
+    path: '/mixes/:id',
+    name: 'mix-detail',
+    component: MixDetailPage,
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: LoginPage,
+  },
+  {
+    path: '/register',
+    name: 'register',
+    component: RegisterPage,
+  },
+  {
+    path: '/about',
+    name: 'about',
+    component: AboutPage,
+  },
+  {
+    path: '/contact',
+    name: 'contact',
+    component: ContactPage,
+  },
+  {
+    path: '/submit',
+    name: 'submit',
+    component: SubmitMixPage,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/my-submissions',
+    name: 'my-submissions',
+    component: MySubmissionsPage,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/admin/pending',
+    name: 'admin-pending',
+    component: AdminPendingPage,
+    meta: { requiresAuth: true, requiresAdmin: true },
+  },
+  {
+    path: '/admin/mixes',
+    name: 'admin-mixes',
+    component: AdminMixesPage,
+    meta: { requiresAuth: true, requiresAdmin: true },
+  },
+]
+
+const router = createRouter({
+  history: createWebHistory(),
+  routes,
+})
+
+router.beforeEach(async (to) => {
+  const authStore = useAuthStore()
+
+  if (authStore.token && !authStore.user) {
+    try {
+      await authStore.fetchMe()
+    } catch (error) {
+      authStore.logout()
+    }
+  }
+
+  if (to.meta.requiresAuth && !authStore.isAuthenticated) {
+    return '/login'
+  }
+
+  if (to.meta.requiresAdmin && !authStore.isAdmin) {
+    return '/mixes'
+  }
+})
+
+export default router

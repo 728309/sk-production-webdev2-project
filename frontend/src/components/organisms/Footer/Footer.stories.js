@@ -1,35 +1,29 @@
-import Footer from './Footer.vue';
+import Footer from './Footer.vue'
 
 export default {
   title: 'Organisms/Footer',
   component: Footer,
   tags: ['autodocs'],
-};
+}
 
 export const Default = {
   args: {
     quickLinks: [
       { name: 'Home', href: '/' },
-      { name: 'Articles', href: '/articles' },
-      { name: 'Categories', href: '/categories' },
+      { name: 'Mixes', href: '/mixes' },
       { name: 'About', href: '/about' },
+      { name: 'Contact', href: '/contact' },
     ],
-    legalLinks: [
-      { name: 'Privacy Policy', href: '/privacy' },
-      { name: 'Terms of Service', href: '/terms' },
-      { name: 'Cookie Policy', href: '/cookies' },
-    ],
+    legalLinks: [],
   },
-};
+}
 
 export const Minimal = {
   args: {
     quickLinks: [
       { name: 'Home', href: '/' },
-      { name: 'Articles', href: '/articles' },
+      { name: 'Mixes', href: '/mixes' },
     ],
-    legalLinks: [
-      { name: 'Privacy Policy', href: '/privacy' },
-    ],
+    legalLinks: [],
   },
-};
+}
