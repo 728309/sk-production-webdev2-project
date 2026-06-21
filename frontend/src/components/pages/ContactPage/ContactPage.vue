@@ -137,7 +137,7 @@ const handleSubmit = () => {
     return
   }
 
-  success.value = 'Thank you. Your message has been prepared for the SK HUB team.'
+  success.value = 'Thank you. Your message has been prepared for the SK HUB team. Contact form handling is prepared for future backend integration.'
   Object.assign(form, emptyForm())
 }
 </script>

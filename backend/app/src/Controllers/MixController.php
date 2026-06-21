@@ -117,6 +117,17 @@ class MixController extends Controller
         }
     }
 
+    public function getMyMixesSummary()
+    {
+        try {
+            $user = $this->requireUser($this->authService);
+
+            return $this->sendSuccessResponse($this->mixService->getSubmissionSummaryByUserId((int)$user->id));
+        } catch (\Throwable $e) {
+            return $this->sendMixError($e);
+        }
+    }
+
     public function getPending()
     {
         try {
@@ -227,6 +238,7 @@ class MixController extends Controller
             }
 
             return $this->sendSuccessResponse($mix);
+
         } catch (\Throwable $e) {
             return $this->sendMixError($e);
         }

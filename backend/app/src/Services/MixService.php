@@ -43,6 +43,11 @@ class MixService implements IMixService
         return $this->repository->getByUserId($userId);
     }
 
+    public function getSubmissionSummaryByUserId(int $userId): array
+    {
+        return $this->repository->getSubmissionSummaryByUserId($userId);
+    }
+
     public function getPending(): array
     {
         return $this->repository->getPending();

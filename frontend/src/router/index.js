@@ -83,7 +83,11 @@ router.beforeEach(async (to) => {
   const authStore = useAuthStore()
 
   if (authStore.token && !authStore.user) {
-    await authStore.fetchMe()
+    try {
+      await authStore.fetchMe()
+    } catch (error) {
+      authStore.logout()
+    }
   }
 
   if (to.meta.requiresAuth && !authStore.isAuthenticated) {

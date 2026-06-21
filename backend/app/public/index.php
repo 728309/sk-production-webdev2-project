@@ -65,6 +65,7 @@ $dispatcher = simpleDispatcher(function (RouteCollector $r) {
     $r->addRoute('POST', '/mixes', ['App\Controllers\MixController', 'create']);
     $r->addRoute('PUT', '/mixes/{id}', ['App\Controllers\MixController', 'adminUpdate']);
     $r->addRoute('DELETE', '/mixes/{id}', ['App\Controllers\MixController', 'adminDelete']);
+    $r->addRoute('GET', '/my/mixes/summary', ['App\Controllers\MixController', 'getMyMixesSummary']);
     $r->addRoute('GET', '/my/mixes', ['App\Controllers\MixController', 'getMyMixes']);
     $r->addRoute('DELETE', '/comments/{id}', ['App\Controllers\CommentController', 'delete']);
 

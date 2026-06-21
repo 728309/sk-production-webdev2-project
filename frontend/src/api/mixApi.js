@@ -30,6 +30,11 @@ export async function fetchMyMixes() {
   return readJsonResponse(response)
 }
 
+export async function fetchMyMixesSummary() {
+  const response = await get('/my/mixes/summary')
+  return readJsonResponse(response)
+}
+
 export async function fetchPendingMixes() {
   const response = await get('/admin/mixes/pending')
   return readJsonResponse(response)

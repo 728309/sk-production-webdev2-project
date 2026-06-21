@@ -14,6 +14,7 @@ interface IMixRepository
     public function getById(int $id): ?Mix;
     public function getFeatured(int $limit = 3): array;
     public function getByUserId(int $userId): array;
+    public function getSubmissionSummaryByUserId(int $userId): array;
     public function getPending(): array;
     public function create(Mix $mix): Mix;
     public function update(int $id, Mix $mix): bool;

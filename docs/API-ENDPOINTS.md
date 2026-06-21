@@ -69,6 +69,7 @@ Supported query parameters for `GET /mixes`:
 | --- | --- | --- | --- |
 | POST | `/mixes` | User token | Submit a new mix. New submissions start as `pending`. |
 | GET | `/my/mixes` | User token | Return mixes submitted by the logged-in user. |
+| GET | `/my/mixes/summary` | User token | Return submission counts for total, pending, approved, and rejected mixes. |
 
 Submission body:
 

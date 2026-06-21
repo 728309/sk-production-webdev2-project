@@ -93,7 +93,7 @@
         <div>
           <p class="page-kicker">Signal accepted</p>
           <Heading :level="2" size="2xl" class="mb-2">
-            Send a Signal to SK HUB
+            Submit Mix CTA
           </Heading>
           <Text as="p" size="sm" color="muted" class="max-w-2xl">
             Send in a set for review. Approved submissions join the public archive.

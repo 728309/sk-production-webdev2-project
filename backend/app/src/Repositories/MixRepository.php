@@ -93,13 +93,38 @@ class MixRepository implements IMixRepository
     public function getByUserId(int $userId): array
     {
         $statement = $this->connection->prepare(
-            'SELECT * FROM mixes WHERE submitted_by_user_id = :user_id ORDER BY id DESC'
+            'SELECT * FROM mixes
+             WHERE submitted_by_user_id = :user_id
+             ORDER BY submitted_date DESC, id DESC'
         );
         $statement->execute(['user_id' => $userId]);
 
         $rows = $statement->fetchAll();
 
         return array_map([$this, 'mapRowToMix'], $rows);
+    }
+
+    public function getSubmissionSummaryByUserId(int $userId): array
+    {
+        $statement = $this->connection->prepare(
+            'SELECT
+                COUNT(*) AS total,
+                SUM(CASE WHEN status = "pending" THEN 1 ELSE 0 END) AS pending,
+                SUM(CASE WHEN status = "published" THEN 1 ELSE 0 END) AS approved,
+                SUM(CASE WHEN status = "rejected" THEN 1 ELSE 0 END) AS rejected
+             FROM mixes
+             WHERE submitted_by_user_id = :user_id'
+        );
+        $statement->execute(['user_id' => $userId]);
+
+        $row = $statement->fetch();
+
+        return [
+            'total' => (int)($row['total'] ?? 0),
+            'pending' => (int)($row['pending'] ?? 0),
+            'approved' => (int)($row['approved'] ?? 0),
+            'rejected' => (int)($row['rejected'] ?? 0),
+        ];
     }
 
     /**

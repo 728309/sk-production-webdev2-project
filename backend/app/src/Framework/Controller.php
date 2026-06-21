@@ -79,7 +79,7 @@ class Controller
         $user = $authService->getUserFromToken($token);
 
         if (!$user) {
-            return null;
+            throw new \RuntimeException('Invalid token', 401);
         }
 
         return $user;

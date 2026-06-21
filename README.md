@@ -11,6 +11,7 @@ This project rebuilds an earlier Web Development 1 idea into a Web Development 2
 - Visitors who want to discover curated music mixes.
 - Producers, DJs, or community members who want to submit a mix.
 - Admin reviewers who need a small dashboard for approving, rejecting, editing, featuring, and deleting submissions.
+- Teachers reviewing a Web Development 2 project with frontend, backend, database, authentication, and role authorization.
 
 ## Why This Project?
 
@@ -164,8 +165,6 @@ User:
 - Password: `password123`
 
 ## Teacher Demo Flow
-
-This section is intended for grading and explains how to demonstrate the Web Development 2 frontend, backend, database, authentication, and role authorization requirements.
 
 1. Open `http://localhost:5173`.
 2. Browse featured mixes on the home page.
