@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import ArticleArchivePage from '../components/pages/ArticleArchivePage/ArticleArchivePage.vue'
+import MixDetailPage from '../components/pages/MixDetailPage/MixDetailPage.vue'
 import LoginPage from '../components/pages/LoginPage/LoginPage.vue'
 import RegisterPage from '../components/pages/RegisterPage/RegisterPage.vue'
 import AboutPage from '../components/pages/AboutPage/AboutPage.vue'
@@ -19,6 +20,11 @@ const routes = [
     path: '/mixes',
     name: 'mixes',
     component: ArticleArchivePage,
+  },
+  {
+    path: '/mixes/:id',
+    name: 'mix-detail',
+    component: MixDetailPage,
   },
   {
     path: '/login',

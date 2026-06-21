@@ -1,5 +1,7 @@
 USE developmentdb;
 
+DROP TABLE IF EXISTS votes;
+DROP TABLE IF EXISTS comments;
 DROP TABLE IF EXISTS mixes;
 DROP TABLE IF EXISTS users;
 
@@ -33,6 +35,38 @@ CREATE TABLE mixes (
     CONSTRAINT fk_mixes_submitted_user
         FOREIGN KEY (submitted_by_user_id) REFERENCES users(id)
         ON DELETE SET NULL
+);
+
+CREATE TABLE comments (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    mix_id INT NOT NULL,
+    user_id INT NOT NULL,
+    body TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT fk_comments_mix
+        FOREIGN KEY (mix_id) REFERENCES mixes(id)
+        ON DELETE CASCADE,
+    CONSTRAINT fk_comments_user
+        FOREIGN KEY (user_id) REFERENCES users(id)
+        ON DELETE CASCADE
+);
+
+CREATE TABLE votes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    mix_id INT NOT NULL,
+    user_id INT NOT NULL,
+    vote_type VARCHAR(20) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    UNIQUE KEY unique_mix_user_vote (mix_id, user_id),
+    CONSTRAINT chk_vote_type CHECK (vote_type IN ('like', 'dislike')),
+    CONSTRAINT fk_votes_mix
+        FOREIGN KEY (mix_id) REFERENCES mixes(id)
+        ON DELETE CASCADE,
+    CONSTRAINT fk_votes_user
+        FOREIGN KEY (user_id) REFERENCES users(id)
+        ON DELETE CASCADE
 );
 
 INSERT INTO mixes (
