@@ -115,6 +115,10 @@ const form = reactive(emptyForm())
 const error = ref('')
 const success = ref('')
 
+const isValidEmail = (value) => {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
+}
+
 const handleSubmit = () => {
   error.value = ''
   success.value = ''
@@ -128,7 +132,12 @@ const handleSubmit = () => {
     return
   }
 
-  success.value = 'Message prepared. Contact handling is not connected yet, but your feedback form is ready for future integration.'
+  if (!isValidEmail(form.email.trim())) {
+    error.value = 'Please enter a valid email address.'
+    return
+  }
+
+  success.value = 'Thank you. Your message has been prepared for the SK HUB team. Contact form handling is prepared for future backend integration.'
   Object.assign(form, emptyForm())
 }
 </script>

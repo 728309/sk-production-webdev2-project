@@ -1,6 +1,6 @@
 # Setup Guide
 
-This guide explains how to run SK Production Hub locally for development or grading.
+This guide explains how to run SK HUB locally for development or grading.
 
 ## Required Tools
 
@@ -143,6 +143,17 @@ Include:
 - Docker and nginx files
 - `.env.example` files
 - `README.md`, `AI-DISCLOSURE.md`, and `docs/`
+
+Keep these important project files:
+
+- `frontend/package.json`
+- `frontend/package-lock.json`
+- `backend/app/composer.json`
+- `backend/app/composer.lock`
+- `backend/docker-compose.yml`
+- `backend/database/init.sql`
+- `backend/nginx.conf`
+- `backend/PHP.Dockerfile`
 
 Exclude:
 

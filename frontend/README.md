@@ -1,6 +1,6 @@
 # SK Production Hub Frontend
 
-This folder contains the Vue 3 frontend for SK Production Hub. It is a single-page application for browsing published mixes, submitting new mixes, commenting, voting, and managing admin review workflows.
+This folder contains the Vue 3 frontend for SK HUB. It is a single-page application for browsing published mixes, submitting new mixes, commenting, voting, and managing admin review workflows.
 
 ## Stack
 
@@ -103,8 +103,24 @@ npm run storybook
 
 ## Responsiveness And Accessibility
 
-- The header has a desktop menu and mobile menu.
-- Cards collapse into one column on small screens.
-- Admin tables use horizontal scrolling on smaller screens.
-- Forms use labels and appropriate input types.
-- Buttons and links have clear visual states.
+- Pages use semantic landmarks such as header, main, section, article, aside, nav, form, and footer.
+- The header has a desktop menu and mobile menu so navigation remains usable on small screens.
+- Mix cards and content cards use responsive grids that collapse into one column on mobile.
+- Admin tables sit inside horizontal scroll containers on smaller screens instead of forcing broken page overflow.
+- Forms use visible labels, appropriate input types, and clear validation/error messages.
+- Buttons, links, inputs, and textareas keep visible hover/focus states with the neon green terminal accent.
+- The dark UI uses light text on black/dark panels for readable contrast.
+- Status badges use text labels plus color, for example pending, published, and rejected.
+- The My Account menu stays as a single dropdown and shows an `Admin` badge only when the logged-in user is an admin.
+
+These choices support keyboard and mobile use without claiming full WCAG certification.
+
+## UI Direction
+
+The frontend uses a dark terminal-inspired SK HUB design:
+
+- True black/near-black page backgrounds
+- Neon green accent states
+- Monospace typography
+- Dark cards, panels, inputs, and admin tables
+- Compact badges and readable metadata

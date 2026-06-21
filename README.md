@@ -2,6 +2,8 @@
 
 SK Production Hub is a music mix submission and review platform. Visitors can browse approved mixes, registered users can submit mixes and interact with published mixes, and admins can review the queue before content appears publicly.
 
+SK HUB is the user-facing name of the SK Production Hub project.
+
 This project rebuilds an earlier Web Development 1 idea into a Web Development 2 architecture: a Vue 3 frontend, a PHP REST API backend, MariaDB/MySQL persistence, Docker services, JWT authentication, and separate user/admin roles.
 
 ## Who Is This App For?
@@ -117,10 +119,12 @@ The schema and seed data are in `backend/database/init.sql`. Docker imports this
 
 ## Responsiveness And Accessibility
 
+- The interface uses a dark terminal-inspired SK HUB style with black backgrounds, neon green accents, readable contrast, and monospace typography.
 - Main pages use responsive cards, forms, and table wrappers.
 - The navbar has desktop and mobile layouts.
 - Forms use visible labels and HTML input types where possible.
 - Buttons and links keep clear focus/hover states.
+- Status badges include text labels as well as color.
 - Admin tables scroll horizontally on smaller screens instead of breaking layout.
 
 ## Setup Quick Start
@@ -191,7 +195,7 @@ Do not include:
 - `backend/app/vendor/`
 - Real `.env` files or secrets
 
-The lock files should stay included because they help reproduce the dependency versions.
+The lock files should stay included because they help reproduce the dependency versions. Do not remove `frontend/package.json`, `frontend/package-lock.json`, `backend/app/composer.json`, `backend/app/composer.lock`, `backend/docker-compose.yml`, `backend/database/init.sql`, `backend/nginx.conf`, or `backend/PHP.Dockerfile`.
 
 ## Documentation
 

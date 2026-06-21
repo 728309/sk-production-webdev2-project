@@ -1,6 +1,6 @@
 # SK Production Hub Backend
 
-This folder contains the PHP REST API for SK Production Hub. It provides authentication, public mix browsing, user submissions, comments, votes, admin review actions, and health checks.
+This folder contains the PHP REST API for SK HUB. It provides authentication, public mix browsing, user submissions, comments, votes, admin review actions, and health checks.
 
 ## Stack
 
@@ -46,6 +46,8 @@ The backend follows a clear Controller -> Service -> Repository structure.
 - Repositories contain SQL and use PDO prepared statements.
 - The shared controller base class centralizes JSON body parsing, bearer token reading, user/admin checks, and consistent JSON error responses.
 
+This separation keeps the code beginner-friendly: route handling stays in controllers, business decisions stay in services, and database details stay in repositories.
+
 ## Environment Variables
 
 `backend/.env.example` documents the development defaults:
@@ -87,10 +89,11 @@ The `-v` flag removes the database volume. MariaDB then imports `database/init.s
 
 - `POST /auth/register`, `POST /auth/login`, `GET /auth/me`
 - `GET /mixes`, `GET /mixes/featured`, `GET /mixes/{id}`
-- `POST /mixes`, `PUT /mixes/{id}`, `DELETE /mixes/{id}`, `GET /my/mixes`
+- `POST /mixes`, `GET /my/mixes`
 - `GET/POST /mixes/{id}/comments`, `DELETE /comments/{id}`
 - `GET/POST /mixes/{id}/votes`
 - `GET/PUT/DELETE /admin/mixes...`
+- `PUT /mixes/{id}`, `DELETE /mixes/{id}` as admin-token REST aliases for the main admin update/delete routes
 - `GET /health`, `GET /health/db`
 
 See [../docs/API-ENDPOINTS.md](../docs/API-ENDPOINTS.md) for the full table.
@@ -101,6 +104,7 @@ See [../docs/API-ENDPOINTS.md](../docs/API-ENDPOINTS.md) for the full table.
 - JWTs are signed and validated in `JwtHelper`.
 - User routes call `requireUser`.
 - Admin routes call `requireAdmin`.
+- Admin authorization is enforced in the PHP backend, not only by frontend route guards.
 - Public mix endpoints filter to `published` mixes.
 - Comments and votes reject unpublished mixes.
 - PDO prepared statements are used for queries.

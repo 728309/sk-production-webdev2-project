@@ -55,8 +55,6 @@ Login body:
 | GET | `/mixes` | Public | Returns published mixes only. Supports pagination, search, and genre filtering. |
 | GET | `/mixes/featured` | Public | Returns featured published mixes for the home page. |
 | GET | `/mixes/{id}` | Public | Returns one published mix. Pending or rejected mixes return `404`. |
-| PUT | `/mixes/{id}` | Admin token | REST-style alias for editing a mix. |
-| DELETE | `/mixes/{id}` | Admin token | REST-style alias for deleting a mix. |
 
 Supported query parameters for `GET /mixes`:
 
@@ -136,6 +134,13 @@ All admin routes require a JWT for a user with role `admin`.
 | PUT | `/admin/mixes/{id}/reject` | Admin token | Reject a mix with a review note. |
 | PUT | `/admin/mixes/{id}/feature` | Admin token | Mark a mix as featured. |
 | PUT | `/admin/mixes/{id}/unfeature` | Admin token | Remove a mix from featured mixes. |
+
+Admin REST aliases:
+
+| Method | Path | Auth | Description |
+| --- | --- | --- | --- |
+| PUT | `/mixes/{id}` | Admin token | REST alias for `PUT /admin/mixes/{id}`. |
+| DELETE | `/mixes/{id}` | Admin token | REST alias for `DELETE /admin/mixes/{id}`. |
 
 Supported query parameters for `GET /admin/mixes`:
 

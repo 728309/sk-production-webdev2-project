@@ -1,6 +1,6 @@
 # Test Accounts
 
-These accounts are seeded by `backend/database/init.sql` for local development and grading.
+These accounts are seeded by `backend/database/init.sql` for local SK HUB development and grading.
 
 ## Admin Account
 
@@ -51,6 +51,8 @@ Without logging in, demonstrate:
 3. Admin flow: login, `/admin/pending`, `/admin/mixes`.
 4. API health: `/health`, `/health/db`.
 5. Documentation: README, setup guide, API endpoints, AI disclosure.
+
+This order shows public browsing first, then authenticated user actions, then backend-protected admin actions.
 
 ## Password Note
 
