@@ -29,6 +29,16 @@ function getAuthHeaders() {
   };
 }
 
+export async function readJsonResponse(response) {
+  const data = await response.json().catch(() => ({}));
+
+  if (!response.ok) {
+    throw new Error(data.error || 'Something went wrong. Please try again.');
+  }
+
+  return data;
+}
+
 /**
  * Make a GET request to the API
  * @param {string} endpoint - API endpoint (e.g., '/mixes')

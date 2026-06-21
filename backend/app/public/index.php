@@ -45,8 +45,12 @@ $dispatcher = simpleDispatcher(function (RouteCollector $r) {
     $r->addRoute('GET', '/mixes', ['App\Controllers\MixController', 'getAll']);
     $r->addRoute('GET', '/mixes/{id}', ['App\Controllers\MixController', 'get']);
     $r->addRoute('POST', '/mixes', ['App\Controllers\MixController', 'create']);
-    $r->addRoute('PUT', '/mixes/{id}', ['App\Controllers\MixController', 'update']);
-    $r->addRoute('DELETE', '/mixes/{id}', ['App\Controllers\MixController', 'delete']);
+    $r->addRoute('GET', '/my/mixes', ['App\Controllers\MixController', 'getMyMixes']);
+
+    // Admin mix review routes
+    $r->addRoute('GET', '/admin/mixes/pending', ['App\Controllers\MixController', 'getPending']);
+    $r->addRoute('PUT', '/admin/mixes/{id}/approve', ['App\Controllers\MixController', 'approve']);
+    $r->addRoute('PUT', '/admin/mixes/{id}/reject', ['App\Controllers\MixController', 'reject']);
 });
 
 

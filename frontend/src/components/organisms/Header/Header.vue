@@ -36,6 +36,25 @@
           </template>
 
           <template v-else>
+            <RouterLink
+              to="/submit"
+              class="text-gray-700 hover:text-blue-600 transition-colors font-medium"
+            >
+              Submit
+            </RouterLink>
+            <RouterLink
+              to="/my-submissions"
+              class="text-gray-700 hover:text-blue-600 transition-colors font-medium"
+            >
+              My Submissions
+            </RouterLink>
+            <RouterLink
+              v-if="authStore.isAdmin"
+              to="/admin/pending"
+              class="text-gray-700 hover:text-blue-600 transition-colors font-medium"
+            >
+              Admin Pending
+            </RouterLink>
             <span
               v-if="authStore.isAdmin"
               class="rounded-full bg-blue-100 px-2 py-1 text-xs font-semibold text-blue-700"
@@ -117,6 +136,28 @@
           </template>
 
           <template v-else>
+            <RouterLink
+              to="/submit"
+              class="text-gray-700 hover:text-blue-600 transition-colors px-2 py-1"
+              @click="mobileMenuOpen = false"
+            >
+              Submit
+            </RouterLink>
+            <RouterLink
+              to="/my-submissions"
+              class="text-gray-700 hover:text-blue-600 transition-colors px-2 py-1"
+              @click="mobileMenuOpen = false"
+            >
+              My Submissions
+            </RouterLink>
+            <RouterLink
+              v-if="authStore.isAdmin"
+              to="/admin/pending"
+              class="text-gray-700 hover:text-blue-600 transition-colors px-2 py-1"
+              @click="mobileMenuOpen = false"
+            >
+              Admin Pending
+            </RouterLink>
             <span
               v-if="authStore.isAdmin"
               class="mx-2 w-fit rounded-full bg-blue-100 px-2 py-1 text-xs font-semibold text-blue-700"

@@ -19,10 +19,10 @@ class MixRepository implements IMixRepository
     /**
      * @return Mix[]
      */
-    public function getAll(int $page = 1, int $limit = 6, ?string $genre = null, ?string $search = null): array
+    public function getAll(int $page = 1, int $limit = 6, ?string $genre = null, ?string $search = null, ?string $status = 'published'): array
     {
         $offset = ($page - 1) * $limit;
-        $filters = $this->buildFilterSql($genre, $search);
+        $filters = $this->buildFilterSql($genre, $search, $status);
 
         $statement = $this->connection->prepare(
             'SELECT * FROM mixes ' . $filters['where'] . ' ORDER BY id LIMIT :limit OFFSET :offset'
@@ -38,9 +38,9 @@ class MixRepository implements IMixRepository
         return array_map([$this, 'mapRowToMix'], $rows);
     }
 
-    public function count(?string $genre = null, ?string $search = null): int
+    public function count(?string $genre = null, ?string $search = null, ?string $status = 'published'): int
     {
-        $filters = $this->buildFilterSql($genre, $search);
+        $filters = $this->buildFilterSql($genre, $search, $status);
 
         $statement = $this->connection->prepare(
             'SELECT COUNT(*) AS total FROM mixes ' . $filters['where']
@@ -67,6 +67,36 @@ class MixRepository implements IMixRepository
         return $this->mapRowToMix($row);
     }
 
+    /**
+     * @return Mix[]
+     */
+    public function getByUserId(int $userId): array
+    {
+        $statement = $this->connection->prepare(
+            'SELECT * FROM mixes WHERE submitted_by_user_id = :user_id ORDER BY id DESC'
+        );
+        $statement->execute(['user_id' => $userId]);
+
+        $rows = $statement->fetchAll();
+
+        return array_map([$this, 'mapRowToMix'], $rows);
+    }
+
+    /**
+     * @return Mix[]
+     */
+    public function getPending(): array
+    {
+        $statement = $this->connection->prepare(
+            'SELECT * FROM mixes WHERE status = :status ORDER BY id DESC'
+        );
+        $statement->execute(['status' => 'pending']);
+
+        $rows = $statement->fetchAll();
+
+        return array_map([$this, 'mapRowToMix'], $rows);
+    }
+
     public function create(Mix $mix): Mix
     {
         $statement = $this->connection->prepare(
@@ -79,10 +109,12 @@ class MixRepository implements IMixRepository
                 cover_image_url,
                 duration,
                 submitted_by,
+                submitted_by_user_id,
                 submitted_date,
                 description,
                 status,
-                featured
+                featured,
+                review_note
             ) VALUES (
                 :title,
                 :artist,
@@ -92,10 +124,12 @@ class MixRepository implements IMixRepository
                 :cover_image_url,
                 :duration,
                 :submitted_by,
+                :submitted_by_user_id,
                 :submitted_date,
                 :description,
                 :status,
-                :featured
+                :featured,
+                :review_note
             )'
         );
 
@@ -119,10 +153,12 @@ class MixRepository implements IMixRepository
                 cover_image_url = :cover_image_url,
                 duration = :duration,
                 submitted_by = :submitted_by,
+                submitted_by_user_id = :submitted_by_user_id,
                 submitted_date = :submitted_date,
                 description = :description,
                 status = :status,
-                featured = :featured
+                featured = :featured,
+                review_note = :review_note
             WHERE id = :id'
         );
 
@@ -132,6 +168,41 @@ class MixRepository implements IMixRepository
         $statement->execute($parameters);
 
         return $statement->rowCount() > 0;
+    }
+
+    public function approve(int $id): ?Mix
+    {
+        if (!$this->getById($id)) {
+            return null;
+        }
+
+        $statement = $this->connection->prepare(
+            'UPDATE mixes SET status = :status, review_note = NULL WHERE id = :id'
+        );
+        $statement->execute([
+            'status' => 'published',
+            'id' => $id,
+        ]);
+
+        return $this->getById($id);
+    }
+
+    public function reject(int $id, string $reviewNote): ?Mix
+    {
+        if (!$this->getById($id)) {
+            return null;
+        }
+
+        $statement = $this->connection->prepare(
+            'UPDATE mixes SET status = :status, review_note = :review_note WHERE id = :id'
+        );
+        $statement->execute([
+            'status' => 'rejected',
+            'review_note' => $reviewNote,
+            'id' => $id,
+        ]);
+
+        return $this->getById($id);
     }
 
     public function delete(int $id): bool
@@ -154,10 +225,12 @@ class MixRepository implements IMixRepository
             'coverImageUrl' => $row['cover_image_url'] ?? '',
             'duration' => $row['duration'] ?? '',
             'submittedBy' => $row['submitted_by'],
+            'submittedByUserId' => $row['submitted_by_user_id'] !== null ? (int)$row['submitted_by_user_id'] : null,
             'submittedDate' => $row['submitted_date'],
             'description' => $row['description'] ?? '',
             'status' => $row['status'],
             'featured' => (bool) $row['featured'],
+            'reviewNote' => $row['review_note'] ?? null,
         ]);
     }
 
@@ -172,17 +245,24 @@ class MixRepository implements IMixRepository
             'cover_image_url' => $mix->coverImageUrl,
             'duration' => $mix->duration,
             'submitted_by' => $mix->submittedBy,
+            'submitted_by_user_id' => $mix->submittedByUserId,
             'submitted_date' => $mix->submittedDate,
             'description' => $mix->description,
             'status' => $mix->status ?: 'published',
             'featured' => $mix->featured ? 1 : 0,
+            'review_note' => $mix->reviewNote,
         ];
     }
 
-    private function buildFilterSql(?string $genre, ?string $search): array
+    private function buildFilterSql(?string $genre, ?string $search, ?string $status): array
     {
         $conditions = [];
         $params = [];
+
+        if ($status !== null && $status !== '') {
+            $conditions[] = 'status = :status';
+            $params['status'] = $status;
+        }
 
         if ($genre !== null && $genre !== '') {
             $conditions[] = 'genre = :genre';

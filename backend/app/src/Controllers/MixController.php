@@ -2,18 +2,23 @@
 
 namespace App\Controllers;
 
+use App\Framework\Controller;
 use App\Models\Mix;
+use App\Models\User;
+use App\Services\AuthService;
+use App\Services\IAuthService;
 use App\Services\IMixService;
 use App\Services\MixService;
-use App\Framework\Controller;
 
 class MixController extends Controller
 {
     private IMixService $mixService;
+    private IAuthService $authService;
 
     public function __construct()
     {
         $this->mixService = new MixService();
+        $this->authService = new AuthService();
     }
 
     public function getAll()
@@ -27,8 +32,8 @@ class MixController extends Controller
             $genreFilter = $genre !== '' ? $genre : null;
             $searchFilter = $search !== '' ? $search : null;
 
-            $mixes = $this->mixService->getAll($page, $limit, $genreFilter, $searchFilter);
-            $total = $this->mixService->count($genreFilter, $searchFilter);
+            $mixes = $this->mixService->getAll($page, $limit, $genreFilter, $searchFilter, 'published');
+            $total = $this->mixService->count($genreFilter, $searchFilter, 'published');
             $totalPages = (int)ceil($total / $limit);
 
             return $this->sendSuccessResponse([
@@ -40,8 +45,8 @@ class MixController extends Controller
                     'totalPages' => $totalPages,
                 ],
             ]);
-        } catch (\Exception $e) {
-            return $this->sendErrorResponse('Internal server error', 500);
+        } catch (\Throwable $e) {
+            return $this->sendMixError($e);
         }
     }
 
@@ -50,50 +55,180 @@ class MixController extends Controller
         try {
             $id = (int)($vars['id'] ?? 0);
             $mix = $this->mixService->getById($id);
-            
+
             if (!$mix) {
                 return $this->sendErrorResponse('Mix not found', 404);
             }
+
             return $this->sendSuccessResponse($mix);
-        } catch (\Exception $e) {
-            return $this->sendErrorResponse('Internal server error', 500);
+        } catch (\Throwable $e) {
+            return $this->sendMixError($e);
         }
     }
 
     public function create()
     {
         try {
-            $mix = $this->mapPostDataToClass(Mix::class);
+            $user = $this->requireUser();
+            $data = $this->getJsonInput();
+            $this->validateSubmission($data);
+
+            $mix = new Mix([
+                'title' => trim($data['title']),
+                'artist' => trim($data['artist']),
+                'genre' => trim($data['genre']),
+                'platform' => trim($data['platform']),
+                'mixUrl' => trim($data['mixUrl']),
+                'coverImageUrl' => trim($data['coverImageUrl'] ?? ''),
+                'duration' => trim($data['duration'] ?? ''),
+                'submittedBy' => $user->name,
+                'submittedByUserId' => $user->id,
+                'submittedDate' => date('Y-m-d'),
+                'description' => trim($data['description'] ?? ''),
+                'status' => 'pending',
+                'featured' => false,
+                'reviewNote' => null,
+            ]);
+
             $mix = $this->mixService->create($mix);
+
             return $this->sendSuccessResponse($mix, 201);
-        } catch (\Exception $e) {
-            return $this->sendErrorResponse('Internal server error', 500);
+        } catch (\Throwable $e) {
+            return $this->sendMixError($e);
         }
     }
 
-    public function update($vars = [])
+    public function getMyMixes()
     {
         try {
-            $mix = $this->mapPostDataToClass(Mix::class);
+            $user = $this->requireUser();
+
+            return $this->sendSuccessResponse($this->mixService->getByUserId((int)$user->id));
+        } catch (\Throwable $e) {
+            return $this->sendMixError($e);
+        }
+    }
+
+    public function getPending()
+    {
+        try {
+            $this->requireAdmin();
+
+            return $this->sendSuccessResponse($this->mixService->getPending());
+        } catch (\Throwable $e) {
+            return $this->sendMixError($e);
+        }
+    }
+
+    public function approve($vars = [])
+    {
+        try {
+            $this->requireAdmin();
             $id = (int)($vars['id'] ?? 0);
-            $mix->id = $id;
-            $this->mixService->update($id, $mix);
+            $mix = $this->mixService->approve($id);
+
+            if (!$mix) {
+                return $this->sendErrorResponse('Mix not found', 404);
+            }
+
             return $this->sendSuccessResponse($mix);
-        } catch (\Exception $e) {
-            return $this->sendErrorResponse('Internal server error', 500);
+        } catch (\Throwable $e) {
+            return $this->sendMixError($e);
         }
     }
 
-    public function delete($vars = [])
+    public function reject($vars = [])
     {
         try {
+            $this->requireAdmin();
             $id = (int)($vars['id'] ?? 0);
-            $this->mixService->delete($id);
-            return $this->sendSuccessResponse();
-        } catch (\Exception $e) {
-            return $this->sendErrorResponse('Internal server error', 500);
+            $data = $this->getJsonInput();
+            $reviewNote = trim($data['reviewNote'] ?? '');
+
+            if ($reviewNote === '') {
+                throw new \InvalidArgumentException('Review note is required', 400);
+            }
+
+            $mix = $this->mixService->reject($id, $reviewNote);
+
+            if (!$mix) {
+                return $this->sendErrorResponse('Mix not found', 404);
+            }
+
+            return $this->sendSuccessResponse($mix);
+        } catch (\Throwable $e) {
+            return $this->sendMixError($e);
         }
     }
 
+    private function validateSubmission(array $data): void
+    {
+        $requiredFields = ['title', 'artist', 'genre', 'platform', 'mixUrl'];
 
+        foreach ($requiredFields as $field) {
+            if (trim($data[$field] ?? '') === '') {
+                throw new \InvalidArgumentException($field . ' is required', 400);
+            }
+        }
+    }
+
+    private function requireUser(): User
+    {
+        $token = $this->getBearerToken();
+
+        if (!$token) {
+            throw new \RuntimeException('Invalid token', 401);
+        }
+
+        $user = $this->authService->getUserFromToken($token);
+
+        if (!$user) {
+            throw new \RuntimeException('Invalid token', 401);
+        }
+
+        return $user;
+    }
+
+    private function requireAdmin(): User
+    {
+        $user = $this->requireUser();
+
+        if ($user->role !== 'admin') {
+            throw new \RuntimeException('Admin access required', 403);
+        }
+
+        return $user;
+    }
+
+    private function getJsonInput(): array
+    {
+        $input = file_get_contents('php://input');
+        $data = json_decode($input, true);
+
+        return is_array($data) ? $data : [];
+    }
+
+    private function getBearerToken(): ?string
+    {
+        $header = $_SERVER['HTTP_AUTHORIZATION'] ?? $_SERVER['REDIRECT_HTTP_AUTHORIZATION'] ?? '';
+
+        if (preg_match('/Bearer\s+(\S+)/', $header, $matches)) {
+            return $matches[1];
+        }
+
+        return null;
+    }
+
+    private function sendMixError(\Throwable $e)
+    {
+        $code = $e->getCode();
+
+        if (!in_array($code, [400, 401, 403, 404], true)) {
+            $code = 500;
+        }
+
+        $message = $code === 500 ? 'Internal server error' : $e->getMessage();
+
+        return $this->sendErrorResponse($message, $code);
+    }
 }

@@ -18,19 +18,29 @@ class MixService implements IMixService
     /**
      * @return Mix[]
      */
-    public function getAll(int $page = 1, int $limit = 6, ?string $genre = null, ?string $search = null): array
+    public function getAll(int $page = 1, int $limit = 6, ?string $genre = null, ?string $search = null, ?string $status = 'published'): array
     {
-        return $this->repository->getAll($page, $limit, $genre, $search);
+        return $this->repository->getAll($page, $limit, $genre, $search, $status);
     }
 
-    public function count(?string $genre = null, ?string $search = null): int
+    public function count(?string $genre = null, ?string $search = null, ?string $status = 'published'): int
     {
-        return $this->repository->count($genre, $search);
+        return $this->repository->count($genre, $search, $status);
     }
 
     public function getById(int $id): ?Mix
     {
         return $this->repository->getById($id);
+    }
+
+    public function getByUserId(int $userId): array
+    {
+        return $this->repository->getByUserId($userId);
+    }
+
+    public function getPending(): array
+    {
+        return $this->repository->getPending();
     }
 
     public function create(Mix $mix): Mix
@@ -41,6 +51,16 @@ class MixService implements IMixService
     public function update(int $id, Mix $mix): bool
     {
         return $this->repository->update($id, $mix);
+    }
+
+    public function approve(int $id): ?Mix
+    {
+        return $this->repository->approve($id);
+    }
+
+    public function reject(int $id, string $reviewNote): ?Mix
+    {
+        return $this->repository->reject($id, $reviewNote);
     }
 
     public function delete(int $id): bool

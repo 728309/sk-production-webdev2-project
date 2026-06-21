@@ -1,17 +1,7 @@
 import { defineStore } from 'pinia'
-import { get, post } from '../utils/api.js'
+import { get, post, readJsonResponse } from '../utils/api.js'
 
 const TOKEN_KEY = 'skProductionToken'
-
-async function readJsonResponse(response) {
-  const data = await response.json().catch(() => ({}))
-
-  if (!response.ok) {
-    throw new Error(data.error || 'Something went wrong. Please try again.')
-  }
-
-  return data
-}
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({

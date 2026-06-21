@@ -13,10 +13,12 @@ class Mix
     public string $coverImageUrl;
     public string $duration;
     public string $submittedBy;
+    public ?int $submittedByUserId;
     public string $submittedDate;
     public string $description;
     public string $status;
     public bool $featured;
+    public ?string $reviewNote;
 
     public function __construct(array $data = [])
     {
@@ -29,9 +31,11 @@ class Mix
         $this->coverImageUrl = $data['coverImageUrl'] ?? '';
         $this->duration = $data['duration'] ?? '';
         $this->submittedBy = $data['submittedBy'] ?? '';
+        $this->submittedByUserId = $data['submittedByUserId'] ?? null;
         $this->submittedDate = $data['submittedDate'] ?? '';
         $this->description = $data['description'] ?? '';
         $this->status = $data['status'] ?? 'published';
         $this->featured = $data['featured'] ?? false;
+        $this->reviewNote = $data['reviewNote'] ?? null;
     }
 }

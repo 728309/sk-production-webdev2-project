@@ -1,7 +1,7 @@
 USE developmentdb;
 
-DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS mixes;
+DROP TABLE IF EXISTS users;
 
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -22,12 +22,17 @@ CREATE TABLE mixes (
     cover_image_url VARCHAR(500),
     duration VARCHAR(20),
     submitted_by VARCHAR(255) NOT NULL,
+    submitted_by_user_id INT NULL,
     submitted_date DATE NOT NULL,
     description TEXT,
     status VARCHAR(50) NOT NULL DEFAULT 'published',
     featured TINYINT(1) NOT NULL DEFAULT 0,
+    review_note TEXT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT fk_mixes_submitted_user
+        FOREIGN KEY (submitted_by_user_id) REFERENCES users(id)
+        ON DELETE SET NULL
 );
 
 INSERT INTO mixes (
@@ -40,10 +45,12 @@ INSERT INTO mixes (
     cover_image_url,
     duration,
     submitted_by,
+    submitted_by_user_id,
     submitted_date,
     description,
     status,
-    featured
+    featured,
+    review_note
 ) VALUES
 (
     1,
@@ -55,10 +62,12 @@ INSERT INTO mixes (
     'https://images.unsplash.com/photo-1514525253161-7a46d19cd819',
     '42:18',
     'Sofia Martins',
+    NULL,
     '2026-05-04',
     'A warm Afrobeat session with bright percussion, smooth horn lines, and late-evening party energy.',
     'published',
-    1
+    1,
+    NULL
 ),
 (
     2,
@@ -70,10 +79,12 @@ INSERT INTO mixes (
     'https://images.unsplash.com/photo-1571266028243-d220c9c3b04d',
     '58:44',
     'Noah Vermeer',
+    NULL,
     '2026-05-07',
     'A driving techno mix built around hypnotic drums, dark synth stabs, and steady peak-time momentum.',
     'published',
-    0
+    0,
+    NULL
 ),
 (
     3,
@@ -85,10 +96,12 @@ INSERT INTO mixes (
     'https://images.unsplash.com/photo-1501386761578-eac5c94b800a',
     '46:09',
     'Maya Brooks',
+    NULL,
     '2026-05-12',
     'Uplifting house selections with soulful vocals, crisp claps, and a relaxed rooftop feel.',
     'published',
-    1
+    1,
+    NULL
 ),
 (
     4,
@@ -100,10 +113,12 @@ INSERT INTO mixes (
     'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f',
     '35:27',
     'Jordan Price',
+    NULL,
     '2026-05-15',
     'Boom bap drums, mellow keys, and sharp underground verses stitched into a late-night hip-hop blend.',
     'published',
-    0
+    0,
+    NULL
 ),
 (
     5,
@@ -115,10 +130,12 @@ INSERT INTO mixes (
     'https://images.unsplash.com/photo-1524368535928-5b5e00ddc76b',
     '51:33',
     'Aisha Khan',
+    NULL,
     '2026-05-19',
     'Amapiano grooves with rolling log drums, airy pads, and smooth weekend balcony energy.',
     'published',
-    1
+    1,
+    NULL
 ),
 (
     6,
@@ -130,10 +147,12 @@ INSERT INTO mixes (
     'https://images.unsplash.com/photo-1516280440614-37939bbacd81',
     '39:52',
     'Elena Rossi',
+    NULL,
     '2026-05-22',
     'A smooth R&B set with glossy vocals, soft basslines, and slow grooves for after-hours listening.',
     'published',
-    0
+    0,
+    NULL
 ),
 (
     7,
@@ -145,10 +164,12 @@ INSERT INTO mixes (
     'https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3',
     '44:06',
     'Dante Lewis',
+    NULL,
     '2026-05-25',
     'Dancehall rhythms with bold hooks, quick transitions, and sunny sound-system energy.',
     'published',
-    0
+    0,
+    NULL
 ),
 (
     8,
@@ -160,10 +181,12 @@ INSERT INTO mixes (
     'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee',
     '55:41',
     'Sam Taylor',
+    NULL,
     '2026-05-29',
     'Fast breaks, deep subs, and atmospheric pads shaped for midnight headphones and city rides.',
     'published',
-    1
+    1,
+    NULL
 );
 
 ALTER TABLE mixes AUTO_INCREMENT = 9;
