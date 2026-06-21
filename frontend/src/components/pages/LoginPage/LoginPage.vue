@@ -1,9 +1,9 @@
 <template>
-  <div class="min-h-screen flex flex-col bg-gray-50">
+  <div class="app-page">
     <Header />
 
-    <main class="flex-1 flex items-center justify-center px-4 py-12">
-      <section class="w-full max-w-md rounded-lg bg-white p-6 shadow-md">
+    <main class="flex flex-1 items-center justify-center px-4 py-10 sm:py-14">
+      <section class="panel panel-padding w-full max-w-md">
         <Heading :level="1" size="2xl" class="mb-2">
           Login
         </Heading>
@@ -13,7 +13,7 @@
 
         <form class="space-y-4" @submit.prevent="handleSubmit">
           <div>
-            <label for="email" class="mb-1 block text-sm font-medium text-gray-700">
+            <label for="email" class="field-label">
               Email
             </label>
             <input
@@ -21,13 +21,13 @@
               v-model="email"
               type="email"
               autocomplete="email"
-              class="w-full rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+              class="form-input"
               required
             />
           </div>
 
           <div>
-            <label for="password" class="mb-1 block text-sm font-medium text-gray-700">
+            <label for="password" class="field-label">
               Password
             </label>
             <input
@@ -35,18 +35,20 @@
               v-model="password"
               type="password"
               autocomplete="current-password"
-              class="w-full rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+              class="form-input"
               required
             />
           </div>
 
-          <Text v-if="error" as="p" size="sm" color="muted" class="text-red-600">
-            {{ error }}
-          </Text>
+          <div v-if="error" class="form-error">
+            <Text as="p" size="sm" color="muted" class="text-red-700">
+              {{ error }}
+            </Text>
+          </div>
 
           <button
             type="submit"
-            class="w-full rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
+            class="button-primary w-full"
             :disabled="loading"
           >
             {{ loading ? 'Logging in...' : 'Login' }}

@@ -1,28 +1,34 @@
 <template>
-  <div class="min-h-screen flex flex-col bg-gray-50">
+  <div class="app-page">
     <Header />
 
-    <main class="flex-1 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full">
-      <Heading :level="1" size="3xl" class="mb-2">
-        My Submissions
-      </Heading>
-      <Text as="p" size="base" color="muted" class="mb-6">
-        Track the review status of mixes you have submitted.
-      </Text>
+    <main class="app-container-medium">
+      <div class="page-header">
+        <Heading :level="1" size="3xl" class="mb-2">
+          My Submissions
+        </Heading>
+        <Text as="p" size="base" color="muted">
+          Track the review status of mixes you have submitted.
+        </Text>
+      </div>
 
-      <Text v-if="loading" as="p" size="sm" color="muted">
-        Loading submissions...
-      </Text>
+      <div v-if="loading" class="state-panel mb-6">
+        <Text as="p" size="sm" color="muted">
+          Loading submissions...
+        </Text>
+      </div>
 
-      <Text v-if="error" as="p" size="sm" color="muted" class="text-red-600">
-        {{ error }}
-      </Text>
+      <div v-if="error" class="form-error mb-6">
+        <Text as="p" size="sm" color="muted" class="text-red-700">
+          {{ error }}
+        </Text>
+      </div>
 
       <div v-if="!loading && submissions.length > 0" class="space-y-4">
         <article
           v-for="mix in submissions"
           :key="mix.id"
-          class="rounded-lg bg-white p-5 shadow-md"
+          class="panel panel-padding"
         >
           <div class="flex flex-wrap items-start justify-between gap-3">
             <div>
@@ -55,7 +61,7 @@
         </article>
       </div>
 
-      <div v-else-if="!loading && !error" class="rounded-lg bg-white p-8 text-center shadow-md">
+      <div v-else-if="!loading && !error" class="state-panel">
         <Text as="p" size="base" color="muted">
           You have not submitted any mixes yet.
         </Text>

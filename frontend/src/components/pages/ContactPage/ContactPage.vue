@@ -1,14 +1,16 @@
 <template>
-  <div class="min-h-screen flex flex-col bg-gray-50">
+  <div class="app-page">
     <Header />
 
-    <main class="flex-1 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 w-full">
-      <Heading :level="1" size="3xl" class="mb-4">
-        Contact
-      </Heading>
-      <Text as="p" size="base" color="muted" class="leading-relaxed">
-        For now, this page is a placeholder while the hub grows.
-      </Text>
+    <main class="app-container-medium">
+      <section class="panel panel-padding">
+        <Heading :level="1" size="3xl" class="mb-4">
+          Contact
+        </Heading>
+        <Text as="p" size="base" color="muted" class="leading-relaxed">
+          For now, this page is a placeholder while the hub grows.
+        </Text>
+      </section>
     </main>
 
     <Footer />

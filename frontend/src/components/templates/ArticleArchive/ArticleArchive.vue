@@ -1,36 +1,36 @@
 <template>
-  <div class="min-h-screen flex flex-col bg-gray-50">
+  <div class="app-page">
     <Header :navigation-links="navigationLinks" />
 
-    <main class="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
-      <div class="mb-8">
+    <main class="app-container">
+      <div class="page-header">
         <Heading :level="1" size="3xl" class="mb-2">
           SK Production Hub
         </Heading>
-        <Text as="p" size="lg" color="muted">
+        <Text as="p" size="lg" color="muted" class="max-w-3xl">
           Browse curated mixes from producers, DJs, and selectors.
         </Text>
       </div>
 
-      <div class="mb-6 grid grid-cols-1 md:grid-cols-[1fr_220px] gap-4">
+      <div class="panel panel-padding mb-6 grid grid-cols-1 gap-4 md:grid-cols-[1fr_220px]">
         <div>
-          <label for="mix-search" class="sr-only">Search mixes</label>
+          <label for="mix-search" class="field-label-small">Search mixes</label>
           <input
             id="mix-search"
             :value="search"
             type="search"
             placeholder="Search title, artist, genre, or description"
-            class="w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-sm text-gray-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+            class="form-input"
             @input="handleSearchInput"
           />
         </div>
 
         <div>
-          <label for="genre-filter" class="sr-only">Genre</label>
+          <label for="genre-filter" class="field-label-small">Genre</label>
           <select
             id="genre-filter"
             :value="selectedGenre"
-            class="w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-sm text-gray-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+            class="form-input"
             @change="handleGenreChange"
           >
             <option value="">All genres</option>
@@ -41,18 +41,22 @@
         </div>
       </div>
 
-      <Text v-if="loading" as="p" size="sm" color="muted" class="mb-4">
-        Loading mixes...
-      </Text>
+      <div v-if="loading" class="state-panel mb-6">
+        <Text as="p" size="sm" color="muted">
+          Loading mixes...
+        </Text>
+      </div>
 
-      <Text v-if="error" as="p" size="sm" color="muted" class="mb-4 text-red-600">
-        {{ error }}
-      </Text>
+      <div v-if="error" class="form-error mb-6">
+        <Text as="p" size="sm" color="muted" class="text-red-700">
+          {{ error }}
+        </Text>
+      </div>
 
       <!-- Mix Grid -->
       <div
         v-if="mixes && mixes.length > 0"
-        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+        class="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3"
       >
         <ArticleCard
           v-for="mix in mixes"
@@ -63,7 +67,7 @@
       </div>
 
       <!-- Empty State -->
-      <div v-else-if="!loading" class="text-center py-12">
+      <div v-else-if="!loading" class="state-panel">
         <Text as="p" size="lg" color="muted">
           No mixes found.
         </Text>
@@ -75,7 +79,7 @@
       >
         <button
           type="button"
-          class="rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-50"
+          class="button-secondary"
           :disabled="pagination.page <= 1 || loading"
           @click="handlePageChange(pagination.page - 1)"
         >
@@ -88,7 +92,7 @@
 
         <button
           type="button"
-          class="rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-50"
+          class="button-secondary"
           :disabled="pagination.page >= pagination.totalPages || loading"
           @click="handlePageChange(pagination.page + 1)"
         >

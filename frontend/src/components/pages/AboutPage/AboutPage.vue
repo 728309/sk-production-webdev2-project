@@ -1,14 +1,16 @@
 <template>
-  <div class="min-h-screen flex flex-col bg-gray-50">
+  <div class="app-page">
     <Header />
 
-    <main class="flex-1 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 w-full">
-      <Heading :level="1" size="3xl" class="mb-4">
-        About
-      </Heading>
-      <Text as="p" size="base" color="muted" class="leading-relaxed">
-        SK Production Hub is a simple archive for discovering submitted mixes across genres and platforms.
-      </Text>
+    <main class="app-container-medium">
+      <section class="panel panel-padding">
+        <Heading :level="1" size="3xl" class="mb-4">
+          About
+        </Heading>
+        <Text as="p" size="base" color="muted" class="leading-relaxed">
+          SK Production Hub is a simple archive for discovering submitted mixes across genres and platforms.
+        </Text>
+      </section>
     </main>
 
     <Footer />

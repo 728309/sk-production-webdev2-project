@@ -1,8 +1,8 @@
 <template>
-  <div class="min-h-screen flex flex-col bg-gray-50">
+  <div class="app-page">
     <Header />
 
-    <main class="flex-1 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+    <main class="app-container max-w-6xl">
       <RouterLink
         to="/mixes"
         class="mb-6 inline-block text-sm font-medium text-blue-600 hover:text-blue-700"
@@ -10,13 +10,13 @@
         Back to mixes
       </RouterLink>
 
-      <div v-if="loading" class="rounded-lg bg-white p-8 text-center shadow-md">
+      <div v-if="loading" class="state-panel">
         <Text as="p" size="base" color="muted">
           Loading mix...
         </Text>
       </div>
 
-      <div v-else-if="error" class="rounded-lg bg-white p-8 text-center shadow-md">
+      <div v-else-if="error" class="state-panel">
         <Heading :level="1" size="2xl" class="mb-2">
           Mix unavailable
         </Heading>
@@ -26,8 +26,8 @@
       </div>
 
       <div v-else-if="mix" class="space-y-6">
-        <section class="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_340px]">
-          <article class="rounded-lg bg-white p-6 shadow-md">
+        <section class="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_340px]">
+          <article class="panel panel-padding">
             <CategoryBadge :genre="mix.genre" />
 
             <Heading :level="1" size="3xl" class="mt-4 mb-2">
@@ -65,18 +65,18 @@
               :href="mix.mixUrl"
               target="_blank"
               rel="noreferrer"
-              class="mt-6 inline-block rounded-md bg-blue-600 px-5 py-2 text-sm font-semibold text-white transition-colors hover:bg-blue-700"
+              class="button-primary mt-6"
             >
               Open mix
             </a>
           </article>
 
           <aside class="space-y-6">
-            <div v-if="mix.coverImageUrl" class="overflow-hidden rounded-lg bg-white shadow-md">
+            <div v-if="mix.coverImageUrl" class="panel overflow-hidden">
               <img
                 :src="mix.coverImageUrl"
                 :alt="`${mix.title} cover image`"
-                class="h-64 w-full object-cover"
+                class="aspect-video w-full object-cover lg:aspect-square"
               />
             </div>
 
@@ -84,7 +84,7 @@
           </aside>
         </section>
 
-        <section class="rounded-lg bg-white p-6 shadow-md">
+        <section class="panel panel-padding">
           <div class="mb-5 flex flex-wrap items-center justify-between gap-3">
             <div>
               <Heading :level="2" size="2xl">
@@ -104,12 +104,12 @@
               id="comment-body"
               v-model="newComment"
               rows="4"
-              class="w-full rounded-md border border-gray-300 bg-white px-4 py-3 text-sm text-gray-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+              class="form-input"
               placeholder="Share a quick thought about this mix"
             ></textarea>
             <button
               type="submit"
-              class="mt-3 rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
+              class="button-primary mt-3"
               :disabled="commentSaving"
             >
               Post comment
@@ -120,9 +120,11 @@
             Log in to comment.
           </Text>
 
-          <Text v-if="commentError" as="p" size="sm" color="muted" class="mb-4 text-red-600">
-            {{ commentError }}
-          </Text>
+          <div v-if="commentError" class="form-error mb-4">
+            <Text as="p" size="sm" color="muted" class="text-red-700">
+              {{ commentError }}
+            </Text>
+          </div>
 
           <div v-if="commentsLoading">
             <Text as="p" size="sm" color="muted">
@@ -134,7 +136,7 @@
             <article
               v-for="comment in comments"
               :key="comment.id"
-              class="rounded-lg border border-gray-200 p-4"
+              class="rounded-lg border border-gray-200 bg-gray-50 p-4"
             >
               <div class="mb-2 flex flex-wrap items-center justify-between gap-2">
                 <div>

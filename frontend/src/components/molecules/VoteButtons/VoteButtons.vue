@@ -1,14 +1,14 @@
 <template>
-  <section class="rounded-lg bg-white p-5 shadow-md">
+  <section class="panel panel-padding">
     <div class="flex flex-wrap items-center justify-between gap-3">
       <div>
         <p class="text-sm font-semibold text-gray-900">Mix rating</p>
         <p class="text-sm text-gray-600">
-          {{ votes.likes }} likes · {{ votes.dislikes }} dislikes
+          {{ votes.likes }} likes &middot; {{ votes.dislikes }} dislikes
         </p>
       </div>
 
-      <div v-if="authStore.isAuthenticated" class="flex gap-2">
+      <div v-if="authStore.isAuthenticated" class="flex flex-wrap gap-2">
         <button
           type="button"
           :class="buttonClass('like')"
@@ -88,13 +88,11 @@ const submitVote = async (voteType) => {
 }
 
 const buttonClass = (voteType) => {
-  const base = 'rounded-md px-4 py-2 text-sm font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-60'
-
   if (votes.value.userVote === voteType) {
-    return `${base} bg-blue-600 text-white hover:bg-blue-700`
+    return 'button-primary'
   }
 
-  return `${base} border border-gray-300 bg-white text-gray-700 hover:bg-gray-100`
+  return 'button-secondary'
 }
 
 onMounted(fetchVotes)

@@ -1,9 +1,9 @@
 <template>
-  <div class="min-h-screen flex flex-col bg-gray-50">
+  <div class="app-page">
     <Header />
 
-    <main class="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
-      <section class="mb-10">
+    <main class="app-container">
+      <section class="page-header">
         <Heading :level="1" size="3xl" class="mb-2">
           SK Production Hub
         </Heading>
@@ -12,7 +12,7 @@
         </Text>
         <RouterLink
           to="/mixes"
-          class="mt-5 inline-block rounded-md bg-blue-600 px-5 py-2 text-sm font-semibold text-white transition-colors hover:bg-blue-700"
+          class="button-primary mt-5"
         >
           Browse all mixes
         </RouterLink>
@@ -34,13 +34,15 @@
           Loading featured mixes...
         </Text>
 
-        <Text v-if="error" as="p" size="sm" color="muted" class="text-red-600">
-          {{ error }}
-        </Text>
+        <div v-if="error" class="form-error mb-6">
+          <Text as="p" size="sm" color="muted" class="text-red-700">
+            {{ error }}
+          </Text>
+        </div>
 
         <div
           v-if="!loading && featuredMixes.length > 0"
-          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+          class="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3"
         >
           <ArticleCard
             v-for="mix in featuredMixes"
@@ -49,7 +51,7 @@
           />
         </div>
 
-        <div v-else-if="!loading && !error" class="rounded-lg bg-white p-8 text-center shadow-md">
+        <div v-else-if="!loading && !error" class="state-panel">
           <Text as="p" size="base" color="muted">
             No featured mixes yet.
           </Text>

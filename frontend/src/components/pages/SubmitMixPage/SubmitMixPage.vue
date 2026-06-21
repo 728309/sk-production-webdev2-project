@@ -1,65 +1,69 @@
 <template>
-  <div class="min-h-screen flex flex-col bg-gray-50">
+  <div class="app-page">
     <Header />
 
-    <main class="flex-1 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full">
-      <Heading :level="1" size="3xl" class="mb-2">
-        Submit a Mix
-      </Heading>
-      <Text as="p" size="base" color="muted" class="mb-6">
-        Submitted mixes are reviewed before they appear in the public archive.
-      </Text>
+    <main class="app-container-narrow">
+      <div class="page-header">
+        <Heading :level="1" size="3xl" class="mb-2">
+          Submit a Mix
+        </Heading>
+        <Text as="p" size="base" color="muted">
+          Submitted mixes are reviewed before they appear in the public archive.
+        </Text>
+      </div>
 
-      <form class="rounded-lg bg-white p-6 shadow-md space-y-4" @submit.prevent="handleSubmit">
+      <form class="panel panel-padding space-y-5" @submit.prevent="handleSubmit">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label for="title" class="mb-1 block text-sm font-medium text-gray-700">Title</label>
-            <input id="title" v-model="form.title" class="input" required />
+            <label for="title" class="field-label">Title</label>
+            <input id="title" v-model="form.title" class="form-input" required />
           </div>
 
           <div>
-            <label for="artist" class="mb-1 block text-sm font-medium text-gray-700">Artist</label>
-            <input id="artist" v-model="form.artist" class="input" required />
+            <label for="artist" class="field-label">Artist</label>
+            <input id="artist" v-model="form.artist" class="form-input" required />
           </div>
 
           <div>
-            <label for="genre" class="mb-1 block text-sm font-medium text-gray-700">Genre</label>
-            <input id="genre" v-model="form.genre" class="input" required />
+            <label for="genre" class="field-label">Genre</label>
+            <input id="genre" v-model="form.genre" class="form-input" required />
           </div>
 
           <div>
-            <label for="platform" class="mb-1 block text-sm font-medium text-gray-700">Platform</label>
-            <input id="platform" v-model="form.platform" class="input" required />
+            <label for="platform" class="field-label">Platform</label>
+            <input id="platform" v-model="form.platform" class="form-input" required />
           </div>
 
           <div>
-            <label for="mixUrl" class="mb-1 block text-sm font-medium text-gray-700">Mix URL</label>
-            <input id="mixUrl" v-model="form.mixUrl" type="url" class="input" required />
+            <label for="mixUrl" class="field-label">Mix URL</label>
+            <input id="mixUrl" v-model="form.mixUrl" type="url" class="form-input" required />
           </div>
 
           <div>
-            <label for="coverImageUrl" class="mb-1 block text-sm font-medium text-gray-700">Cover Image URL</label>
-            <input id="coverImageUrl" v-model="form.coverImageUrl" type="url" class="input" />
+            <label for="coverImageUrl" class="field-label">Cover Image URL</label>
+            <input id="coverImageUrl" v-model="form.coverImageUrl" type="url" class="form-input" />
           </div>
 
           <div>
-            <label for="duration" class="mb-1 block text-sm font-medium text-gray-700">Duration</label>
-            <input id="duration" v-model="form.duration" class="input" placeholder="42:18" />
+            <label for="duration" class="field-label">Duration</label>
+            <input id="duration" v-model="form.duration" class="form-input" placeholder="42:18" />
           </div>
         </div>
 
         <div>
-          <label for="description" class="mb-1 block text-sm font-medium text-gray-700">Description</label>
-          <textarea id="description" v-model="form.description" rows="4" class="input"></textarea>
+          <label for="description" class="field-label">Description</label>
+          <textarea id="description" v-model="form.description" rows="4" class="form-input"></textarea>
         </div>
 
-        <Text v-if="error" as="p" size="sm" color="muted" class="text-red-600">
-          {{ error }}
-        </Text>
+        <div v-if="error" class="form-error">
+          <Text as="p" size="sm" color="muted" class="text-red-700">
+            {{ error }}
+          </Text>
+        </div>
 
         <button
           type="submit"
-          class="rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
+          class="button-primary w-full sm:w-auto"
           :disabled="loading"
         >
           {{ loading ? 'Submitting...' : 'Submit mix' }}
@@ -110,22 +114,3 @@ const handleSubmit = async () => {
   }
 }
 </script>
-
-<style scoped>
-.input {
-  width: 100%;
-  border-radius: 0.375rem;
-  border: 1px solid #d1d5db;
-  background: white;
-  padding: 0.5rem 1rem;
-  font-size: 0.875rem;
-  color: #111827;
-  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-}
-
-.input:focus {
-  border-color: #3b82f6;
-  outline: none;
-  box-shadow: 0 0 0 2px rgb(191 219 254);
-}
-</style>

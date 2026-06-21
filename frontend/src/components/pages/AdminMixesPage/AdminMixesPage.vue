@@ -1,9 +1,9 @@
 <template>
-  <div class="min-h-screen flex flex-col bg-gray-50">
+  <div class="app-page">
     <Header />
 
-    <main class="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full">
-      <div class="mb-6 flex flex-wrap items-end justify-between gap-3">
+    <main class="app-container">
+      <div class="page-header flex flex-wrap items-end justify-between gap-3">
         <div>
           <Heading :level="1" size="3xl" class="mb-2">
             Admin Mixes
@@ -14,29 +14,29 @@
         </div>
       </div>
 
-      <section class="mb-6 grid grid-cols-1 gap-4 rounded-lg bg-white p-5 shadow-md md:grid-cols-4">
+      <section class="panel panel-padding mb-6 grid grid-cols-1 gap-4 md:grid-cols-4">
         <div>
-          <label for="admin-search" class="mb-1 block text-xs font-semibold uppercase text-gray-500">
+          <label for="admin-search" class="field-label-small">
             Search
           </label>
           <input
             id="admin-search"
             v-model="filters.search"
             type="search"
-            class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+            class="form-input"
             placeholder="Title, artist, genre"
             @input="handleFilterChange"
           />
         </div>
 
         <div>
-          <label for="admin-genre" class="mb-1 block text-xs font-semibold uppercase text-gray-500">
+          <label for="admin-genre" class="field-label-small">
             Genre
           </label>
           <select
             id="admin-genre"
             v-model="filters.genre"
-            class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+            class="form-input"
             @change="handleFilterChange"
           >
             <option value="">All genres</option>
@@ -47,13 +47,13 @@
         </div>
 
         <div>
-          <label for="admin-status" class="mb-1 block text-xs font-semibold uppercase text-gray-500">
+          <label for="admin-status" class="field-label-small">
             Status
           </label>
           <select
             id="admin-status"
             v-model="filters.status"
-            class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+            class="form-input"
             @change="handleFilterChange"
           >
             <option value="">All statuses</option>
@@ -66,7 +66,7 @@
         <div class="flex items-end">
           <button
             type="button"
-            class="w-full rounded-md border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-100"
+            class="button-secondary w-full"
             @click="resetFilters"
           >
             Reset
@@ -74,17 +74,21 @@
         </div>
       </section>
 
-      <Text v-if="loading" as="p" size="sm" color="muted" class="mb-4">
-        Loading mixes...
-      </Text>
+      <div v-if="loading" class="state-panel mb-6">
+        <Text as="p" size="sm" color="muted">
+          Loading mixes...
+        </Text>
+      </div>
 
-      <Text v-if="error" as="p" size="sm" color="muted" class="mb-4 text-red-600">
-        {{ error }}
-      </Text>
+      <div v-if="error" class="form-error mb-6">
+        <Text as="p" size="sm" color="muted" class="text-red-700">
+          {{ error }}
+        </Text>
+      </div>
 
       <section class="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_380px]">
-        <div class="overflow-hidden rounded-lg bg-white shadow-md">
-          <div class="overflow-x-auto">
+        <div class="table-shell">
+          <div class="table-scroll">
             <table class="min-w-full divide-y divide-gray-200">
               <thead class="bg-gray-100">
                 <tr>
@@ -151,7 +155,7 @@
           >
             <button
               type="button"
-              class="rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-50"
+              class="button-secondary"
               :disabled="pagination.page <= 1 || loading"
               @click="changePage(pagination.page - 1)"
             >
@@ -162,7 +166,7 @@
             </Text>
             <button
               type="button"
-              class="rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-50"
+              class="button-secondary"
               :disabled="pagination.page >= pagination.totalPages || loading"
               @click="changePage(pagination.page + 1)"
             >
@@ -171,7 +175,7 @@
           </div>
         </div>
 
-        <aside class="rounded-lg bg-white p-5 shadow-md">
+        <aside class="panel panel-padding self-start">
           <Heading :level="2" size="xl" class="mb-4">
             {{ editForm.id ? 'Edit Mix' : 'Select a Mix' }}
           </Heading>
@@ -182,36 +186,36 @@
 
           <form v-else class="space-y-4" @submit.prevent="saveMix">
             <div>
-              <label for="edit-title" class="mb-1 block text-xs font-semibold uppercase text-gray-500">Title</label>
-              <input id="edit-title" v-model="editForm.title" class="admin-input" type="text" />
+              <label for="edit-title" class="field-label-small">Title</label>
+              <input id="edit-title" v-model="editForm.title" class="form-input" type="text" />
             </div>
             <div>
-              <label for="edit-artist" class="mb-1 block text-xs font-semibold uppercase text-gray-500">Artist</label>
-              <input id="edit-artist" v-model="editForm.artist" class="admin-input" type="text" />
+              <label for="edit-artist" class="field-label-small">Artist</label>
+              <input id="edit-artist" v-model="editForm.artist" class="form-input" type="text" />
             </div>
             <div>
-              <label for="edit-genre" class="mb-1 block text-xs font-semibold uppercase text-gray-500">Genre</label>
-              <input id="edit-genre" v-model="editForm.genre" class="admin-input" type="text" />
+              <label for="edit-genre" class="field-label-small">Genre</label>
+              <input id="edit-genre" v-model="editForm.genre" class="form-input" type="text" />
             </div>
             <div>
-              <label for="edit-platform" class="mb-1 block text-xs font-semibold uppercase text-gray-500">Platform</label>
-              <input id="edit-platform" v-model="editForm.platform" class="admin-input" type="text" />
+              <label for="edit-platform" class="field-label-small">Platform</label>
+              <input id="edit-platform" v-model="editForm.platform" class="form-input" type="text" />
             </div>
             <div>
-              <label for="edit-mix-url" class="mb-1 block text-xs font-semibold uppercase text-gray-500">Mix URL</label>
-              <input id="edit-mix-url" v-model="editForm.mixUrl" class="admin-input" type="url" />
+              <label for="edit-mix-url" class="field-label-small">Mix URL</label>
+              <input id="edit-mix-url" v-model="editForm.mixUrl" class="form-input" type="url" />
             </div>
             <div>
-              <label for="edit-cover" class="mb-1 block text-xs font-semibold uppercase text-gray-500">Cover Image URL</label>
-              <input id="edit-cover" v-model="editForm.coverImageUrl" class="admin-input" type="url" />
+              <label for="edit-cover" class="field-label-small">Cover Image URL</label>
+              <input id="edit-cover" v-model="editForm.coverImageUrl" class="form-input" type="url" />
             </div>
             <div>
-              <label for="edit-duration" class="mb-1 block text-xs font-semibold uppercase text-gray-500">Duration</label>
-              <input id="edit-duration" v-model="editForm.duration" class="admin-input" type="text" />
+              <label for="edit-duration" class="field-label-small">Duration</label>
+              <input id="edit-duration" v-model="editForm.duration" class="form-input" type="text" />
             </div>
             <div>
-              <label for="edit-status" class="mb-1 block text-xs font-semibold uppercase text-gray-500">Status</label>
-              <select id="edit-status" v-model="editForm.status" class="admin-input">
+              <label for="edit-status" class="field-label-small">Status</label>
+              <select id="edit-status" v-model="editForm.status" class="form-input">
                 <option value="pending">Pending</option>
                 <option value="published">Published</option>
                 <option value="rejected">Rejected</option>
@@ -222,21 +226,21 @@
               Featured
             </label>
             <div>
-              <label for="edit-description" class="mb-1 block text-xs font-semibold uppercase text-gray-500">Description</label>
-              <textarea id="edit-description" v-model="editForm.description" class="admin-input min-h-28" rows="5"></textarea>
+              <label for="edit-description" class="field-label-small">Description</label>
+              <textarea id="edit-description" v-model="editForm.description" class="form-input min-h-28" rows="5"></textarea>
             </div>
 
             <div class="flex flex-wrap gap-3">
               <button
                 type="submit"
-                class="rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
+                class="button-primary"
                 :disabled="saving"
               >
                 Save
               </button>
               <button
                 type="button"
-                class="rounded-md border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-100"
+                class="button-secondary"
                 @click="clearEdit"
               >
                 Cancel
@@ -445,21 +449,6 @@ onMounted(fetchMixes)
 </script>
 
 <style scoped>
-.admin-input {
-  width: 100%;
-  border-radius: 0.375rem;
-  border: 1px solid rgb(209 213 219);
-  padding: 0.5rem 0.75rem;
-  font-size: 0.875rem;
-  color: rgb(17 24 39);
-}
-
-.admin-input:focus {
-  border-color: rgb(59 130 246);
-  outline: none;
-  box-shadow: 0 0 0 2px rgb(191 219 254);
-}
-
 .action-button {
   display: inline-flex;
   min-height: 2rem;

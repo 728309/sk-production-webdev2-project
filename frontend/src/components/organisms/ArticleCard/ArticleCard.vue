@@ -1,17 +1,17 @@
 <template>
   <RouterLink
     :to="`/mixes/${article.id}`"
-    class="block bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 overflow-hidden focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+    class="group block h-full overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
     @click="$emit('click', article.id)"
   >
-    <article>
-      <div class="p-6">
+    <article class="flex h-full flex-col">
+      <div class="flex h-full flex-col p-5 sm:p-6">
         <div class="flex items-start justify-between mb-3">
           <CategoryBadge :genre="article.genre" />
         </div>
 
         <Heading :level="3" size="xl" class="mb-3">
-          <span class="hover:text-blue-600 transition-colors">
+          <span class="transition-colors group-hover:text-blue-600">
             {{ article.title }}
           </span>
         </Heading>
@@ -24,12 +24,12 @@
           as="p"
           size="sm"
           color="muted"
-          class="mb-4 line-clamp-3"
+          class="mb-4 min-h-16 line-clamp-3"
         >
           {{ truncatedDescription }}
         </Text>
 
-        <div class="grid grid-cols-2 gap-3 mb-4 text-sm text-gray-600">
+        <div class="mb-4 grid grid-cols-2 gap-3 text-sm text-gray-600">
           <div>
             <span class="block text-xs font-semibold uppercase text-gray-500">Duration</span>
             <span>{{ article.duration }}</span>
@@ -40,10 +40,12 @@
           </div>
         </div>
 
-        <ArticleMeta
-          :submitted-by="article.submittedBy"
-          :submitted-date="article.submittedDate"
-        />
+        <div class="mt-auto border-t border-gray-100 pt-4">
+          <ArticleMeta
+            :submitted-by="article.submittedBy"
+            :submitted-date="article.submittedDate"
+          />
+        </div>
       </div>
     </article>
   </RouterLink>
