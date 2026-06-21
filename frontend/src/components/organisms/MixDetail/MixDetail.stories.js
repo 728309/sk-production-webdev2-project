@@ -1,4 +1,4 @@
-import MixDetail from './MixDetail.vue';
+import MixDetail from './MixDetail.vue'
 
 const sampleMix = {
   id: 1,
@@ -15,7 +15,7 @@ const sampleMix = {
   description: 'A warm Afrobeat session with bright percussion, smooth horn lines, and late-evening party energy.',
   status: 'published',
   featured: true,
-};
+}
 
 export default {
   title: 'Organisms/MixDetail',
@@ -26,13 +26,13 @@ export default {
       control: 'object',
     },
   },
-};
+}
 
 export const Default = {
   args: {
     mix: sampleMix,
   },
-};
+}
 
 export const Techno = {
   args: {
@@ -52,7 +52,7 @@ export const Techno = {
       featured: false,
     },
   },
-};
+}
 
 export const RnB = {
   args: {
@@ -72,4 +72,4 @@ export const RnB = {
       featured: false,
     },
   },
-};
+}

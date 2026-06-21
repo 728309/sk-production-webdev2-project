@@ -1,10 +1,10 @@
-import Header from './Header.vue';
+import Header from './Header.vue'
 
 export default {
   title: 'Organisms/Header',
   component: Header,
   tags: ['autodocs'],
-};
+}
 
 export const Default = {
   args: {
@@ -15,7 +15,7 @@ export const Default = {
       { name: 'Contact', href: '/contact' },
     ],
   },
-};
+}
 
 export const CustomNavigation = {
   args: {
@@ -25,4 +25,4 @@ export const CustomNavigation = {
       { name: 'About', href: '/about' },
     ],
   },
-};
+}

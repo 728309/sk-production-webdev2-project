@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!-- Loading State -->
     <div v-if="showFullPageLoading" class="flex min-h-screen items-center justify-center bg-black">
       <div class="text-center">
         <div
@@ -10,7 +9,6 @@
       </div>
     </div>
 
-    <!-- Error State -->
     <div
       v-else-if="showFullPageError"
       class="min-h-screen flex items-center justify-center"
@@ -30,7 +28,6 @@
       </div>
     </div>
 
-    <!-- Mix Archive Template -->
     <MixArchive
       v-else
       :mixes="mixes"
@@ -48,98 +45,94 @@
 </template>
 
 <script setup>
-import { computed, ref, onMounted } from "vue";
-import MixArchive from "../../templates/MixArchive/MixArchive.vue";
-import { fetchMixes as fetchMixesApi } from "../../../api/mixApi.js";
+import { computed, onMounted, ref } from 'vue'
+import MixArchive from '../../templates/MixArchive/MixArchive.vue'
+import { fetchMixes as fetchMixesApi } from '../../../api/mixApi.js'
 
-const mixes = ref([]);
-const loading = ref(true);
-const error = ref(null);
-const page = ref(1);
-const limit = ref(6);
-const search = ref("");
-const selectedGenre = ref("");
+const mixes = ref([])
+const loading = ref(true)
+const error = ref(null)
+const page = ref(1)
+const limit = ref(6)
+const search = ref('')
+const selectedGenre = ref('')
 const pagination = ref({
   page: 1,
   limit: 6,
   total: 0,
   totalPages: 0,
-});
+})
 
 const genres = [
-  "Afrobeat",
-  "Techno",
-  "House",
-  "Hip-Hop",
-  "Amapiano",
-  "R&B",
-  "Dancehall",
-  "Drum and Bass",
-];
+  'Afrobeat',
+  'Techno',
+  'House',
+  'Hip-Hop',
+  'Amapiano',
+  'R&B',
+  'Dancehall',
+  'Drum and Bass',
+]
 
-const showFullPageLoading = computed(() => loading.value && mixes.value.length === 0);
-const showFullPageError = computed(() => error.value && mixes.value.length === 0);
+const showFullPageLoading = computed(() => loading.value && mixes.value.length === 0)
+const showFullPageError = computed(() => error.value && mixes.value.length === 0)
 
-/**
- * Fetch mixes from the API
- */
 const fetchMixes = async () => {
-  loading.value = true;
-  error.value = null;
+  loading.value = true
+  error.value = null
 
   const params = new URLSearchParams({
     page: String(page.value),
     limit: String(limit.value),
-  });
+  })
 
   if (selectedGenre.value) {
-    params.append("genre", selectedGenre.value);
+    params.append('genre', selectedGenre.value)
   }
 
   if (search.value.trim()) {
-    params.append("search", search.value.trim());
+    params.append('search', search.value.trim())
   }
 
   try {
-    const result = await fetchMixesApi(params);
-    mixes.value = result.data || [];
+    const result = await fetchMixesApi(params)
+    mixes.value = result.data || []
     pagination.value = result.pagination || {
       page: page.value,
       limit: limit.value,
       total: mixes.value.length,
       totalPages: 1,
-    };
+    }
   } catch (err) {
-    error.value = err.message || "Failed to load mixes. Please try again later.";
-    mixes.value = [];
+    error.value = err.message || 'Failed to load mixes. Please try again later.'
+    mixes.value = []
   } finally {
-    loading.value = false;
+    loading.value = false
   }
-};
+}
 
 const handleSearchChange = (value) => {
-  search.value = value;
-  page.value = 1;
-  fetchMixes();
-};
+  search.value = value
+  page.value = 1
+  fetchMixes()
+}
 
 const handleGenreChange = (value) => {
-  selectedGenre.value = value;
-  page.value = 1;
-  fetchMixes();
-};
+  selectedGenre.value = value
+  page.value = 1
+  fetchMixes()
+}
 
 const handlePageChange = (newPage) => {
   if (newPage < 1 || newPage > pagination.value.totalPages) {
-    return;
+    return
   }
 
-  page.value = newPage;
-  fetchMixes();
-};
+  page.value = newPage
+  fetchMixes()
+}
 
-// Fetch mixes when component is mounted
 onMounted(() => {
-  fetchMixes();
-});
+  fetchMixes()
+})
 </script>

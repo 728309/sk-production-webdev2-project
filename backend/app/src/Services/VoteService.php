@@ -2,7 +2,8 @@
 
 namespace App\Services;
 
-use App\Repositories\IVoteRepository;
+use App\Inheritance\Repositories\IVoteRepository;
+use App\Inheritance\Services\IVoteService;
 use App\Repositories\VoteRepository;
 
 class VoteService implements IVoteService

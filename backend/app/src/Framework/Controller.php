@@ -2,9 +2,9 @@
 
 namespace App\Framework;
 
+use App\Inheritance\Services\IAuthService;
 use App\Models\User;
 use App\Services\AuthService;
-use App\Services\IAuthService;
 
 class Controller
 {

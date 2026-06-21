@@ -20,9 +20,9 @@
       </div>
 
       <div v-if="error" class="form-error mb-6">
-          <Text as="p" size="sm" color="muted" class="text-[var(--color-danger)]">
-            {{ error }}
-          </Text>
+        <Text as="p" size="sm" color="muted" class="text-[var(--color-danger)]">
+          {{ error }}
+        </Text>
       </div>
 
       <div v-if="!loading && pendingMixes.length > 0" class="space-y-4">

@@ -1,4 +1,4 @@
-import MixArchive from './MixArchive.vue';
+import MixArchive from './MixArchive.vue'
 
 const sampleMixes = [
   {
@@ -65,7 +65,7 @@ const sampleMixes = [
     status: 'published',
     featured: false,
   },
-];
+]
 
 export default {
   title: 'Templates/MixArchive',
@@ -76,25 +76,25 @@ export default {
       control: 'object',
     },
   },
-};
+}
 
 export const Default = {
   args: {
     mixes: sampleMixes,
   },
-};
+}
 
 export const Empty = {
   args: {
     mixes: [],
   },
-};
+}
 
 export const SingleMix = {
   args: {
     mixes: [sampleMixes[0]],
   },
-};
+}
 
 export const ManyMixes = {
   args: {
@@ -128,4 +128,4 @@ export const ManyMixes = {
       },
     ],
   },
-};
+}

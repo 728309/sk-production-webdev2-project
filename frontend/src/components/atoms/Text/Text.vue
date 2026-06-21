@@ -5,7 +5,7 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import { computed } from 'vue'
 
 const props = defineProps({
   as: {
@@ -28,9 +28,9 @@ const props = defineProps({
     default: 'default',
     validator: (value) => ['default', 'muted', 'primary', 'secondary'].includes(value),
   },
-});
+})
 
-const tag = computed(() => props.as);
+const tag = computed(() => props.as)
 
 const classes = computed(() => {
   const sizes = {
@@ -38,22 +38,22 @@ const classes = computed(() => {
     sm: 'text-[0.95rem] leading-6',
     base: 'text-base leading-7',
     lg: 'text-lg leading-8',
-  };
-  
+  }
+
   const weights = {
     normal: 'font-normal',
     medium: 'font-medium',
     semibold: 'font-semibold',
     bold: 'font-bold',
-  };
-  
+  }
+
   const colors = {
     default: 'text-[var(--color-text)]',
     muted: 'text-[var(--color-text-muted)]',
     primary: 'text-[var(--color-accent)]',
     secondary: 'text-[var(--color-text-soft)]',
-  };
-  
-  return `${sizes[props.size]} ${weights[props.weight]} ${colors[props.color]}`;
-});
+  }
+
+  return `${sizes[props.size]} ${weights[props.weight]} ${colors[props.color]}`
+})
 </script>

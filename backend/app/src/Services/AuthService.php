@@ -2,8 +2,9 @@
 
 namespace App\Services;
 
+use App\Inheritance\Repositories\IUserRepository;
+use App\Inheritance\Services\IAuthService;
 use App\Models\User;
-use App\Repositories\IUserRepository;
 use App\Repositories\UserRepository;
 use App\Utils\JwtHelper;
 

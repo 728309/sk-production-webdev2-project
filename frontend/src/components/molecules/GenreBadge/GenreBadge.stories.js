@@ -1,28 +1,28 @@
-import GenreBadge from './GenreBadge.vue';
+import GenreBadge from './GenreBadge.vue'
 
 export default {
   title: 'Molecules/GenreBadge',
   component: GenreBadge,
   tags: ['autodocs'],
-};
+}
 
 export const Afrobeat = {
   args: {
     genre: 'Afrobeat',
   },
-};
+}
 
 export const Techno = {
   args: {
     genre: 'Techno',
   },
-};
+}
 
 export const House = {
   args: {
     genre: 'House',
   },
-};
+}
 
 export const AllGenres = {
   render: () => ({
@@ -40,4 +40,4 @@ export const AllGenres = {
       </div>
     `,
   }),
-};
+}

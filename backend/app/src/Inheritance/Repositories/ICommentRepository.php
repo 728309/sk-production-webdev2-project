@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Services;
+namespace App\Inheritance\Repositories;
 
 use App\Models\Comment;
 
-interface ICommentService
+interface ICommentRepository
 {
     /**
      * @return Comment[]

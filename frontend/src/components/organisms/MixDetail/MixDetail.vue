@@ -34,20 +34,20 @@
 </template>
 
 <script setup>
-import Heading from '../../atoms/Heading/Heading.vue';
-import Text from '../../atoms/Text/Text.vue';
-import MixMeta from '../../molecules/MixMeta/MixMeta.vue';
-import GenreBadge from '../../molecules/GenreBadge/GenreBadge.vue';
+import Heading from '../../atoms/Heading/Heading.vue'
+import Text from '../../atoms/Text/Text.vue'
+import MixMeta from '../../molecules/MixMeta/MixMeta.vue'
+import GenreBadge from '../../molecules/GenreBadge/GenreBadge.vue'
 
 defineProps({
   mix: {
     type: Object,
     required: true,
     validator: (value) => {
-      return value.id && value.title && value.artist && value.genre;
+      return value.id && value.title && value.artist && value.genre
     },
   },
-});
+})
 </script>
 
 <style scoped>

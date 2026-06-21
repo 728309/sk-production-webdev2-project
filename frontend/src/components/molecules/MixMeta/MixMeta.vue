@@ -9,16 +9,12 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
-import Text from '../../atoms/Text/Text.vue';
-import DateDisplay from '../../atoms/DateDisplay/DateDisplay.vue';
+import { computed } from 'vue'
+import Text from '../../atoms/Text/Text.vue'
+import DateDisplay from '../../atoms/DateDisplay/DateDisplay.vue'
 
 const props = defineProps({
   postedDate: {
-    type: String,
-    default: '',
-  },
-  submittedBy: {
     type: String,
     default: '',
   },
@@ -26,7 +22,7 @@ const props = defineProps({
     type: String,
     default: '',
   },
-});
+})
 
-const displayDate = computed(() => props.postedDate || props.submittedDate);
+const displayDate = computed(() => props.postedDate || props.submittedDate)
 </script>

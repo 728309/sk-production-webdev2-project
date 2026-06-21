@@ -1,6 +1,6 @@
 # AI Disclosure
 
-AI was used as a development assistant while building SK Production Hub.
+AI was used as a development assistant while building SK HUB. with Chatgbt 5.5
 
 ## How AI Was Used
 
@@ -46,7 +46,3 @@ This project helped reinforce:
 - PDO prepared statements.
 - Docker workflow with nginx, PHP, MariaDB/MySQL, and phpMyAdmin.
 - Final submission polish, including documentation, setup guides, and demo flow.
-
-## Visual Shield Benchmark Note
-
-Visual Shield was inspected only as a quality benchmark for structure, documentation depth, naming clarity, accessibility explanation, and final submission polish. No Visual Shield code, text, domain logic, styling, component names, or files were copied into SK HUB.

@@ -1,4 +1,4 @@
-# SK Production Hub Frontend
+# SK HUB Frontend
 
 This folder contains the Vue 3 frontend for SK HUB. It is a single-page application for browsing published mixes, submitting new mixes, commenting, voting, and managing admin review workflows.
 

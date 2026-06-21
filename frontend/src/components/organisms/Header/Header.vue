@@ -130,7 +130,6 @@
         </div>
       </div>
 
-      <!-- Mobile menu -->
       <div v-if="mobileMenuOpen" class="md:hidden border-t border-[var(--color-border)] pb-4 pt-3">
         <nav class="flex flex-col space-y-2">
           <RouterLink
@@ -224,68 +223,68 @@
 </template>
 
 <script setup>
-import { onBeforeUnmount, onMounted, ref } from "vue";
-import { RouterLink } from "vue-router";
-import { useAuthStore } from "../../../stores/authStore.js";
-import Heading from "../../atoms/Heading/Heading.vue";
+import { onBeforeUnmount, onMounted, ref } from 'vue'
+import { RouterLink } from 'vue-router'
+import { useAuthStore } from '../../../stores/authStore.js'
+import Heading from '../../atoms/Heading/Heading.vue'
 
 defineProps({
   navigationLinks: {
     type: Array,
     default: () => [
-      { name: "Home", href: "/" },
-      { name: "Mixes", href: "/mixes" },
-      { name: "About", href: "/about" },
-      { name: "Contact", href: "/contact" },
+      { name: 'Home', href: '/' },
+      { name: 'Mixes', href: '/mixes' },
+      { name: 'About', href: '/about' },
+      { name: 'Contact', href: '/contact' },
     ],
   },
-});
+})
 
-const authStore = useAuthStore();
-const mobileMenuOpen = ref(false);
-const accountMenuOpen = ref(false);
-const mobileAccountOpen = ref(false);
-const accountMenuRef = ref(null);
+const authStore = useAuthStore()
+const mobileMenuOpen = ref(false)
+const accountMenuOpen = ref(false)
+const mobileAccountOpen = ref(false)
+const accountMenuRef = ref(null)
 
 const closeMenus = () => {
-  accountMenuOpen.value = false;
-};
+  accountMenuOpen.value = false
+}
 
 const closeMobileMenu = () => {
-  mobileMenuOpen.value = false;
-  mobileAccountOpen.value = false;
-};
+  mobileMenuOpen.value = false
+  mobileAccountOpen.value = false
+}
 
 const toggleMobileMenu = () => {
   if (mobileMenuOpen.value) {
-    closeMobileMenu();
-    return;
+    closeMobileMenu()
+    return
   }
 
-  mobileMenuOpen.value = true;
-};
+  mobileMenuOpen.value = true
+}
 
 const toggleAccountMenu = () => {
-  accountMenuOpen.value = !accountMenuOpen.value;
-};
+  accountMenuOpen.value = !accountMenuOpen.value
+}
 
 const handleLogout = () => {
-  authStore.logout();
-  closeMenus();
-  closeMobileMenu();
-};
+  authStore.logout()
+  closeMenus()
+  closeMobileMenu()
+}
 
 const handleDocumentClick = (event) => {
   if (accountMenuRef.value && !accountMenuRef.value.contains(event.target)) {
-    accountMenuOpen.value = false;
+    accountMenuOpen.value = false
   }
-};
+}
 
 onMounted(() => {
-  document.addEventListener("click", handleDocumentClick);
-});
+  document.addEventListener('click', handleDocumentClick)
+})
 
 onBeforeUnmount(() => {
-  document.removeEventListener("click", handleDocumentClick);
-});
+  document.removeEventListener('click', handleDocumentClick)
+})
 </script>

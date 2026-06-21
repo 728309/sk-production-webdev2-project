@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Inheritance\Repositories\IMixRepository;
 use App\Models\Mix;
 use App\Utils\Database;
 use PDO;

@@ -1,4 +1,4 @@
-# SK Production Hub Backend
+# SK HUB Backend
 
 This folder contains the PHP REST API for SK HUB. It provides authentication, public mix browsing, user submissions, comments, votes, admin review actions, and health checks.
 
@@ -24,6 +24,7 @@ backend/
     src/
       Controllers/        HTTP controllers
       Framework/          Shared controller helpers
+      Inheritance/        Repository and service interfaces
       Models/             Simple model classes
       Repositories/       PDO database queries
       Services/           Business logic and validation
@@ -44,6 +45,7 @@ The backend follows a clear Controller -> Service -> Repository structure.
 - Controllers read route variables, JSON bodies, and auth state, then return JSON.
 - Services contain rules such as registration validation, submission validation, comment validation, and vote validation.
 - Repositories contain SQL and use PDO prepared statements.
+- Inheritance contains the service and repository interfaces that the concrete classes implement.
 - The shared controller base class centralizes JSON body parsing, bearer token reading, user/admin checks, and consistent JSON error responses.
 
 This separation keeps the code beginner-friendly: route handling stays in controllers, business decisions stay in services, and database details stay in repositories.

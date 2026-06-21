@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace App\Inheritance\Services;
 
 use App\Models\Mix;
 

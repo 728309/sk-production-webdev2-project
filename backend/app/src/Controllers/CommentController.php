@@ -3,11 +3,11 @@
 namespace App\Controllers;
 
 use App\Framework\Controller;
+use App\Inheritance\Services\IAuthService;
+use App\Inheritance\Services\ICommentService;
+use App\Inheritance\Services\IMixService;
 use App\Services\AuthService;
 use App\Services\CommentService;
-use App\Services\IAuthService;
-use App\Services\ICommentService;
-use App\Services\IMixService;
 use App\Services\MixService;
 
 class CommentController extends Controller

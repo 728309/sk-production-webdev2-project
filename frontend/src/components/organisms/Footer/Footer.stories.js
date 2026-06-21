@@ -1,10 +1,10 @@
-import Footer from './Footer.vue';
+import Footer from './Footer.vue'
 
 export default {
   title: 'Organisms/Footer',
   component: Footer,
   tags: ['autodocs'],
-};
+}
 
 export const Default = {
   args: {
@@ -16,7 +16,7 @@ export const Default = {
     ],
     legalLinks: [],
   },
-};
+}
 
 export const Minimal = {
   args: {
@@ -26,4 +26,4 @@ export const Minimal = {
     ],
     legalLinks: [],
   },
-};
+}

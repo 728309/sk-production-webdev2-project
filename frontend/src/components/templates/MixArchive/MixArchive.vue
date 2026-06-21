@@ -64,7 +64,6 @@
         </Text>
       </div>
 
-      <!-- Mix Grid -->
       <div
         v-if="mixes && mixes.length > 0"
         class="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3"
@@ -77,7 +76,6 @@
         />
       </div>
 
-      <!-- Empty State -->
       <div v-else-if="!loading" class="state-panel">
         <Text as="p" size="lg" color="muted">
           No mixes found.
@@ -120,11 +118,11 @@
 </template>
 
 <script setup>
-import Header from '../../organisms/Header/Header.vue';
-import Footer from '../../organisms/Footer/Footer.vue';
-import MixCard from '../../organisms/MixCard/MixCard.vue';
-import Heading from '../../atoms/Heading/Heading.vue';
-import Text from '../../atoms/Text/Text.vue';
+import Header from '../../organisms/Header/Header.vue'
+import Footer from '../../organisms/Footer/Footer.vue'
+import MixCard from '../../organisms/MixCard/MixCard.vue'
+import Heading from '../../atoms/Heading/Heading.vue'
+import Text from '../../atoms/Text/Text.vue'
 
 defineProps({
   mixes: {
@@ -182,33 +180,33 @@ defineProps({
     type: Array,
     default: () => [],
   },
-});
+})
 
 const emit = defineEmits([
   'mix-click',
   'search-change',
   'genre-change',
   'page-change',
-]);
+])
 
 const handleMixClick = (mixId) => {
-  emit('mix-click', mixId);
-};
+  emit('mix-click', mixId)
+}
 
 const handleSearchInput = (event) => {
-  emit('search-change', event.target.value);
-};
+  emit('search-change', event.target.value)
+}
 
 const handleGenreChange = (event) => {
-  emit('genre-change', event.target.value);
-};
+  emit('genre-change', event.target.value)
+}
 
 const handleReset = () => {
-  emit('search-change', '');
-  emit('genre-change', '');
-};
+  emit('search-change', '')
+  emit('genre-change', '')
+}
 
 const handlePageChange = (page) => {
-  emit('page-change', page);
-};
+  emit('page-change', page)
+}
 </script>

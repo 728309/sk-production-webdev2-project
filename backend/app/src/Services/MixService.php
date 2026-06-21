@@ -2,8 +2,9 @@
 
 namespace App\Services;
 
+use App\Inheritance\Repositories\IMixRepository;
+use App\Inheritance\Services\IMixService;
 use App\Models\Mix;
-use App\Repositories\IMixRepository;
 use App\Repositories\MixRepository;
 
 class MixService implements IMixService

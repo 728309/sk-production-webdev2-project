@@ -1,28 +1,25 @@
-import MixMeta from './MixMeta.vue';
+import MixMeta from './MixMeta.vue'
 
 export default {
   title: 'Molecules/MixMeta',
   component: MixMeta,
   tags: ['autodocs'],
-};
+}
 
 export const Default = {
   args: {
-    submittedBy: 'Sofia Martins',
-    submittedDate: '2026-05-04',
+    postedDate: '2026-05-04',
   },
-};
+}
 
 export const Recent = {
   args: {
-    submittedBy: 'Noah Vermeer',
-    submittedDate: new Date().toISOString().split('T')[0],
+    postedDate: new Date().toISOString().split('T')[0],
   },
-};
+}
 
-export const LongSubmitterName = {
+export const OlderPost = {
   args: {
-    submittedBy: 'Alexandra van den Berg',
-    submittedDate: '2026-05-18',
+    postedDate: '2026-05-18',
   },
-};
+}

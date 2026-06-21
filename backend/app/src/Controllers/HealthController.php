@@ -11,7 +11,7 @@ class HealthController extends Controller
     {
         return $this->sendSuccessResponse([
             'status' => 'ok',
-            'service' => 'SK Production Hub / SK HUB API',
+            'service' => 'SK HUB API',
         ]);
     }
 

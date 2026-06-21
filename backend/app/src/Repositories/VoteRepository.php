@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Inheritance\Repositories\IVoteRepository;
 use App\Utils\Database;
 use PDO;
 

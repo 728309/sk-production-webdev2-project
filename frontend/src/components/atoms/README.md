@@ -1,33 +1,13 @@
 # Atoms
 
-**Basic building blocks** that cannot be broken down further without losing their meaning.
+Atoms are the smallest reusable UI pieces in SK HUB.
 
-## What belongs here?
+Current examples:
 
-- Buttons
-- Inputs
-- Labels
-- Icons
-- Headings (h1, h2, etc.)
-- Links
-- Images
-- Text elements
+- `Badge`
+- `Button`
+- `DateDisplay`
+- `Heading`
+- `Text`
 
-## Characteristics
-
-- ✅ Highly reusable
-- ✅ Minimal dependencies
-- ✅ Single, focused purpose
-- ✅ No business logic
-- ✅ Styling and basic interactivity only
-
-## Example
-
-```vue
-<!-- Button.vue - An atom -->
-<template>
-  <button :class="['btn', `btn-${variant}`]" @click="$emit('click')">
-    <slot></slot>
-  </button>
-</template>
-```
+Keep atom components focused on display, small props, and basic interaction only. They should not fetch data or contain page-specific logic.

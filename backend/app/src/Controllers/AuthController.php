@@ -3,8 +3,8 @@
 namespace App\Controllers;
 
 use App\Framework\Controller;
+use App\Inheritance\Services\IAuthService;
 use App\Services\AuthService;
-use App\Services\IAuthService;
 
 class AuthController extends Controller
 {

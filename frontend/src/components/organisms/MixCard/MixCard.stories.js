@@ -1,4 +1,4 @@
-import MixCard from './MixCard.vue';
+import MixCard from './MixCard.vue'
 
 const sampleMix = {
   id: 1,
@@ -15,7 +15,7 @@ const sampleMix = {
   description: 'A warm Afrobeat session with bright percussion, smooth horn lines, and late-evening party energy.',
   status: 'published',
   featured: true,
-};
+}
 
 export default {
   title: 'Organisms/MixCard',
@@ -26,13 +26,13 @@ export default {
       control: 'object',
     },
   },
-};
+}
 
 export const Default = {
   args: {
     mix: sampleMix,
   },
-};
+}
 
 export const Techno = {
   args: {
@@ -52,7 +52,7 @@ export const Techno = {
       featured: false,
     },
   },
-};
+}
 
 export const LongDescription = {
   args: {
@@ -71,7 +71,7 @@ export const LongDescription = {
       description: 'Uplifting house selections with soulful vocals, crisp claps, and a relaxed rooftop feel that moves from sunny warm-up grooves into deeper late-night club records.',
     },
   },
-};
+}
 
 export const Grid = {
   render: () => ({
@@ -105,8 +105,8 @@ export const Grid = {
           submittedDate: '2026-05-19',
           postedDate: '2026-05-19 00:00:00',
         },
-      ];
-      return { mixes };
+      ]
+      return { mixes }
     },
     template: `
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -114,4 +114,4 @@ export const Grid = {
       </div>
     `,
   }),
-};
+}

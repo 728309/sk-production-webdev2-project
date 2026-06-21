@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Inheritance\Repositories\ICommentRepository;
 use App\Models\Comment;
 use App\Utils\Database;
 use PDO;

@@ -2,7 +2,6 @@
   <footer class="mt-auto border-t border-[var(--color-border)] bg-black">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-        <!-- Brand section -->
         <div class="col-span-1 md:col-span-2">
           <Heading :level="3" size="lg" class="terminal-text mb-4">
             SK HUB
@@ -23,7 +22,6 @@
           </div>
         </div>
 
-        <!-- Quick Links -->
         <div>
           <Heading :level="4" size="md" class="mb-4 uppercase">
             Quick Links
@@ -40,7 +38,6 @@
           </ul>
         </div>
 
-        <!-- Legal -->
         <div v-if="legalLinks.length > 0">
           <Heading :level="4" size="md" class="mb-4 uppercase">
             Legal
@@ -68,9 +65,9 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
-import Heading from '../../atoms/Heading/Heading.vue';
-import Text from '../../atoms/Text/Text.vue';
+import { computed } from 'vue'
+import Heading from '../../atoms/Heading/Heading.vue'
+import Text from '../../atoms/Text/Text.vue'
 
 defineProps({
   quickLinks: {
@@ -90,7 +87,7 @@ defineProps({
     type: Array,
     default: () => [],
   },
-});
+})
 
-const currentYear = computed(() => new Date().getFullYear());
+const currentYear = computed(() => new Date().getFullYear())
 </script>

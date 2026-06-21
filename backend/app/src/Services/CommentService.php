@@ -2,9 +2,10 @@
 
 namespace App\Services;
 
+use App\Inheritance\Repositories\ICommentRepository;
+use App\Inheritance\Services\ICommentService;
 use App\Models\Comment;
 use App\Repositories\CommentRepository;
-use App\Repositories\ICommentRepository;
 
 class CommentService implements ICommentService
 {

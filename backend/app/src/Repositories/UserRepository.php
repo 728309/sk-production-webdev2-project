@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Inheritance\Repositories\IUserRepository;
 use App\Models\User;
 use App\Utils\Database;
 use PDO;

@@ -1,4 +1,4 @@
-import Badge from './Badge.vue';
+import Badge from './Badge.vue'
 
 export default {
   title: 'Atoms/Badge',
@@ -14,7 +14,7 @@ export default {
       options: ['sm', 'md', 'lg'],
     },
   },
-};
+}
 
 export const Default = {
   args: {
@@ -24,11 +24,11 @@ export const Default = {
   render: (args) => ({
     components: { Badge },
     setup() {
-      return { args };
+      return { args }
     },
     template: '<Badge v-bind="args">Badge</Badge>',
   }),
-};
+}
 
 export const Primary = {
   args: {
@@ -37,11 +37,11 @@ export const Primary = {
   render: (args) => ({
     components: { Badge },
     setup() {
-      return { args };
+      return { args }
     },
     template: '<Badge v-bind="args">Primary</Badge>',
   }),
-};
+}
 
 export const AllVariants = {
   render: () => ({
@@ -57,7 +57,7 @@ export const AllVariants = {
       </div>
     `,
   }),
-};
+}
 
 export const AllSizes = {
   render: () => ({
@@ -70,4 +70,4 @@ export const AllSizes = {
       </div>
     `,
   }),
-};
+}

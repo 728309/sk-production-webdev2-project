@@ -53,36 +53,36 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
-import { RouterLink } from 'vue-router';
-import Heading from '../../atoms/Heading/Heading.vue';
-import Text from '../../atoms/Text/Text.vue';
-import DateDisplay from '../../atoms/DateDisplay/DateDisplay.vue';
-import GenreBadge from '../../molecules/GenreBadge/GenreBadge.vue';
+import { computed } from 'vue'
+import { RouterLink } from 'vue-router'
+import Heading from '../../atoms/Heading/Heading.vue'
+import Text from '../../atoms/Text/Text.vue'
+import DateDisplay from '../../atoms/DateDisplay/DateDisplay.vue'
+import GenreBadge from '../../molecules/GenreBadge/GenreBadge.vue'
 
 const props = defineProps({
   mix: {
     type: Object,
     required: true,
     validator: (value) => {
-      return value.id && value.title && value.artist && value.genre;
+      return value.id && value.title && value.artist && value.genre
     },
   },
-});
+})
 
-defineEmits(['click']);
+defineEmits(['click'])
 
 const truncatedDescription = computed(() => {
-  const maxLength = 150;
-  const description = props.mix.description || '';
+  const maxLength = 150
+  const description = props.mix.description || ''
 
   if (description.length <= maxLength) {
-    return description;
+    return description
   }
-  return description.substring(0, maxLength) + '...';
-});
+  return description.substring(0, maxLength) + '...'
+})
 
-const displayPostedDate = computed(() => props.mix.postedDate || props.mix.submittedDate || '');
+const displayPostedDate = computed(() => props.mix.postedDate || props.mix.submittedDate || '')
 </script>
 
 <style scoped>

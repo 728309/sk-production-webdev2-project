@@ -1,36 +1,19 @@
 # Pages
 
-**Specific instances of templates** with real content.
+Pages are the route-level screens users visit in SK HUB.
 
-## What belongs here?
+Current examples:
 
-- Home page
-- About page
-- Product detail page
-- User profile page
-- Contact page
+- `HomePage`
+- `MixArchivePage`
+- `MixDetailPage`
+- `SubmitMixPage`
+- `MySubmissionsPage`
+- `AdminPendingPage`
+- `AdminMixesPage`
+- `LoginPage`
+- `RegisterPage`
+- `AboutPage`
+- `ContactPage`
 
-## Characteristics
-
-- ✅ Final, concrete pages users interact with
-- ✅ Combine templates with real content and data
-- ✅ May fetch data from APIs
-- ✅ Handle page-specific logic
-- ✅ Usually route-specific
-
-## Example
-
-```vue
-<!-- HomePage.vue - A page -->
-<template>
-  <MainLayout>
-    <template #content>
-      <HeroSection :title="heroTitle" :subtitle="heroSubtitle" />
-      <ProductList :products="featuredProducts" />
-    </template>
-    <template #sidebar>
-      <CategoryFilter />
-    </template>
-  </MainLayout>
-</template>
-```
+Pages are the right place for route-specific state, API calls, and redirects. Shared visual pieces should live in atoms, molecules, organisms, or templates.

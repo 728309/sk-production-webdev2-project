@@ -1,10 +1,12 @@
-# SK Production Hub
+# SK HUB
 
-SK Production Hub is a music mix submission and review platform. Visitors can browse approved mixes, registered users can submit mixes and interact with published mixes, and admins can review the queue before content appears publicly.
+SK HUB is a music mix submission and review platform. Visitors can browse approved mixes, registered users can submit mixes and interact with published mixes, and admins can review the queue before content appears publicly.
 
 SK HUB is the user-facing name of the SK Production Hub project.
 
 This project rebuilds an earlier Web Development 1 idea into a Web Development 2 architecture: a Vue 3 frontend, a PHP REST API backend, MariaDB/MySQL persistence, Docker services, JWT authentication, and separate user/admin roles.
+
+Github Repo: https://github.com/728309/sk-production-webdev2-project
 
 ## Who Is This App For?
 
@@ -85,12 +87,13 @@ backend/app/src/
   Controllers/   HTTP request/response handling
   Services/      Business rules and validation
   Repositories/  PDO database queries
+  Inheritance/   Service and repository interfaces
   Models/        Simple data objects
   Framework/     Shared controller helpers
   Utils/         Database and JWT utilities
 ```
 
-Controllers parse requests and return JSON. Services hold rules such as registration validation, vote validation, and comment validation. Repositories use PDO prepared statements for database access.
+Controllers parse requests and return JSON. Services hold rules such as registration validation, vote validation, and comment validation. Repositories use PDO prepared statements for database access. The `Inheritance/` folder keeps the service and repository interfaces in one place.
 
 ### Database
 

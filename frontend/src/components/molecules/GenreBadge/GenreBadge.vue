@@ -5,15 +5,15 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
-import Badge from '../../atoms/Badge/Badge.vue';
+import { computed } from 'vue'
+import Badge from '../../atoms/Badge/Badge.vue'
 
 const props = defineProps({
   genre: {
     type: String,
     required: true,
   },
-});
+})
 
 const genreVariant = computed(() => {
   const variantMap = {
@@ -25,8 +25,8 @@ const genreVariant = computed(() => {
     'R&B': 'danger',
     'Dancehall': 'warning',
     'Drum and Bass': 'default',
-  };
+  }
 
-  return variantMap[props.genre] || 'default';
-});
+  return variantMap[props.genre] || 'default'
+})
 </script>

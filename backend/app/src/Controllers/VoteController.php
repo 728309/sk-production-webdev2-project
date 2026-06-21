@@ -3,10 +3,10 @@
 namespace App\Controllers;
 
 use App\Framework\Controller;
+use App\Inheritance\Services\IAuthService;
+use App\Inheritance\Services\IMixService;
+use App\Inheritance\Services\IVoteService;
 use App\Services\AuthService;
-use App\Services\IAuthService;
-use App\Services\IMixService;
-use App\Services\IVoteService;
 use App\Services\MixService;
 use App\Services\VoteService;
 
