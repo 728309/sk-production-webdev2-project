@@ -4,21 +4,55 @@
       <div class="flex justify-between items-center h-16">
         <div class="flex items-center">
           <Heading :level="1" size="xl" class="text-blue-600">
-            <a href="/" class="hover:text-blue-700 transition-colors">
+            <RouterLink to="/" class="hover:text-blue-700 transition-colors">
               SK Production Hub
-            </a>
+            </RouterLink>
           </Heading>
         </div>
 
-        <nav class="hidden md:flex space-x-8">
-          <a
+        <nav class="hidden md:flex items-center space-x-6">
+          <RouterLink
             v-for="link in navigationLinks"
             :key="link.name"
-            :href="link.href"
+            :to="link.href"
             class="text-gray-700 hover:text-blue-600 transition-colors font-medium"
           >
             {{ link.name }}
-          </a>
+          </RouterLink>
+
+          <template v-if="!authStore.isAuthenticated">
+            <RouterLink
+              to="/login"
+              class="text-gray-700 hover:text-blue-600 transition-colors font-medium"
+            >
+              Login
+            </RouterLink>
+            <RouterLink
+              to="/register"
+              class="text-gray-700 hover:text-blue-600 transition-colors font-medium"
+            >
+              Register
+            </RouterLink>
+          </template>
+
+          <template v-else>
+            <span
+              v-if="authStore.isAdmin"
+              class="rounded-full bg-blue-100 px-2 py-1 text-xs font-semibold text-blue-700"
+            >
+              Admin
+            </span>
+            <span class="text-sm text-gray-600">
+              {{ authStore.user.name }}
+            </span>
+            <button
+              type="button"
+              class="text-gray-700 hover:text-blue-600 transition-colors font-medium"
+              @click="handleLogout"
+            >
+              Logout
+            </button>
+          </template>
         </nav>
 
         <div class="md:hidden">
@@ -55,14 +89,51 @@
       <!-- Mobile menu -->
       <div v-if="mobileMenuOpen" class="md:hidden pb-4">
         <nav class="flex flex-col space-y-2">
-          <a
+          <RouterLink
             v-for="link in navigationLinks"
             :key="link.name"
-            :href="link.href"
+            :to="link.href"
             class="text-gray-700 hover:text-blue-600 transition-colors px-2 py-1"
+            @click="mobileMenuOpen = false"
           >
             {{ link.name }}
-          </a>
+          </RouterLink>
+
+          <template v-if="!authStore.isAuthenticated">
+            <RouterLink
+              to="/login"
+              class="text-gray-700 hover:text-blue-600 transition-colors px-2 py-1"
+              @click="mobileMenuOpen = false"
+            >
+              Login
+            </RouterLink>
+            <RouterLink
+              to="/register"
+              class="text-gray-700 hover:text-blue-600 transition-colors px-2 py-1"
+              @click="mobileMenuOpen = false"
+            >
+              Register
+            </RouterLink>
+          </template>
+
+          <template v-else>
+            <span
+              v-if="authStore.isAdmin"
+              class="mx-2 w-fit rounded-full bg-blue-100 px-2 py-1 text-xs font-semibold text-blue-700"
+            >
+              Admin
+            </span>
+            <span class="px-2 py-1 text-sm text-gray-600">
+              {{ authStore.user.name }}
+            </span>
+            <button
+              type="button"
+              class="px-2 py-1 text-left text-gray-700 hover:text-blue-600 transition-colors"
+              @click="handleLogout"
+            >
+              Logout
+            </button>
+          </template>
         </nav>
       </div>
     </div>
@@ -71,6 +142,8 @@
 
 <script setup>
 import { ref } from "vue";
+import { RouterLink } from "vue-router";
+import { useAuthStore } from "../../../stores/authStore.js";
 import Heading from "../../atoms/Heading/Heading.vue";
 
 defineProps({
@@ -85,5 +158,11 @@ defineProps({
   },
 });
 
+const authStore = useAuthStore();
 const mobileMenuOpen = ref(false);
+
+const handleLogout = () => {
+  authStore.logout();
+  mobileMenuOpen.value = false;
+};
 </script>

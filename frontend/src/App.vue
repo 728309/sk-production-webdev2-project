@@ -1,7 +1,15 @@
 <script setup>
-import ArticleArchivePage from './components/pages/ArticleArchivePage/ArticleArchivePage.vue'
+import { onMounted } from 'vue'
+import { RouterView } from 'vue-router'
+import { useAuthStore } from './stores/authStore.js'
+
+const authStore = useAuthStore()
+
+onMounted(() => {
+  authStore.fetchMe()
+})
 </script>
 
 <template>
-  <ArticleArchivePage />
+  <RouterView />
 </template>

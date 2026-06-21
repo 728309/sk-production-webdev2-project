@@ -17,6 +17,18 @@ function buildApiUrl(endpoint) {
   return `${baseUrl}/${path}`;
 }
 
+function getAuthHeaders() {
+  const token = localStorage.getItem('skProductionToken');
+
+  if (!token) {
+    return {};
+  }
+
+  return {
+    Authorization: `Bearer ${token}`,
+  };
+}
+
 /**
  * Make a GET request to the API
  * @param {string} endpoint - API endpoint (e.g., '/mixes')
@@ -29,6 +41,7 @@ export async function get(endpoint, options = {}) {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
+      ...getAuthHeaders(),
       ...options.headers,
     },
     ...options,
@@ -48,6 +61,7 @@ export async function post(endpoint, data, options = {}) {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      ...getAuthHeaders(),
       ...options.headers,
     },
     body: JSON.stringify(data),
@@ -68,6 +82,7 @@ export async function put(endpoint, data, options = {}) {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
+      ...getAuthHeaders(),
       ...options.headers,
     },
     body: JSON.stringify(data),
@@ -87,6 +102,7 @@ export async function del(endpoint, options = {}) {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
+      ...getAuthHeaders(),
       ...options.headers,
     },
     ...options,
